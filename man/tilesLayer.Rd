@@ -7,7 +7,7 @@
 tilesLayer(x, add = FALSE)
 }
 \arguments{
-\item{x}{an OpenStreetMap object; the \link{getTiles} function outputs these 
+\item{x}{a RasterBrick object; the \link{getTiles} function outputs these 
 objects.}
 
 \item{add}{whether to add the layer to an existing plot (TRUE) or 
@@ -17,21 +17,23 @@ not (FALSE).}
 Plot tiles from open map servers.
 }
 \note{
-This function is a wrapper for plot.OpenStreetMap from the 
-OpenStreetMap package.
+This function is a wrapper for plotRGB from the 
+raster package.
 }
 \examples{
 \dontrun{
 data("nuts2006")
-# Download the tiles, nuts0.spdf extent
-EuropeStamen <- getTiles(spdf = nuts0.spdf, type = "stamen-watercolor")
-class(EuropeStamen)
+# extract Denmark
+spdf <- nuts0.spdf[nuts0.spdf$id=="DK",]   
+# Download the tiles, extent = Denmark 
+den <- getTiles(spdf = spdf, type = "osm", crop = TRUE)
+class(den)
 # Plot the tiles
-tilesLayer(EuropeStamen)
+tilesLayer(den)
 # Plot countries
-plot(nuts0.spdf, add=TRUE)
+plot(spdf, add=TRUE)
 # Map tiles sources
-mtext(text = "Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA.", 
+mtext(text = "Map data © OpenStreetMap contributors, under CC BY SA.",
       side = 1, adj = 0, cex = 0.7, font = 3)
 }
 }

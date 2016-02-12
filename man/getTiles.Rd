@@ -4,23 +4,23 @@
 \alias{getTiles}
 \title{Get Tiles from Open Map Servers}
 \usage{
-getTiles(spdf, type = "osm", zoom = NULL)
+getTiles(spdf, type = "osm", zoom = NULL, crop = FALSE)
 }
 \arguments{
 \item{spdf}{a Spatial*DataFrame with a valid projection attribute.}
 
-\item{type}{the tile server from which to get the map, one of "osm", "osm-bw", 
-"maptoolkit-topo", "waze", "mapquest", "mapquest-aerial", "bing", 
-"stamen-toner", "stamen-terrain", "stamen-watercolor", "osm-german", 
-"osm-wanderreitkarte", "mapbox", "esri", "esri-topo", "nps", "apple-iphoto", 
-"skobbler", "cloudmade-<id>", "hillshade", "opencyclemap", "osm-transport", 
-"osm-public-transport", "osm-bbike", "osm-bbike-german".}
+\item{type}{the tile server from which to get the map, one of "hikebike", 
+"hotstyle", "lovinacycle", "lovinahike", "mapquestosm", "mapquestsat", "opencycle", 
+"openpiste", "osm", "osmgrayscale", "osmtransport", "stamenbw", "stamenwatercolor",
+"thunderforestlandscape" and "thunderforestoutdoors".}
 
 \item{zoom}{the zoom level. If null, it is determined automatically 
 (see Details).}
+
+\item{crop}{TRUE if results should be cropped to the specified spdf extent, FALSE otherwise.}
 }
 \value{
-An OpenStreetMap object is returned.
+A RatserBrick is returned.
 }
 \description{
 Get map tiles based on a Spatial*DataFrame extent. Maps can be 
@@ -31,20 +31,25 @@ Zoom levels are descibed on the OpenStreetMap wiki:
 \url{http://wiki.openstreetmap.org/wiki/Zoom_levels}.
 }
 \note{
-This function uses \code{rgdal} and \code{OpenStreetMap} packages.
+This function is a wrapper around the \code{osrm.raster} function 
+from the \code{rosm} package. \cr
+Use directly the \href{http://cran.r-project.org/package=rosm}{rosm} package to have a finer control over  
+extraction and display parameters.
 }
 \examples{
 \dontrun{
 data("nuts2006")
-# Download the tiles, nuts0.spdf extent
-EuropeOsm <- getTiles(spdf = nuts0.spdf, type = "osm")
-class(EuropeOsm)
+# extract Denmark
+spdf <- nuts0.spdf[nuts0.spdf$id=="DK",]   
+# Download the tiles, extent = Denmark 
+den <- getTiles(spdf = spdf, type = "osm", crop = TRUE)
+class(den)
 # Plot the tiles
-tilesLayer(EuropeOsm)
+tilesLayer(den)
 # Plot countries
-plot(nuts0.spdf, add=TRUE)
+plot(spdf, add=TRUE)
 # Map tiles sources
-mtext(text = "Map data © OpenStreetMap contributors, under CC BY SA.", 
+mtext(text = "Map data © OpenStreetMap contributors, under CC BY SA.",
       side = 1, adj = 0, cex = 0.7, font = 3)
 }
 }

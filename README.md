@@ -1,4 +1,9 @@
-# `cartography`
+# cartography
+
+[![Version](http://www.r-pkg.org/badges/version/cartography)](https://cran.rstudio.com/web/packages/cartography/)
+![](http://cranlogs.r-pkg.org/badges/cartography?color=brightgreen)  
+
+
 ***Create and integrate maps in your R workflow!***   
 
 ![Cartographic Composition ](http://f.hypotheses.org/wp-content/blogs.dir/2209/files/2015/10/cartocomp.png)
@@ -12,7 +17,7 @@
 * Proportional symbols maps (circles, squares, bars)   
 `propSymbolsLayer`, `propSymbolsChoroLayer`, `propSymbolsTypoLayer`, `propTrianglesLayer`  
 
-* Chroropleth maps (main discretization methods are availables)  
+* Chroropleth maps (main discretization methods are available)  
 `choroLayer`  
 
 * Typology maps  
@@ -40,7 +45,7 @@ It also proposes some **additional useful features** like:
 * Nice legends   
 `legendBarsSymbols`, `legendChoro`, `legendCirclesSymbols`, `legendGradLines`, `legendPropLines`, `legendPropTriangles`, `legendSquaresSymbols`, `legendTypo`  
 
-* Access to cartographic API (via OpenStreetMap package)  
+* Access to cartographic API (via rosm package)  
 `getTiles`, `tilesLayer`  
 
 * Irregular polygons to regular grid transformation with data handling  

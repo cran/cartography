@@ -63,6 +63,9 @@ not (FALSE).}
 \item{add}{whether to add the layer to an existing plot (TRUE) or 
 not (FALSE).}
 }
+\value{
+An invisible (\link{invisible}) SpatialLinesDataFrame with the discontinuity measures is returned.
+}
 \description{
 This function computes and plots spatial discontinuities. The 
 discontinuities are plotted over the layer outputed by the \link{getBorders} function.
