@@ -16,8 +16,8 @@
 #' is deprecated; please use inches instead.).
 #' @param col color of symbols.
 #' @param col2 second color of symbols (see Details).
-#' @param border color of polygon borders.
-#' @param lwd borders width.
+#' @param border color of symbols borders.
+#' @param lwd width of symbols borders.
 #' @param breakval breaking value (see Details).
 #' @param fixmax value of the biggest symbol (see Details).
 #' @param legend.pos position of the legend, one of "topleft", "top", 
@@ -167,7 +167,7 @@ propSymbolsLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, var,
     sizeMax <- max(sizes)
     
     if (inches <= sizeMax){
-      sizevect <- xinch(seq(inches, inches/9, length.out = 4))
+      sizevect <- xinch(seq(inches, min(sizes), length.out = 4))
       varvect <- seq(fixmax,0,length.out = 4 )
       inches <- sizeMax
     }else{
@@ -176,7 +176,7 @@ propSymbolsLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, var,
       dots <- rbind(dots[1,],dots)
       dots[1,var] <- fixmax
       sizes <- c(inches, sizes)
-      sizevect <- xinch(seq(inches, inches/9, length.out = 4))
+      sizevect <- xinch(seq(inches, min(sizes), length.out = 4))
       varvect <- seq(fixmax, 0,length.out = 4 )
     }
     

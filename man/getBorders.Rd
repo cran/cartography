@@ -4,7 +4,7 @@
 \alias{getBorders}
 \title{Extract SpatialPolygonsDataFrame Borders}
 \usage{
-getBorders(spdf, spdfid = NULL, tol = 1)
+getBorders(spdf, spdfid = NULL)
 }
 \arguments{
 \item{spdf}{a SpatialPolygonsDataFrame. This SpatialPolygonsDataFrame
@@ -12,9 +12,6 @@ has to be projected (planar coordinates).}
 
 \item{spdfid}{identifier field in spdf, default to the first column 
 of the spdf data frame. (optional)}
-
-\item{tol}{tolerance to detect contiguity (in map units). You may 
-not want to change this parameter.}
 }
 \value{
 A SpatialLinesDataFrame of borders is returned. This object has three 
@@ -24,9 +21,6 @@ of id1 and id2 (with "_" as separator).
 }
 \description{
 Extract borders between SpatialPolygonsDataFrame units.
-}
-\note{
-This function uses the rgeos package.
 }
 \examples{
 data(nuts2006)

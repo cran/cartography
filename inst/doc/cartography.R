@@ -93,7 +93,7 @@ opar <- par(mar = c(0.1,0.1,1.3,0.1))
 
 ## Plot Stamen tiles (using OpenStreetMap data) as basemap 
 # Download the tiles, nuts0.spdf extent
-EUosm <- getTiles(spdf = nuts0.spdf, type = "osm", zoom = 4)
+EUosm <- getTiles(spdf = nuts0.spdf, type = "osmtransport", zoom = 4)
 # Plot the tiles
 tilesLayer(EUosm)
 
@@ -152,11 +152,11 @@ gradLinkLayer(spdf = twincities.spdf, # SpatialLinesdataFrame of the links
               lwd = c(0.1,1,4,10), # list of widths
               col = "#92000090", # color of the links
               legend.pos = "right", legend.frame = TRUE,
-              legend.title.txt = "Number of Aggrements\n(regional level)",
+              legend.title.txt = "Number of Aggreements\n(regional level)",
               add = TRUE)
 
 # Plot the layout
-layoutLayer(title = "International Twinning Agreements Betwwen Cities", 
+layoutLayer(title = "International Twinning Agreements Between Cities", 
             author = "cartography", sources = "Sources: Adam Ploszaj & Wikipedia, 2011",
             scale = NULL, south = TRUE, frame = TRUE, col = NA, 
             coltitle = "black")
@@ -213,7 +213,6 @@ data(nuts2006)
 opar <- par(mar = c(0,0,1.2,0))
 
 # Get a SpatialLinesDataFrame of countries borders
-## The getBorders function needs the rgeos package to work
 nuts0.contig.spdf <- getBorders(nuts0.spdf)
 class(nuts0.contig.spdf)
 head(nuts0.contig.spdf@data)
@@ -263,7 +262,6 @@ data(nuts2006)
 opar <- par(mar = c(0,0,1.2,0))
 
 # Create a grid layer
-## The getGridLayer function needs the rgeos package to work
 mygrid <- getGridLayer(spdf=nuts2.spdf, # SpatialPolygonsDataFrame
                        cellsize = 200000) # output cell size, in map units (200 km)
 # getGridLayer outputs a list
