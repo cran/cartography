@@ -3,7 +3,8 @@
 #' @name propTrianglesLayer
 #' @param spdf a SpatialPointsDataFrame or a SpatialPolygonsDataFrame; if spdf 
 #' is a SpatialPolygonsDataFrame symbols are plotted on centroids.
-#' @param df a data frame that contains the values to plot.
+#' @param df a data frame that contains the values to plot. If df is missing 
+#' spdf@data is used instead. 
 #' @param spdfid identifier field in spdf, default to the first column 
 #' of the spdf data frame. (optional)
 #' @param dfid identifier field in df, default to the first column 
@@ -74,6 +75,7 @@ propTrianglesLayer <- function(spdf, df, spdfid = NULL, dfid = NULL,
                                legend.frame = FALSE,
                                add = TRUE)
 {
+  if (missing(df)){df <- spdf@data}
   if (is.null(spdfid)){spdfid <- names(spdf@data)[1]}
   if (is.null(dfid)){dfid <- names(df)[1]}
   

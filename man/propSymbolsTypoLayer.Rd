@@ -6,7 +6,7 @@
 \usage{
 propSymbolsTypoLayer(spdf, df, spdfid = NULL, dfid = NULL, var,
   inches = 0.3, fixmax = NULL, symbols = "circle", border = "grey20",
-  lwd = 1, var2, col = NULL, legend.title.cex = 0.8,
+  lwd = 1, var2, col = NULL, colNA = "white", legend.title.cex = 0.8,
   legend.values.cex = 0.6, legend.var.pos = "bottomleft",
   legend.var.title.txt = var, legend.values.rnd = 0,
   legend.var.style = "c", legend.var.frame = FALSE,
@@ -18,7 +18,8 @@ propSymbolsTypoLayer(spdf, df, spdfid = NULL, dfid = NULL, var,
 \item{spdf}{SpatialPointsDataFrame or SpatialPolygonsDataFrame; if spdf
 is a SpatialPolygonsDataFrame symbols are plotted on centroids.}
 
-\item{df}{a data frame that contains the values to plot.}
+\item{df}{a data frame that contains the values to plot. If df is missing 
+spdf@data is used instead.}
 
 \item{spdfid}{identifier field in spdf, default to the first column
 of the spdf data frame. (optional)}
@@ -42,6 +43,8 @@ squares, height for bars) in inches.}
 \item{var2}{name of the factor (or character) field in df to plot.}
 
 \item{col}{a vector of colors.}
+
+\item{colNA}{no data color.}
 
 \item{legend.title.cex}{size of the legend title.}
 
@@ -80,8 +83,8 @@ not (FALSE).}
 is deprecated; please use inches instead.).}
 }
 \description{
-Plot a proportional symbols layer with a color based on a
-qualitative data.
+Plot a proportional symbols layer with colors based on
+ qualitative data.
 }
 \examples{
 data("nuts2006")
@@ -92,17 +95,8 @@ propSymbolsTypoLayer(spdf = nuts0.spdf, df = nuts0.df,
                      var = "pop2008", var2="typo")
 
 ## Example 2
-# Layout plot
-layoutLayer(title = "Countries Population & Color in Europe",
-            sources = "UMS RIATE, 2015",
-            scale = NULL,
-            frame = TRUE,
-            col = "black",
-            coltitle = "white",
-            bg = "#D9F5FF",
-            extent = nuts0.spdf)
 #Countries plot
-plot(nuts0.spdf, col = "grey60",border = "grey20", add=TRUE)
+plot(nuts0.spdf, col = "grey60",border = "grey20", add = FALSE)
 nuts0.df$typo <- c(rep("A",10),rep("B",10),rep("C",10),rep("D",4))
 nuts0.df$typo[1:3] <- NA
 nuts0.df$pop2008[4:6] <- NA
@@ -114,9 +108,16 @@ propSymbolsTypoLayer(spdf = nuts0.spdf, df = nuts0.df,
                      legend.var.title.txt = "Total\\npopulation (2008)",
                      legend.values.rnd = -3,
                      legend.var2.title.txt = "Category",
-                     col = c("red","green","blue","yellow"),
+                     col = carto.pal(pal1 = "pastel.pal", 4),
                      legend.var2.values.order = c("D", "A", "B", "C"),
                      legend.var.style = "c")
+# Layout plot
+layoutLayer(title = "Countries Population & Color in Europe",
+            sources = "UMS RIATE, 2015",
+            scale = NULL,
+            frame = TRUE,
+            col = "black",
+            coltitle = "white")
 }
 \seealso{
 \link{legendBarsSymbols}, \link{legendTypo},

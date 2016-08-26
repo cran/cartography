@@ -7,19 +7,20 @@
 propSymbolsChoroLayer(spdf, df, spdfid = NULL, dfid = NULL, var,
   inches = 0.3, fixmax = NULL, symbols = "circle", border = "grey20",
   lwd = 1, var2, breaks = NULL, method = "quantile", nclass = NULL,
-  col = NULL, legend.title.cex = 0.8, legend.values.cex = 0.6,
-  legend.var.pos = "right", legend.var.title.txt = var,
-  legend.var.values.rnd = 0, legend.var.style = "c",
-  legend.var.frame = FALSE, legend.var2.pos = "topright",
-  legend.var2.title.txt = var2, legend.var2.values.rnd = 2,
-  legend.var2.nodata = "no data", legend.var2.frame = FALSE, add = TRUE,
-  k = NULL)
+  col = NULL, colNA = "white", legend.title.cex = 0.8,
+  legend.values.cex = 0.6, legend.var.pos = "right",
+  legend.var.title.txt = var, legend.var.values.rnd = 0,
+  legend.var.style = "c", legend.var.frame = FALSE,
+  legend.var2.pos = "topright", legend.var2.title.txt = var2,
+  legend.var2.values.rnd = 2, legend.var2.nodata = "no data",
+  legend.var2.frame = FALSE, add = TRUE, k = NULL)
 }
 \arguments{
 \item{spdf}{SpatialPointsDataFrame or SpatialPolygonsDataFrame; if spdf 
 is a SpatialPolygonsDataFrame symbols are plotted on centroids.}
 
-\item{df}{a data frame that contains the values to plot.}
+\item{df}{a data frame that contains the values to plot. If df is missing 
+spdf@data is used instead.}
 
 \item{spdfid}{identifier field in spdf, default to the first column 
 of the spdf data frame. (optional)}
@@ -47,13 +48,15 @@ Note that if there are nlevel colors (classes) there should be (nlevel+1)
 breakpoints (see \link{choroLayer} Details).}
 
 \item{method}{a discretization method; one of "sd", "equal", 
-"quantile", "jenks", "q6" or "geom"  (see \link{choroLayer} Details).}
+"quantile", "fisher-jenks", "q6" or "geom"  (see \link{choroLayer} Details).}
 
 \item{nclass}{a targeted number of classes. If null, the number of class is 
 automatically defined (see \link{choroLayer} Details).}
 
 \item{col}{a vector of colors. Note that if breaks is specified there must be one less 
 colors specified than the number of break.}
+
+\item{colNA}{no data color.}
 
 \item{legend.title.cex}{size of the legend title.}
 

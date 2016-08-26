@@ -5,7 +5,7 @@
 \title{Discontinuities Layer}
 \usage{
 discLayer(spdf, df, spdfid1 = NULL, spdfid2 = NULL, dfid = NULL, var,
-  method = "quantile", nclass = NULL, threshold = 0.75, type = "rel",
+  method = "quantile", nclass = 4, threshold = 0.75, type = "rel",
   sizemin = 1, sizemax = 10, col = "red", legend.pos = "bottomleft",
   legend.title.txt = "legend title", legend.title.cex = 0.8,
   legend.values.cex = 0.6, legend.values.rnd = 2, legend.frame = FALSE,
@@ -28,10 +28,10 @@ of df. (optional)}
 \item{var}{name of the numeric field in df used to compute and plot discontinuities.}
 
 \item{method}{a discretization method; one of "sd", "equal", 
-"quantile", "jenks","q6" or "geom"  (see \link{discretization} Details).}
+"quantile", "fisher-jenks","q6" or "geom"  (see \link{getBreaks} Details).}
 
 \item{nclass}{a targeted number of classes. If null, the number of 
-class is automatically defined (see \link{discretization} Details).}
+class is automatically defined (see \link{getBreaks} Details).}
 
 \item{threshold}{share of represented borders, value between 0 
 (nothing) and 1 (all the discontinuities).}

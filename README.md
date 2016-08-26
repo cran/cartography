@@ -1,12 +1,15 @@
 # cartography
 
 [![Version](http://www.r-pkg.org/badges/version/cartography)](https://CRAN.R-project.org/package=cartography/)
-![](http://cranlogs.r-pkg.org/badges/cartography?color=brightgreen)
+![](https://img.shields.io/badge/license-GPL--3-brightgreen.svg?style=flat) 
 [![Travis-CI Build Status](https://travis-ci.org/Groupe-ElementR/cartography.svg?branch=master)](https://travis-ci.org/Groupe-ElementR/cartography)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/Groupe-ElementR/cartography?branch=master&svg=true)](https://ci.appveyor.com/project/Groupe-ElementR/cartography)
+![](http://cranlogs.r-pkg.org/badges/cartography?color=brightgreen)  
+ 
 
 ## *Create and integrate maps in your R workflow!*
 
-![Cartographic Mix](http://rgeomatic.hypotheses.org/files/2016/02/cartomix.png)  
+[![Cartographic Mix](http://rgeomatic.hypotheses.org/files/2016/02/cartomix.png "click on the map to see the code")](https://gist.github.com/rCarto/ef52aa4e96a7b628956fbf531143ae68)  
 
 This package allows various **cartographic representations** such as proportional 
 symbols, chroropleth, typology, flows or discontinuities. In addition, it also 
@@ -17,9 +20,40 @@ the graphic presentation of maps.
 `cartography` uses R base graphics to map spatial information.  
 
 
+## Vignette
+The [vignette](https://cran.r-project.org/web/packages/cartography/vignettes/cartography.html) 
+contains commented scripts on how to build various types of maps with `cartography`
+```{r}
+vignette(topic = "cartography")
+```
+
+## Blog posts, tutorials
+
+[Create and integrate maps in your R workflow with the cartography package](http://rgeomatic.hypotheses.org/842) (EN)  
+[Cartographie avec R : le package cartography](http://rgeomatic.hypotheses.org/659) (FR)  
+[R pour les cartographes](http://neocarto.hypotheses.org/1859) (FR)    
+[Comment faire un carton avec R?](http://rgeomatic.hypotheses.org/category/cartography) (FR - *How to build inset maps*)  
+[Tutoriel - Cartographie avec R](http://wukan.ums-riate.fr/r2016/) (FR)  
+[Cartographie et traitement de l’information géographique avec R](http://wukan.ums-riate.fr/RUSS/RUSS_2016/) (FR)  
+[R pour les cartographes : le package cartography](https://osgeo-fr.github.io/presentations_foss4gfr/2016/J1/R_Cartography_T_Giraud_FOSS4G-fr-2016/FOSS4G-fr-2016.html) (FR)
+
+## Installation
+* Development version on GitHub
+```{r}
+require(devtools)
+devtools::install_github("Groupe-ElementR/cartography")
+```
+
+* Stable version on [CRAN](https://CRAN.R-project.org/package=cartography/)
+```{r}
+install.packages("cartography")
+```
+
 ## Demo
 
-This script creates a map of symbols that are proportional to values of a 
+* You can access the code used to create the cartographic mix [here](https://gist.github.com/rCarto/ef52aa4e96a7b628956fbf531143ae68).  
+
+* The following script creates a map of symbols that are proportional to values of a 
 first variable and colored to reflect the discretization of a second variable.  
 
 ```r
@@ -65,30 +99,13 @@ layoutLayer(title = "Demographic trends, 1999-2008", coltitle = "black",
             author = "cartography", frame ="", col = NA)
 par(opar)
 ```
-![Proportional Choropleth](http://rgeomatic.hypotheses.org/files/2015/10/propchoro.png)
+![](http://rgeomatic.hypotheses.org/files/2015/10/propchoro.png)
 
 
-## Vignette
-The [vignette](https://cran.r-project.org/web/packages/cartography/vignettes/cartography.html) 
-contains commented scripts on how to build various types of maps with `cartography`
-```{r}
-vignette(topic = "cartography")
-```
 
+## Community Guidelines
 
-## Installation
-* Development version on GitHub
-```{r}
-require(devtools)
-devtools::install_github("Groupe-ElementR/cartography")
-```
-
-* Stable version on [CRAN](https://CRAN.R-project.org/package=cartography/)
-```{r}
-install.packages("cartography")
-```
-
-
+One can contribute to the package through [pull requests](https://github.com/Groupe-ElementR/cartography/pulls) and report issues or ask questions [here](https://github.com/Groupe-ElementR/cartography/issues).
 
 
 

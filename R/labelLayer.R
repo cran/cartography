@@ -3,7 +3,8 @@
 #' @name labelLayer
 #' @param spdf  a SpatialPointsDataFrame or a SpatialPolygonsDataFrame; if spdf 
 #' is a SpatialPolygonsDataFrame texts are plotted on centroids.
-#' @param df a data frame that contains the labels to plot.
+#' @param df a data frame that contains the labels to plot. If df is missing 
+#' spdf@data is used instead. 
 #' @param spdfid identifier field in spdf, default to the first column 
 #' of the spdf data frame. (optional)
 #' @param dfid identifier field in df, default to the first column 
@@ -42,6 +43,7 @@
 #'      cex = 0.7, adj = 0)
 labelLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, txt, col = "black",
                        cex = 0.7, ...){
+  if (missing(df)){df <- spdf@data}
   if (is.null(spdfid)){spdfid <- names(spdf@data)[1]}
   if (is.null(dfid)){dfid <- names(df)[1]}
   if (class(spdf) %in% c("SpatialPolygonsDataFrame", "SpatialPointsDataFrame")){

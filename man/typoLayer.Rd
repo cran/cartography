@@ -5,15 +5,17 @@
 \title{Typology Layer}
 \usage{
 typoLayer(spdf, df, spdfid = NULL, dfid = NULL, var, col = NULL,
-  border = "grey20", lwd = 1, legend.pos = "bottomleft",
-  legend.title.txt = var, legend.title.cex = 0.8, legend.values.cex = 0.6,
+  border = "grey20", lwd = 1, colNA = "white",
+  legend.pos = "bottomleft", legend.title.txt = var,
+  legend.title.cex = 0.8, legend.values.cex = 0.6,
   legend.values.order = NULL, legend.nodata = "no data",
   legend.frame = FALSE, add = FALSE)
 }
 \arguments{
 \item{spdf}{a SpatialPolygonsDataFrame.}
 
-\item{df}{a data frame that contains the values to plot.}
+\item{df}{a data frame that contains the values to plot. If df is missing 
+spdf@data is used instead.}
 
 \item{spdfid}{identifier field in spdf, default to the first column 
 of the spdf data frame. (optional)}
@@ -28,6 +30,8 @@ of df. (optional)}
 \item{border}{color of the polygons borders.}
 
 \item{lwd}{borders width.}
+
+\item{colNA}{no data color.}
 
 \item{legend.pos}{position of the legend, one of "topleft", "top", 
 "topright", "left", "right", "bottomleft", "bottom", "bottomright". If 
@@ -59,22 +63,20 @@ data(nuts2006)
 nuts0.df$typo <- c(rep("A",10),rep("B",10),rep("C",10),rep("D",4))
 typoLayer(spdf = nuts0.spdf, df = nuts0.df, var = "typo") 
 
+
+## Example 2
+nuts0.df$typo <- c(rep("A",10),rep("B",10),rep("C",10),rep("D",4))
+typoLayer(spdf = nuts0.spdf, df = nuts0.df,
+          var="typo",  col = carto.pal(pal1 = "multi.pal", 4),
+          legend.values.order = c("D", "B", "A", "C"),
+          legend.pos = "topright", 
+          legend.title.txt = "Category")
 layoutLayer(title = "Colors in Europe",
             sources = "UMS RIATE, 2015",
             scale = NULL,
             frame = TRUE,
             col = "black",
-            coltitle = "white",
-            bg = "#D9F5FF",
-            extent = nuts0.spdf)
-#Countries plot
-nuts0.df$typo <- c(rep("A",10),rep("B",10),rep("C",10),rep("D",4))
-typoLayer(spdf = nuts0.spdf, df = nuts0.df,
-          var="typo",  col = c("red","black","grey","yellow"),
-          legend.values.order = c("D", "B", "A", "C"),
-          legend.pos = "topright", 
-          legend.title.txt = "Category", 
-          add=TRUE)
+            coltitle = "white")
 }
 \seealso{
 \link{propSymbolsTypoLayer}, \link{typoLayer}, \link{legendTypo}

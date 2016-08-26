@@ -14,9 +14,9 @@
 #' @param var name of the numeric field in df used to compute and plot discontinuities.
 #' @param col color of the discontinuities lines.
 #' @param nclass a targeted number of classes. If null, the number of 
-#' class is automatically defined (see \link{discretization} Details).
+#' class is automatically defined (see \link{getBreaks} Details).
 #' @param method a discretization method; one of "sd", "equal", 
-#' "quantile", "jenks","q6" or "geom"  (see \link{discretization} Details).
+#' "quantile", "fisher-jenks","q6" or "geom"  (see \link{getBreaks} Details).
 #' @param threshold share of represented borders, value between 0 
 #' (nothing) and 1 (all the discontinuities).
 #' @param sizemin thickness of the smallest line.
@@ -56,7 +56,7 @@
 #'           legend.pos = "topright", add=TRUE)
 #' @export
 discLayer <- function(spdf, df, spdfid1 = NULL, spdfid2=NULL, dfid=NULL, var, 
-                      method="quantile", nclass=NULL, threshold = 0.75, 
+                      method="quantile", nclass = 4, threshold = 0.75, 
                       type = "rel",
                       sizemin = 1, sizemax = 10,
                       col = "red", 
@@ -97,7 +97,7 @@ discLayer <- function(spdf, df, spdfid1 = NULL, spdfid2=NULL, dfid=NULL, var,
   
   # Discretisation
   spdf <- spdf[spdf@data$disc >= minvar,]
-  distr <- discretization(v = spdf@data$disc, nclass = nclass, method = method)
+  distr <- getBreaks(v = spdf@data$disc, nclass = nclass, method = method)
   
   # Classes de tailles
   x <- (sizemax-sizemin)/nclass

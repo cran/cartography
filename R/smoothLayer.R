@@ -8,7 +8,8 @@
 #' \item{more customizable inputs and outputs (custom distance matrix, raster output...);}
 #' \item{other functions related to spatial interactions (Reilly  and Huff catchment areas).}}
 #' @param spdf a SpatialPolygonsDataFrame.
-#' @param df a data frame that contains the values to compute
+#' @param df a data frame that contains the values to compute If df is missing 
+#' spdf@data is used instead. 
 #' @param spdfid name of the identifier field in spdf, default to the first column 
 #' of the spdf data frame. (optional)
 #' @param dfid name of the identifier field in df, default to the first column 
@@ -93,13 +94,14 @@ smoothLayer <- function(spdf, df, spdfid = NULL, dfid = NULL,
                         legend.values.rnd = 0,
                         legend.frame = FALSE,
                         add = FALSE){
-  # if (!requireNamespace("SpatialPosition", quietly = TRUE)) {
-  #   stop("'SpatialPosition' package needed for this function to work. Please install it.",
-  #        call. = FALSE)
-  # }
-  # if(!'package:SpatialPosition' %in% search()){
-  #   attachNamespace('SpatialPosition')
-  # }
+  if (!requireNamespace("SpatialPosition", quietly = TRUE)) {
+    stop("'SpatialPosition' package needed for this function to work. Please install it.",
+         call. = FALSE)
+  }
+  if(!'package:SpatialPosition' %in% search()){
+    attachNamespace('SpatialPosition')
+  }
+  if (missing(df)){df <- spdf@data}
   # Potential
   pot.spdf <- SpatialPosition::quickStewart(spdf = spdf, df = df, 
                                             spdfid = spdfid, dfid = dfid, 

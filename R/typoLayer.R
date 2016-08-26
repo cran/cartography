@@ -2,7 +2,8 @@
 #' @name typoLayer
 #' @description Plot a typology layer.
 #' @param spdf a SpatialPolygonsDataFrame.
-#' @param df a data frame that contains the values to plot.
+#' @param df a data frame that contains the values to plot. If df is missing 
+#' spdf@data is used instead. 
 #' @param spdfid identifier field in spdf, default to the first column 
 #' of the spdf data frame. (optional)
 #' @param dfid identifier field in df, default to the first column 
@@ -22,6 +23,7 @@
 #' @param legend.frame whether to add a frame to the legend (TRUE) or 
 #' not (FALSE).
 #' @param legend.nodata no data label.
+#' @param colNA no data color. 
 #' @param add whether to add the layer to an existing plot (TRUE) or 
 #' not (FALSE).
 #' @seealso \link{propSymbolsTypoLayer}, \link{typoLayer}, \link{legendTypo}
@@ -32,24 +34,23 @@
 #' nuts0.df$typo <- c(rep("A",10),rep("B",10),rep("C",10),rep("D",4))
 #' typoLayer(spdf = nuts0.spdf, df = nuts0.df, var = "typo") 
 #' 
+#' 
+#' ## Example 2
+#' nuts0.df$typo <- c(rep("A",10),rep("B",10),rep("C",10),rep("D",4))
+#' typoLayer(spdf = nuts0.spdf, df = nuts0.df,
+#'           var="typo",  col = carto.pal(pal1 = "multi.pal", 4),
+#'           legend.values.order = c("D", "B", "A", "C"),
+#'           legend.pos = "topright", 
+#'           legend.title.txt = "Category")
 #' layoutLayer(title = "Colors in Europe",
 #'             sources = "UMS RIATE, 2015",
 #'             scale = NULL,
 #'             frame = TRUE,
 #'             col = "black",
-#'             coltitle = "white",
-#'             bg = "#D9F5FF",
-#'             extent = nuts0.spdf)
-#' #Countries plot
-#' nuts0.df$typo <- c(rep("A",10),rep("B",10),rep("C",10),rep("D",4))
-#' typoLayer(spdf = nuts0.spdf, df = nuts0.df,
-#'           var="typo",  col = c("red","black","grey","yellow"),
-#'           legend.values.order = c("D", "B", "A", "C"),
-#'           legend.pos = "topright", 
-#'           legend.title.txt = "Category", 
-#'           add=TRUE)
+#'             coltitle = "white")
 typoLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, var, 
                       col = NULL, border = "grey20", lwd = 1,
+                      colNA = "white",
                       legend.pos = "bottomleft", 
                       legend.title.txt = var,
                       legend.title.cex = 0.8, 
@@ -59,6 +60,8 @@ typoLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, var,
                       legend.frame = FALSE,
                       add = FALSE)
 {
+  # Check missing df and NULL identifiers 
+  if (missing(df)){df <- spdf@data}
   if (is.null(spdfid)){spdfid <- names(spdf@data)[1]}
   if (is.null(dfid)){dfid <- names(df)[1]}
   
@@ -78,17 +81,23 @@ typoLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, var,
                        col = col[1:length(legend.values.order)], 
                        stringsAsFactors = FALSE)
   colvec <- refcol[match(spdf@data[,var], refcol[,1]),2]
+
   # for the legend  
   mycols <- refcol[,2]
   rVal <- refcol[,1]
   
-    
+  # for NA values
+  nodata <- FALSE
+  if(max(is.na(df[,var]) > 0)){
+    nodata <- TRUE
+    colvec[is.na(colvec)] <- colNA
+  }
+
   # plot
   plot(spdf, col = colvec, border = border, lwd = lwd, add = add)
   
   
-  nodata <- FALSE
-  if(max(is.na(df[,var]) > 0)){nodata <- TRUE}
+
   
   if(legend.pos !="n"){
     legendTypo(pos = legend.pos, title.txt = legend.title.txt,
@@ -97,7 +106,8 @@ typoLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, var,
                col = mycols, 
                frame = legend.frame, 
                symbol="box", 
-               nodata = nodata, 
+               nodata = nodata,
+               nodata.col = colNA,
                nodata.txt = legend.nodata)
   }
 }

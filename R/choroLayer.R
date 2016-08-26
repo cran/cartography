@@ -2,7 +2,8 @@
 #' @name choroLayer
 #' @description Plot a chorpoleth layer.
 #' @param spdf a SpatialPolygonsDataFrame.
-#' @param df a data frame that contains the values to plot.
+#' @param df a data frame that contains the values to plot. If df is missing 
+#' spdf@data is used instead. 
 #' @param spdfid name of the identifier field in spdf, default to the first column 
 #' of the spdf data frame. (optional)
 #' @param dfid name of the identifier field in df, default to the first column 
@@ -14,7 +15,7 @@
 #' colors specified than the number of break. 
 #' @param nclass a targeted number of classes. If null, the number of class is automatically defined (see Details).
 #' @param method a discretization method; one of "sd", "equal", 
-#' "quantile", "jenks","q6" or "geom"  (see Details).
+#' "quantile", "fisher-jenks","q6" or "geom"  (see Details).
 #' @param border color of the polygons borders.
 #' @param lwd borders width.
 #' @param legend.pos position of the legend, one of "topleft", "top", 
@@ -28,22 +29,29 @@
 #' @param legend.frame whether to add a frame to the legend (TRUE) or 
 #' not (FALSE).
 #' @param legend.nodata no data label.
+#' @param colNA no data color. 
 #' @param add whether to add the layer to an existing plot (TRUE) or 
 #' not (FALSE).
 #' @details 
-#' The optimum number of class depends on the number of geographical objects. If nclass is not defined, 
-#' an automatic method inspired by Sturges (1926) is used : nclass = 1+3.3*log10(N), where nclass is the number 
-#' of class and N is the variable length.
+#' The optimum number of class depends on the number of geographical objects. 
+#' If nclass is not defined, an automatic method inspired by Sturges (1926) 
+#' is used : nclass = 1+3.3*log10(N), where nclass is the number 
+#' of class and N is the variable length.\cr
 #' 
 #' 
-#' If breaks is used then nclass and method are not.
+#' If breaks is used then nclass and method are not. \cr
 #' 
-#' "sd", "equal", "quantile" and "jenks" are \link{classIntervals} methods. The "q6" method
-#' uses the following \link{quantile} probabilities: 0, 0.05, 0.275, 0.5, 0.725, 0.95, 1.   
+#' 
+#' "sd", "equal", "quantile" and "fisher-jenks" are \link{classIntervals} methods. 
+#' Jenks and Fisher-Jenks algorithms are based on the same principle and give 
+#' quite similar results but Fisher-Jenks is much faster. \cr
+#' The "q6" method uses the following \link{quantile} probabilities: 0, 0.05, 
+#' 0.275, 0.5, 0.725, 0.95, 1.\cr   
 #' The "geom" method is based on a geometric progression along the variable values.  
 #' @references Herbert A. Sturges, «
-#' \emph{The Choice of a Class Interval }», Journal of the American Statistical Association, vol. 21, n° 153, mars 1926, p. 65-66.
-#' @seealso \link{discretization}, \link{carto.pal},  \link{legendChoro}, \link{propSymbolsChoroLayer}
+#' \emph{The Choice of a Class Interval }», Journal of the American Statistical 
+#' Association, vol. 21, n° 153, mars 1926, p. 65-66.
+#' @seealso \link{getBreaks}, \link{carto.pal},  \link{legendChoro}, \link{propSymbolsChoroLayer}
 #' @export
 #' @examples
 #' data("nuts2006")
@@ -94,6 +102,7 @@ choroLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, var,
                        breaks = NULL, method = "quantile", nclass = NULL,
                        col = NULL,
                        border = "grey20", lwd = 1,
+                       colNA = "white",
                        legend.pos = "bottomleft", 
                        legend.title.txt = var,
                        legend.title.cex = 0.8, 
@@ -103,23 +112,32 @@ choroLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, var,
                        legend.frame = FALSE,
                        add = FALSE)
 {
+  if (missing(df)){df <- spdf@data}
   if (is.null(spdfid)){spdfid <- names(spdf@data)[1]}
   if (is.null(dfid)){dfid <- names(df)[1]}
   
   # Join
-  spdf@data <- data.frame(spdf@data[,spdfid], df[match(spdf@data[,spdfid], df[,dfid]),])
+  spdf@data <- data.frame(spdf@data[,spdfid], 
+                          df[match(spdf@data[,spdfid], df[,dfid]),])
 
   spdf <- spdf[!is.na(spdf@data[,dfid]),]
   
   # get the colors and breaks
   layer <- choro(var=spdf@data[,var], distr = breaks, col = col,
                  nclass = nclass, method = method)
-  # poly
-  plot(spdf, col = as.vector(layer$colMap), border = border, lwd = lwd, 
-       add = add)
+  
+  colVec <- as.vector(layer$colMap)
   
   nodata <- FALSE
-  if(max(is.na(df[,var])>0)){nodata <- TRUE}
+  if(max(is.na(df[,var])>0)){
+    nodata <- TRUE
+    colVec[is.na(colVec)] <- colNA
+    }
+  # poly
+  plot(spdf, col = colVec, border = border, lwd = lwd, 
+       add = add)
+  
+
   
   if(legend.pos !="n"){
     legendChoro(pos = legend.pos, 
@@ -130,7 +148,7 @@ choroLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, var,
                 col = layer$col, 
                 values.rnd = legend.values.rnd,
                 frame = legend.frame, 
-                symbol="box",  nodata.col = NA,
+                symbol="box",  nodata.col = colNA,
                 nodata = nodata, 
                 nodata.txt = legend.nodata)
     
