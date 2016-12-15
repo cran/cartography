@@ -1,12 +1,12 @@
 Package: cartography
 Title: Thematic Cartography
-Version: 1.4.0
-Date: 2016-08-24
+Version: 1.4.1
+Date: 2016-12-13
 Authors@R: c(
       person("Timothée", "Giraud", 
-        email = "timothee.giraud@ums-riate.fr", role = c("cre","aut")),
+        email = "timothee.giraud@cnrs.fr", role = c("cre","aut")),
       person("Nicolas", "Lambert", 
-        email = "nicolas.lambert@ums-riate.fr", role = c("aut")))
+        email = "nicolas.lambert@cnrs.fr", role = c("aut")))
 Description: Create and integrate maps in your R workflow. This package allows
     various cartographic representations such as proportional symbols, chroropleth,
     typology, flows or discontinuities. In addition, it also proposes some useful
@@ -23,9 +23,9 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 5.0.1
 NeedsCompilation: no
-Packaged: 2016-08-26 09:21:47 UTC; tg
+Packaged: 2016-12-15 08:46:06 UTC; tg
 Author: Timothée Giraud [cre, aut],
   Nicolas Lambert [aut]
-Maintainer: Timothée Giraud <timothee.giraud@ums-riate.fr>
+Maintainer: Timothée Giraud <timothee.giraud@cnrs.fr>
 Repository: CRAN
-Date/Publication: 2016-08-26 19:02:27
+Date/Publication: 2016-12-15 15:57:33

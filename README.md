@@ -4,7 +4,8 @@
 ![](https://img.shields.io/badge/license-GPL--3-brightgreen.svg?style=flat) 
 [![Travis-CI Build Status](https://travis-ci.org/Groupe-ElementR/cartography.svg?branch=master)](https://travis-ci.org/Groupe-ElementR/cartography)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/Groupe-ElementR/cartography?branch=master&svg=true)](https://ci.appveyor.com/project/Groupe-ElementR/cartography)
-![](http://cranlogs.r-pkg.org/badges/cartography?color=brightgreen)  
+![](http://cranlogs.r-pkg.org/badges/cartography?color=brightgreen)
+[![status](http://joss.theoj.org/papers/0c2d51fc23efb8e1f87d764da8414923/status.svg)](http://joss.theoj.org/papers/0c2d51fc23efb8e1f87d764da8414923)  
  
 
 ## *Create and integrate maps in your R workflow!*
@@ -21,7 +22,7 @@ the graphic presentation of maps.
 
 
 ## Vignette
-The [vignette](https://cran.r-project.org/web/packages/cartography/vignettes/cartography.html) 
+The [vignette](https://CRAN.R-project.org/package=cartography/vignettes/cartography.html) 
 contains commented scripts on how to build various types of maps with `cartography`
 ```{r}
 vignette(topic = "cartography")
@@ -29,6 +30,7 @@ vignette(topic = "cartography")
 
 ## Blog posts, tutorials
 
+[Demo codes in the R graph Gallery](http://www.r-graph-gallery.com/portfolio/maps/) (EN)  
 [Create and integrate maps in your R workflow with the cartography package](http://rgeomatic.hypotheses.org/842) (EN)  
 [Cartographie avec R : le package cartography](http://rgeomatic.hypotheses.org/659) (FR)  
 [R pour les cartographes](http://neocarto.hypotheses.org/1859) (FR)    
