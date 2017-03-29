@@ -1,7 +1,7 @@
 Package: cartography
 Title: Thematic Cartography
-Version: 1.4.1
-Date: 2016-12-13
+Version: 1.4.2
+Date: 2017-03-29
 Authors@R: c(
       person("Timothée", "Giraud", 
         email = "timothee.giraud@cnrs.fr", role = c("cre","aut")),
@@ -21,11 +21,11 @@ Imports: classInt, stats, graphics, utils, methods, rgeos, rosm, raster
 Suggests: SpatialPosition, knitr, rmarkdown
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2016-12-15 08:46:06 UTC; tg
+Packaged: 2017-03-29 09:55:38 UTC; tg
 Author: Timothée Giraud [cre, aut],
   Nicolas Lambert [aut]
 Maintainer: Timothée Giraud <timothee.giraud@cnrs.fr>
 Repository: CRAN
-Date/Publication: 2016-12-15 15:57:33
+Date/Publication: 2017-03-29 11:16:20 UTC
