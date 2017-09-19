@@ -7,6 +7,7 @@
 #' \item{vignettes to explain the computation of potentials;} 
 #' \item{more customizable inputs and outputs (custom distance matrix, raster output...);}
 #' \item{other functions related to spatial interactions (Reilly  and Huff catchment areas).}}
+#' @param x an sf object, a simple feature collection. 
 #' @param spdf a SpatialPolygonsDataFrame.
 #' @param df a data frame that contains the values to compute If df is missing 
 #' spdf@data is used instead. 
@@ -31,13 +32,14 @@
 #'  (in map units). 
 #' @param nclass	numeric; a targeted number of classes (default to 8). Not used if breaks is set.
 #' @param breaks numeric; a vector of values used to discretize the potentials. 
-#' @param mask SpatialPolygonsDataFrame; mask used to clip contours of potentials.
+#' @param mask sf object or SpatialPolygonsDataFrame; mask used to clip contours of potentials.
 #' @param col a vector of colors. Note that if breaks is specified there must be one less 
 #' colors specified than the number of break. 
 #' @param border color of the polygons borders.
 #' @param lwd borders width.
 #' @param legend.pos position of the legend, one of "topleft", "top", 
-#' "topright", "left", "right", "bottomleft", "bottom", "bottomright". If 
+#' "topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
+#' vector of two coordinates in map units (c(x, y)). If 
 #' legend.pos is "n" then the legend is not plotted.
 #' @param legend.title.txt title of the legend.
 #' @param legend.title.cex size of the legend title.
@@ -51,31 +53,43 @@
 #' @details 
 #' If var2 is provided the ratio between the potentials of var (numerator) 
 #' and var2 (denominator) is computed.
-#' @return An \code{\link{invisible}} SpatialPolygonsDataFrame is returned (see \code{\link[SpatialPosition:quickStewart]{quickStewart}}).
+#' @return An \code{\link{invisible}} sf object (MULTIPOLYGONs) is returned (see \code{\link[SpatialPosition:quickStewart]{quickStewart}}).
 #' @export
 #' @seealso \link[SpatialPosition]{quickStewart}, \link[SpatialPosition]{SpatialPosition}, \link{choroLayer}
 #' @examples
-#' \dontrun{
-#' data("nuts2006")
+#' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+#' smoothLayer(x = mtq, var = 'P13_POP',
+#'             span = 4000, beta = 2, breaks = c(0,5000,seq(10000,110000,10000)),
+#'             mask = mtq, border = NA,
+#'             col = carto.pal(pal1 = 'wine.pal', n1 = 12),
+#'             legend.title.txt = "Population\nPotential",
+#'             legend.pos = "topright", legend.values.rnd = -2)
+#' propSymbolsLayer(x = mtq, var = "P13_POP", legend.pos = c(690000, 1599950),
+#'                  legend.title.txt = "Population 2013",
+#'                  col = NA, border = "#ffffff50")
+#' layoutLayer(title = "Actual and Potential Popultation in Martinique", 
+#'             author = "INSEE, 2016", sources = "")
 #' 
+#' \donttest{
+#' data("nuts2006")
 #' # Potential of GDP
-#' smoothLayer(spdf = nuts3.spdf, df = nuts3.df, 
+#' smoothLayer(spdf = nuts3.spdf, df = nuts3.df,
 #'             var = 'gdppps2008',
-#'             span = 75000, beta = 2, 
-#'             mask = nuts0.spdf, 
-#'             legend.title.txt = "GDP", 
-#'             legend.pos = "topright", legend.values.rnd = -2)  
+#'             span = 75000, beta = 2,
+#'             mask = nuts0.spdf,
+#'             legend.title.txt = "GDP",
+#'             legend.pos = "topright", legend.values.rnd = -2)
 #' 
 #' # Potential of GDP per Capita
 #' nuts3.df$gdppps2008 <- nuts3.df$gdppps2008 * 1000000
-#' smoothLayer(spdf = nuts3.spdf, df = nuts3.df, 
+#' smoothLayer(spdf = nuts3.spdf, df = nuts3.df,
 #'             var = 'gdppps2008', var2 = 'pop2008',
-#'             span = 75000, beta = 2, 
-#'             mask = nuts0.spdf, 
-#'             legend.title.txt = "GDP PER CAPITA", 
-#'             legend.pos = "topright", legend.values.rnd = -2)  
-#'}             
-smoothLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, 
+#'             span = 75000, beta = 2,
+#'             mask = nuts0.spdf,
+#'             legend.title.txt = "GDP PER CAPITA",
+#'             legend.pos = "topright", legend.values.rnd = -2)
+#' }
+smoothLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, 
                         var, 
                         var2 = NULL, 
                         typefct = "exponential", 
@@ -101,7 +115,20 @@ smoothLayer <- function(spdf, df, spdfid = NULL, dfid = NULL,
   if(!'package:SpatialPosition' %in% search()){
     attachNamespace('SpatialPosition')
   }
-  if (missing(df)){df <- spdf@data}
+
+  
+  if(!missing(x)){
+    spdf <- methods::as(x, "Spatial")
+    df <- spdf@data
+  }
+  
+  if(missing(df)){df <- spdf@data}
+  
+  if(methods::is(mask, "sf")){
+    mask <- methods::as(mask, "Spatial")
+  }
+  
+  
   # Potential
   pot.spdf <- SpatialPosition::quickStewart(spdf = spdf, df = df, 
                                             spdfid = spdfid, dfid = dfid, 
@@ -117,12 +144,12 @@ smoothLayer <- function(spdf, df, spdfid = NULL, dfid = NULL,
     breaks <- sort(c(unique(pot.spdf$min), max(pot.spdf$max)))
   }
   # map
-  choroLayer(spdf = pot.spdf, df = pot.spdf@data, var = "center", 
+  choroLayer(spdf = pot.spdf, var = "center", 
              breaks = breaks, col = col, border = border, lwd = lwd, 
              legend.pos = legend.pos, legend.title.txt = legend.title.txt, 
              legend.title.cex = legend.title.cex, 
              legend.values.cex = legend.values.cex,
              legend.values.rnd = legend.values.rnd, 
              legend.frame = legend.frame, add = add)
-  return(invisible(pot.spdf))
+  return(invisible(sf::st_as_sf(pot.spdf)))
 }

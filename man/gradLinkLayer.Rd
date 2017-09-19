@@ -4,29 +4,23 @@
 \alias{gradLinkLayer}
 \title{Graduated Links Layer}
 \usage{
-gradLinkLayer(spdf, df, spdfid = NULL, spdfids, spdfide, dfid = NULL, dfids,
-  dfide, var, breaks = getBreaks(v = df[, var], nclass = 4, method =
-  "quantile"), lwd = c(1, 2, 4, 6), col = "red",
-  legend.pos = "bottomleft", legend.title.txt = var,
+gradLinkLayer(x, df, xid = NULL, dfid = NULL, var, breaks = getBreaks(v =
+  df[, var], nclass = 4, method = "quantile"), lwd = c(1, 2, 4, 6),
+  col = "red", legend.pos = "bottomleft", legend.title.txt = var,
   legend.title.cex = 0.8, legend.values.cex = 0.6, legend.values.rnd = 0,
-  legend.frame = FALSE, add = TRUE)
+  legend.frame = FALSE, add = TRUE, spdf, spdfid, spdfids, spdfide, dfids,
+  dfide)
 }
 \arguments{
-\item{spdf}{SpatialLinesDataFrame; a link layer.}
+\item{x}{an sf object, a simple feature collection.}
 
-\item{df}{data frame with identifier(s) and a variable.}
+\item{df}{a data frame that contains identifiers of starting and ending points and a variable.}
 
-\item{spdfid}{unique identifier in spdf (spdfids, spdfide, dfids and dfide are not used).}
+\item{xid}{identifier fields in x, character 
+vector of length 2, default to the 2 first columns. (optional)}
 
-\item{spdfids}{identifier of starting points in spdf (spdfid and dfid are not used).}
-
-\item{spdfide}{identifier of ending points in spdf (spdfid and dfid are not used).}
-
-\item{dfid}{unique identifier in df (spdfids, spdfide, dfids and dfide are not used).}
-
-\item{dfids}{identifier of starting points in df (spdfid and dfid are not used).}
-
-\item{dfide}{identifier of ending points in df (spdfid and dfid are not used).}
+\item{dfid}{identifier fields in df, character 
+vector of length 2, default to the two first columns. (optional)}
 
 \item{var}{name of the variable used to plot the links widths.}
 
@@ -37,7 +31,8 @@ gradLinkLayer(spdf, df, spdfid = NULL, spdfids, spdfide, dfid = NULL, dfids,
 \item{col}{color of the links.}
 
 \item{legend.pos}{position of the legend, one of "topleft", "top", 
-"topright", "left", "right", "bottomleft", "bottom", "bottomright". If 
+"topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
+vector of two coordinates in map units (c(x, y)). If 
 legend.pos is "n" then the legend is not plotted.}
 
 \item{legend.title.txt}{title of the legend.}
@@ -54,6 +49,18 @@ not (FALSE).}
 
 \item{add}{whether to add the layer to an existing plot (TRUE) or 
 not (FALSE).}
+
+\item{spdf}{defunct.}
+
+\item{spdfid}{defunct.}
+
+\item{spdfids}{defunct.}
+
+\item{spdfide}{defunct.}
+
+\item{dfids}{defunct.}
+
+\item{dfide}{defunct.}
 }
 \description{
 Plot a layer of graduated links. Links are plotted according to discrete classes of widths.
@@ -64,12 +71,11 @@ Unlike most of cartography functions, identifiers fields are mandatory.
 \examples{
 data("nuts2006")
 # Create a link layer
-twincities.spdf <- getLinkLayer(spdf = nuts2.spdf, df = twincities.df[,1:2])
+twincities.sf <- getLinkLayer(x = nuts2.spdf, df = twincities.df[,1:2])
 # Plot the links - Twin cities agreements between regions 
 plot(nuts0.spdf, col = "grey60",border = "grey20")
-gradLinkLayer(spdf = twincities.spdf, df = twincities.df,
-              spdfids = "i", spdfide = "j",
-              dfids = "i", dfide = "j",legend.pos = "topright",
+gradLinkLayer(x = twincities.sf, df = twincities.df,
+              legend.pos = "topright",
               var = "fij", breaks = c(2,5,15,20,30), lwd = c(0.1,1,4,10),
               col = "#92000090", add = TRUE)
 }

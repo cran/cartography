@@ -4,34 +4,28 @@
 \alias{discLayer}
 \title{Discontinuities Layer}
 \usage{
-discLayer(spdf, df, spdfid1 = NULL, spdfid2 = NULL, dfid = NULL, var,
-  method = "quantile", nclass = 4, threshold = 0.75, type = "rel",
-  sizemin = 1, sizemax = 10, col = "red", legend.pos = "bottomleft",
+discLayer(x, df, dfid = NULL, var, method = "quantile", nclass = 4,
+  threshold = 0.75, type = "rel", sizemin = 1, sizemax = 10,
+  col = "red", legend.pos = "bottomleft",
   legend.title.txt = "legend title", legend.title.cex = 0.8,
   legend.values.cex = 0.6, legend.values.rnd = 2, legend.frame = FALSE,
-  add = TRUE)
+  add = TRUE, spdf, spdfid1, spdfid2)
 }
 \arguments{
-\item{spdf}{a SpatialLinesDataFrame, as outputed by the \link{getBorders} function.}
+\item{x}{an sf object, a simple feature collection, as outputed by the \link{getBorders} function.}
 
 \item{df}{a data frame that contains the values used to compute and plot discontinuities.}
-
-\item{spdfid1}{first identifier of the border, default to the second column 
-of the spdf data frame. (optional)}
-
-\item{spdfid2}{second identifier of the border, default to the third column 
-of the spdf data frame. (optional)}
 
 \item{dfid}{identifier field in df, default to the first column 
 of df. (optional)}
 
 \item{var}{name of the numeric field in df used to compute and plot discontinuities.}
 
-\item{method}{a discretization method; one of "sd", "equal", 
-"quantile", "fisher-jenks","q6" or "geom"  (see \link{getBreaks} Details).}
+\item{method}{a discretization method; one of "sd", "equal", "quantile", "fisher-jenks","
+q6", "geom", "arith", "em" or "msd" (see \link{getBreaks}).}
 
 \item{nclass}{a targeted number of classes. If null, the number of 
-class is automatically defined (see \link{getBreaks} Details).}
+class is automatically defined (see \link{getBreaks}).}
 
 \item{threshold}{share of represented borders, value between 0 
 (nothing) and 1 (all the discontinuities).}
@@ -45,7 +39,8 @@ class is automatically defined (see \link{getBreaks} Details).}
 \item{col}{color of the discontinuities lines.}
 
 \item{legend.pos}{position of the legend, one of "topleft", "top", 
-"topright", "left", "right", "bottomleft", "bottom", "bottomright". If 
+"topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
+vector of two coordinates in map units (c(x, y)). If 
 legend.pos is "n" then the legend is not plotted.}
 
 \item{legend.title.txt}{title of the legend.}
@@ -62,14 +57,21 @@ not (FALSE).}
 
 \item{add}{whether to add the layer to an existing plot (TRUE) or 
 not (FALSE).}
+
+\item{spdf}{defunct.}
+
+\item{spdfid1}{defunct.}
+
+\item{spdfid2}{defunct.}
 }
 \value{
-An invisible (\link{invisible}) SpatialLinesDataFrame with the discontinuity measures is returned.
+An \link{invisible} sf object (MULTISTRING) with the discontinuity measures is returned.
 }
 \description{
 This function computes and plots spatial discontinuities. The 
 discontinuities are plotted over the layer outputed by the \link{getBorders} function.
-The line widths reflect the ratio between values of an indicator in two neighbouring units.
+The line widths reflect the ratio or the difference between values of an indicator 
+in two neighbouring units.
 }
 \details{
 The "rel" type of discontinuity is the result of pmax(value unit 1 / value unit 2, value unit 2 / value unit 1).\cr
@@ -78,18 +80,35 @@ The "abs" type of discontinuity is the result of pmax(value unit 1 - value unit 
 \examples{
 data(nuts2006)
 # Get borders
-nuts0.contig.spdf <- getBorders(nuts0.spdf)
+nuts0.contig <- getBorders(x = nuts0.spdf)
 # GDP per capita
 nuts0.df$gdpcap <- nuts0.df$gdppps2008/nuts0.df$pop2008
 # Plot countries
 plot(nuts0.spdf, col="#CCCCCC", lwd=1, border="white")
 # Plot discontinuities
-discLayer(spdf = nuts0.contig.spdf, df = nuts0.df,
+discLayer(x = nuts0.contig, df = nuts0.df,
           var = "gdpcap", col="red", nclass=5,
           method="quantile", threshold = 0.5, sizemin = 1,
           sizemax = 10, type = "rel", legend.frame = TRUE,
           legend.title.txt = "GDP per Capita discontinuities\\n(relative)",
           legend.pos = "topright", add=TRUE)
+
+mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+# Get borders
+mtq.borders <- getBorders(x = mtq)
+# Employees share in the pop
+mtq$emp_share <- 100 * mtq$C13_CS5/mtq$C13_POP
+# Plot this share
+choroLayer(x = mtq, var = "emp_share", border = NA, method = 'q6', 
+           legend.values.rnd = 1, legend.pos = "topleft", 
+           legend.title.txt = "Share of employees\\nin the population\\n(age > 15 y.o.)" )
+# Plot discontinuities
+discLayer(x = mtq.borders, df = mtq,
+          var = "emp_share", col="darkorange2", nclass=3,
+          method="quantile", threshold = 0.5, sizemin = 0.5,
+          sizemax = 10, type = "abs", 
+          legend.title.txt = "Discontinuities\\n(absolute difference)",
+          legend.pos = "bottomleft", add=TRUE)
 }
 \seealso{
 \link{getBorders}, \link{gradLinkLayer}, \link{legendGradLines}

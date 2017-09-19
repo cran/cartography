@@ -2,45 +2,59 @@
 % Please edit documentation in R/getOuterBorders.R
 \name{getOuterBorders}
 \alias{getOuterBorders}
-\title{Extract SpatialPolygonsDataFrame Outer Borders}
+\title{Extract Polygons Outer Borders}
 \usage{
-getOuterBorders(spdf, spdfid = NULL, res = NULL, width = NULL)
+getOuterBorders(x, id, res = NULL, width = NULL, spdf, spdfid = NULL)
 }
 \arguments{
-\item{spdf}{a SpatialPolygonsDataFrame.}
+\item{x}{an sf object, a simple feature collection or a SpatialPolygonsDataFrame.}
 
-\item{spdfid}{identifier field in spdf, default to the first column 
-of the spdf data frame. (optional)}
+\item{id}{identifier field in x, default to the first column. (optional)}
 
-\item{res}{resolution of the grid used to compute borders (in spdf units). 
+\item{res}{resolution of the grid used to compute borders (in x units).
 A high resolution will give more detailed borders. (optional)}
 
-\item{width}{maximum distance between used to compute borders (in spdf units). 
+\item{width}{maximum distance between used to compute borders (in x units).
 A higher width will build borders between units that are farther apart. (optional)}
+
+\item{spdf}{deprecated, a SpatialPolygonsDataFrame. This SpatialPolygonsDataFrame
+has to be projected (planar coordinates).}
+
+\item{spdfid}{deprecated, identifier field in spdf, default to the first column 
+of the spdf data frame.  (optional)}
 }
 \value{
-A SpatialLinesDataFrame of borders is returned. This object has three 
+An sf object (MULTILINESTRING) of borders is returned. This object has three
 id fields: id, id1 and id2.
-id1 and id2 are ids of units that neighbour a border; id is the concatenation 
+id1 and id2 are ids of units that neighbour a border; id is the concatenation
 of id1 and id2 (with "_" as separator).
 }
 \description{
-Extract outer borders between SpatialPolygonsDataFrame units. 
-Outer borders are non-contiguous SpatialPolygonsDataFrame borders (e.g. 
+Extract outer borders between polygons.
+Outer borders are non-contiguous polygons borders (e.g.
 maritim borders).
 }
 \note{
 getBorders and getOuterBorders can be combined with rbind.
 }
 \examples{
-\dontrun{
+mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+# Get units borders
+mtq.outer <- getOuterBorders(x = mtq, res = 500, width = 2500)
+# Plot communesa
+plot(mtq$geometry, col = "grey60")
+# Plot borders
+plot(mtq.outer, col = sample(x = rainbow(nrow(mtq.outer))),
+     lwd = 3, add = TRUE)
+     
+\donttest{
 data(nuts2006)
 # Get units borders
-nuts0.outer <- getOuterBorders(nuts0.spdf)
+nuts0.outer <- getOuterBorders(x = nuts0.spdf)
 # Plot Countries
 plot(nuts0.spdf, border = NA, col = "grey60")
 # Plot borders
-plot(nuts0.outer, col = sample(x = rainbow(nrow(nuts0.outer))), 
+plot(nuts0.outer, col = sample(x = rainbow(nrow(nuts0.outer))),
      lwd = 3, add = TRUE)
 }
 }

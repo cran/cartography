@@ -4,7 +4,7 @@
 \alias{smoothLayer}
 \title{Smooth Layer}
 \usage{
-smoothLayer(spdf, df, spdfid = NULL, dfid = NULL, var, var2 = NULL,
+smoothLayer(x, spdf, df, spdfid = NULL, dfid = NULL, var, var2 = NULL,
   typefct = "exponential", span, beta, resolution = NULL, mask = NULL,
   nclass = 8, breaks = NULL, col = NULL, border = "grey20", lwd = 1,
   legend.pos = "bottomleft", legend.title.txt = "Potential",
@@ -12,6 +12,8 @@ smoothLayer(spdf, df, spdfid = NULL, dfid = NULL, var, var2 = NULL,
   legend.frame = FALSE, add = FALSE)
 }
 \arguments{
+\item{x}{an sf object, a simple feature collection.}
+
 \item{spdf}{a SpatialPolygonsDataFrame.}
 
 \item{df}{a data frame that contains the values to compute If df is missing 
@@ -44,7 +46,7 @@ interaction function equals 0.5.}
 \item{resolution}{numeric; resolution of the output SpatialPointsDataFrame
 (in map units).}
 
-\item{mask}{SpatialPolygonsDataFrame; mask used to clip contours of potentials.}
+\item{mask}{sf object or SpatialPolygonsDataFrame; mask used to clip contours of potentials.}
 
 \item{nclass}{numeric; a targeted number of classes (default to 8). Not used if breaks is set.}
 
@@ -58,7 +60,8 @@ colors specified than the number of break.}
 \item{lwd}{borders width.}
 
 \item{legend.pos}{position of the legend, one of "topleft", "top", 
-"topright", "left", "right", "bottomleft", "bottom", "bottomright". If 
+"topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
+vector of two coordinates in map units (c(x, y)). If 
 legend.pos is "n" then the legend is not plotted.}
 
 \item{legend.title.txt}{title of the legend.}
@@ -77,7 +80,7 @@ not (FALSE).}
 not (FALSE).}
 }
 \value{
-An \code{\link{invisible}} SpatialPolygonsDataFrame is returned (see \code{\link[SpatialPosition:quickStewart]{quickStewart}}).
+An \code{\link{invisible}} sf object (MULTIPOLYGONs) is returned (see \code{\link[SpatialPosition:quickStewart]{quickStewart}}).
 }
 \description{
 Plot a layer of smoothed data. It can also compute a ratio of potentials.\cr \cr
@@ -93,26 +96,38 @@ If var2 is provided the ratio between the potentials of var (numerator)
 and var2 (denominator) is computed.
 }
 \examples{
-\dontrun{
-data("nuts2006")
+mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+smoothLayer(x = mtq, var = 'P13_POP',
+            span = 4000, beta = 2, breaks = c(0,5000,seq(10000,110000,10000)),
+            mask = mtq, border = NA,
+            col = carto.pal(pal1 = 'wine.pal', n1 = 12),
+            legend.title.txt = "Population\\nPotential",
+            legend.pos = "topright", legend.values.rnd = -2)
+propSymbolsLayer(x = mtq, var = "P13_POP", legend.pos = c(690000, 1599950),
+                 legend.title.txt = "Population 2013",
+                 col = NA, border = "#ffffff50")
+layoutLayer(title = "Actual and Potential Popultation in Martinique", 
+            author = "INSEE, 2016", sources = "")
 
+\donttest{
+data("nuts2006")
 # Potential of GDP
-smoothLayer(spdf = nuts3.spdf, df = nuts3.df, 
+smoothLayer(spdf = nuts3.spdf, df = nuts3.df,
             var = 'gdppps2008',
-            span = 75000, beta = 2, 
-            mask = nuts0.spdf, 
-            legend.title.txt = "GDP", 
-            legend.pos = "topright", legend.values.rnd = -2)  
+            span = 75000, beta = 2,
+            mask = nuts0.spdf,
+            legend.title.txt = "GDP",
+            legend.pos = "topright", legend.values.rnd = -2)
 
 # Potential of GDP per Capita
 nuts3.df$gdppps2008 <- nuts3.df$gdppps2008 * 1000000
-smoothLayer(spdf = nuts3.spdf, df = nuts3.df, 
+smoothLayer(spdf = nuts3.spdf, df = nuts3.df,
             var = 'gdppps2008', var2 = 'pop2008',
-            span = 75000, beta = 2, 
-            mask = nuts0.spdf, 
-            legend.title.txt = "GDP PER CAPITA", 
-            legend.pos = "topright", legend.values.rnd = -2)  
-}             
+            span = 75000, beta = 2,
+            mask = nuts0.spdf,
+            legend.title.txt = "GDP PER CAPITA",
+            legend.pos = "topright", legend.values.rnd = -2)
+}
 }
 \seealso{
 \link[SpatialPosition]{quickStewart}, \link[SpatialPosition]{SpatialPosition}, \link{choroLayer}

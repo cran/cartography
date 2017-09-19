@@ -9,14 +9,14 @@ barscale(size = NULL, lwd = 1.5, cex = 0.6, pos = NULL,
 }
 \arguments{
 \item{size}{size of the scale bar in kilometers. If set to NULL, an 
-automatic scale bar is displayed (1/10 of the map width).}
+automatic size is used (1/10 of the map width).}
 
 \item{lwd}{width of the scale bar.}
 
 \item{cex}{cex of the text.}
 
 \item{pos}{position of the legend, default to the bottom right corner of the map. 
-A vector of two coordinates (c(x, y) is possible.}
+A vector of two coordinates (c(x, y)) is possible.}
 
 \item{style}{style of the legend, either "pretty" or "oldschool". The 
 "oldschool" style only uses the "size" parameter.}
@@ -24,13 +24,17 @@ A vector of two coordinates (c(x, y) is possible.}
 \description{
 Plot a scale bar.
 }
+\note{
+This scale bar is not accurate on unprojected (long/lat) maps.
+}
 \examples{
 data("nuts2006")
 plot(nuts0.spdf, col = "grey60",border = "grey20", add=FALSE)
 barscale(size = 1000)
 barscale(size = 500, lwd = 3, cex = .9, pos = c(3553000, 1449000))
 
-plot(nuts0.spdf, col = "grey60",border = "grey20", add=FALSE)
+mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+plot(st_geometry(mtq), col = "grey60", border = "grey20")
 barscale(style = "oldschool")
 }
 \seealso{

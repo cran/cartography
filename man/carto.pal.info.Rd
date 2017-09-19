@@ -7,13 +7,13 @@
 carto.pal.info()
 }
 \value{
-A vector of palettes names is returned.
+A vector of color palettes names is returned.
 }
 \description{
-Display the names of all the available color palettes.
+Display the names of all color palettes.
 }
 \examples{
-carto.pal.info
+carto.pal.info()
 }
 \seealso{
 \link{carto.pal}, \link{display.carto.pal}, \link{display.carto.all}

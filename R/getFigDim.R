@@ -1,11 +1,11 @@
 #' @title Get Figure Dimensions
 #' @description Give the dimension of a map figure to be exported in 
-#' raster of vector format. \cr
-#' Output dimension are based on a Spatial*DataFrame 
-#' dimension ratio, the margins of the figure, a targeted width or height
-#' of the figure and its resolution. 
+#' raster or vector format. \cr
+#' Output dimension are based on a spatial object dimension ratio, margins of 
+#' the figure, a targeted width or height and a resolution. 
 #' @name getFigDim
-#' @param spdf a Spatial*DataFrame.
+#' @param x an sf object, a simple feature collection or a Spatial*DataFrame. 
+#' @param spdf deprecated, a Spatial*DataFrame.
 #' @param width width of the figure (in pixels), either width or height 
 #' must be set.
 #' @param height heigth of the figure (in pixels), either width or height 
@@ -21,37 +21,50 @@
 #' @examples
 #' \dontrun{
 #' data("nuts2006")
-#' spdf <- nuts0.spdf[nuts0.spdf$id=="IT",]
+#' italy <- nuts0.spdf[nuts0.spdf$id=="IT",]
 #' 
 #' ## PNG export
 #' # get figure dimension
-#' sizes <- getFigDim(spdf = spdf, width = 450, mar = c(0,0,1.2,0))
+#' sizes <- getFigDim(x = italy, width = 450, mar = c(0,0,1.2,0))
 #' # export the map
 #' png(filename = "Italy.png", width = sizes[1], height = sizes[2])
 #' par(mar = c(0,0,1.2,0))
-#' plot(spdf, col = NA, border=NA, bg = "#A6CAE0")
+#' plot(italy, col = NA, border=NA, bg = "#A6CAE0")
 #' plot(world.spdf, col = "#E3DEBF", border = NA, add = TRUE)
-#' plot(spdf, col = "#D1914D", border = "white", add = TRUE)
+#' plot(italy, col = "#D1914D", border = "white", add = TRUE)
 #' layoutLayer(title = "Map of Italy")
 #' dev.off()
 #' 
 #' ## PDF export
 #' # get figure dimension
-#' sizes <- getFigDim(spdf = spdf, width = 450, mar = c(1,1,2.2,1))
+#' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+#' sizes <- getFigDim(x = mtq, width = 450, mar = c(1,1,2.2,1))
 #' # export the map
-#' pdf(file = "Italy.pdf", width = sizes[1]/72, height = sizes[2]/72)
+#' pdf(file = "Martinique.pdf", width = sizes[1]/72, height = sizes[2]/72)
 #' par(mar = c(1,1,2.2,1))
-#' plot(spdf, col = NA, border = NA, bg = "#A6CAE0")
-#' plot(world.spdf, col = "#E3DEBF", border = NA, add = TRUE)
-#' plot(spdf, col = "#D1914D", border = "white", add = TRUE)
-#' layoutLayer(title = "Map of Italy")
+#' plot(st_geometry(mtq), col = "#D1914D", border = "white", bg = "#A6CAE0")
+#' layoutLayer(title = "Map of Martinique")
 #' dev.off()
 #' }
-getFigDim <- function(spdf, width = NULL, height = NULL, 
+getFigDim <- function(x, spdf, width = NULL, height = NULL, 
                       mar = par('mar'), res = 72){
-  bb <- sp::bbox(obj = spdf)
-  iw <- bb[1,2] - bb[1,1]
-  ih <- bb[2,2] - bb[2,1]
+  
+  if(!missing(spdf)){
+    warning("spdf is deprecated; use x instead.", call. = FALSE)
+  }
+  
+  if(missing(x)){
+    x <- sf::st_as_sf(spdf)
+  }
+  
+  if(methods::is(x, "Spatial")){
+    x <- sf::st_as_sf(x)
+  }
+  
+  
+  bb <- sf::st_bbox(x)
+  iw <- bb[3] - bb[1]
+  ih <- bb[4] - bb[2]
   if (is.null(width) & is.null(height)){width <- 474}
   if(!is.null(width)){
     wh <- iw / ih
@@ -62,5 +75,5 @@ getFigDim <- function(spdf, width = NULL, height = NULL,
     heightmar <- height - ( 0.2 * (mar[1] +  mar[3]) * res )
     width <- (heightmar / hw) + ( 0.2 * (mar[2] +  mar[4]) * res )
   }
-  return(floor(c(width, height)))
+  return(unname(floor(c(width, height))))
 }

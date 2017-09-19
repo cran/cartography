@@ -1,13 +1,47 @@
 ## ----echo=FALSE----------------------------------------------------------
 knitr::opts_chunk$set(collapse = TRUE)
 
-## ----labelMap, fig.height=5, fig.width=7---------------------------------
+knitr::knit_hooks$set(margin = function(before, options, envir){
+if (before){
+  par(mar=c(0.1,0.1,1.3,0.1))
+  } 
+})
+
+## ----importRGDAL, margin=TRUE, fig.height=5, fig.width=5-----------------
+library(rgdal)
+# path to the ESRI Shapefile embedded in cartography
+path_to_file <- system.file("shape/martinique.shp", package="cartography")
+mtq <- readOGR(dsn = path_to_file, verbose = FALSE)
+class(mtq)
+plot(mtq)
+
+## ----importSF, margin=TRUE,fig.height=5, fig.width=5---------------------
+library(sf)
+# path to the ESRI Shapefile embedded in cartography
+path_to_file <- system.file("shape/martinique.shp", package="cartography")
+mtq <- st_read(dsn = path_to_file, quiet = TRUE)
+class(mtq)
+plot(st_geometry(mtq))
+
+## ----importDataSet, margin=TRUE, fig.height=5, fig.width=7---------------
 library(cartography)
 # Load data
 data(nuts2006)
-# set margins
-opar <- par(mar = c(0,0,1.2,0))
 
+# Plot a layer with the extent of the EU28 countries with only a background color
+plot(nuts0.spdf, border = NA, col = NA, bg = "#A6CAE0")
+# Plot non european space
+plot(world.spdf, col  = "#E3DEBF", border=NA, add=TRUE)
+# Plot a layer of countries borders
+plot(nuts0.spdf, border = "grey20", lwd = 3, add = TRUE)
+# Plot a layer of NUTS1
+plot(nuts1.spdf, border = "grey30", lwd = 2, add = TRUE)
+# Plot a layer of NUTS2
+plot(nuts2.spdf, border = "grey40", lwd = 0.5, add = TRUE)
+# Plot a layer of NUTS3
+plot(nuts3.spdf, border = "grey20", lwd = 0.1, add = TRUE)
+
+## ----labelMap, fig.height=5, fig.width=7, margin=TRUE--------------------
 # Layout plot
 layoutLayer(title = "Most Populated Countries of Europe", # title of the map
             author = "",  # no author text
@@ -20,9 +54,9 @@ layoutLayer(title = "Most Populated Countries of Europe", # title of the map
             extent = nuts0.spdf) # set the extent of the map
 
 # Non European space
-plot(world.spdf, col  = "#E3DEBF", border=NA, add=TRUE)
+plot(world.spdf, col = "#E3DEBF", border = NA, add = TRUE)
 # European (EU28) countries
-plot(nuts0.spdf, col = "#D1914D",border = "white", lwd=1, add=TRUE)
+plot(nuts0.spdf, col = "#D1914D",border = "white", lwd = 1, add = TRUE)
 
 # Selection of the 10 most populated countries of Europe
 dflab <- nuts0.df[order(nuts0.df$pop2008, decreasing = TRUE),][1:10,]
@@ -41,15 +75,9 @@ labelLayer(spdf = nuts0.spdf, # SpatialPolygonsDataFrame used to plot he labels
 text(x = 5477360, y = 4177311, labels = "The 10 most populated countries of Europe
 Total population 2008, in millions of inhabitants.", cex = 0.7, adj = 0)
 
-par(opar)
 
-## ----choroMap, fig.height=5, fig.width=7---------------------------------
-library(cartography)
-# Load data
-data(nuts2006)
-# set margins
-opar <- par(mar = c(0,0,1.2,0))
 
+## ----choroMap, fig.height=5, fig.width=7, margin=TRUE--------------------
 # Compute the compound annual growth rate
 nuts2.df$cagr <- (((nuts2.df$pop2008 / nuts2.df$pop1999)^(1/9)) - 1) * 100
 
@@ -85,18 +113,11 @@ layoutLayer(title = "Demographic Trends", author = "cartography",
             sources = "Eurostat, 2008", frame = TRUE, col = NA, 
             scale = NULL,coltitle = "black",
             south = TRUE) # add a south arrow
-par(opar)
 
-## ----propMap, fig.height=5, fig.width=7, message=FALSE-------------------
-library(cartography)
-# Load data
-data(nuts2006)
-# set margins
-opar <- par(mar = c(0.1,0.1,1.3,0.1))
-
-## Plot Stamen tiles (using OpenStreetMap data) as basemap 
+## ----propMap, fig.height=5, fig.width=7, message=FALSE, margin=TRUE------
+## Plot OpenStreetMap tiles as basemap 
 # Download the tiles, nuts0.spdf extent
-EUosm <- getTiles(spdf = nuts0.spdf, type = "stamenwatercolor", zoom = 4)
+EUosm <- getTiles(spdf = nuts0.spdf, type = "osm", zoom = 4)
 # Plot the tiles
 tilesLayer(EUosm)
 
@@ -111,30 +132,22 @@ propSymbolsLayer(spdf = nuts0.spdf, # SpatialPolygonsDataFrame of the countries
                  symbols = "circle", # type of symbol
                  border = "white", # color of the symbols borders
                  lwd = 1.5, # width of the symbols borders
-                 legend.pos = "topleft", 
+                 legend.pos = "topleft",
                  legend.title.txt = "Total population\n(in thousands)")
-# Layout plot
+# # Layout plot
 layoutLayer(title = "Countries Population in Europe",
             sources = "Data: Eurostat, 2008",
             author = "Base map: Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA.",
             scale = NULL, frame = TRUE,
             col = "#688994") # color of the frame
-par(opar)
 
-## ----linkMap, fig.height=5, fig.width=7----------------------------------
-library(cartography)
-# Load data
-data(nuts2006)
-# set margins
-opar <- par(mar = c(0,0,1.2,0))
-
+## ----linkMap, fig.height=5, fig.width=7, margin=TRUE---------------------
 # Create a link layer from the twincities data frame
 head(twincities.df)
 # twincities contains links between Nuts 2 regions
 # ?twincities.df
-twincities.spdf <- getLinkLayer(spdf = nuts2.spdf, # SpatialPolygonsDataFrame of Nuts2
+twincities.spdf <- getLinkLayer(x = nuts2.spdf, # SpatialPolygonsDataFrame of Nuts2
                                 df = twincities.df) # links data frame
-class(twincities.spdf)
 
 # Plot a layer with the extent of the EU28 countries with only a background color
 plot(nuts0.spdf, border = NA, col = NA, bg = "#A6CAE0")
@@ -143,13 +156,9 @@ plot(world.spdf, col  = "#E3DEBF", border=NA, add=TRUE)
 # Plot Nuts2 regions
 plot(nuts2.spdf, col = "#D1914D",border = "grey80", add=TRUE)
 
-# Plot links with graduated sizes
-gradLinkLayer(spdf = twincities.spdf, # SpatialLinesdataFrame of the links
+# # Plot links with graduated sizes
+gradLinkLayer(x = twincities.spdf, # SpatialLinesdataFrame of the links
               df = twincities.df, # data frame of the links
-              spdfids = "i", # identifier of starting points in spdf 
-              spdfide = "j", # identifier of ending points in spdf 
-              dfids = "i", # identifier of starting points in df 
-              dfide = "j", # identifier of starting points in df 
               var = "fij", # name of the variable used to plot the links widths
               breaks = c(2,5,15,20,30), # list of breaks
               lwd = c(0.1,1,4,10), # list of widths
@@ -163,24 +172,17 @@ layoutLayer(title = "International Twinning Agreements Between Cities",
             author = "cartography", sources = "Sources: Adam Ploszaj & Wikipedia, 2011",
             scale = NULL, south = TRUE, frame = TRUE, col = NA, 
             coltitle = "black")
-par(opar)
 
-## ----propchoroLayer, fig.height=5, fig.width=7---------------------------
-library(cartography)
-# Load data
-data(nuts2006)
-# set margins
-opar <- par(mar = c(0,0,1.2,0))
-
+## ----propchoroLayer, fig.height=5, fig.width=7, margin=TRUE--------------
 # Compute the compound annual growth rate
 nuts2.df$cagr <- (((nuts2.df$pop2008 / nuts2.df$pop1999)^(1/9)) - 1) * 100
 
 # Plot a layer with the extent of the EU28 countries with only a background color
 plot(nuts0.spdf, border = NA, col = NA, bg = "#A6CAE0")
 # Plot non european space
-plot(world.spdf, col  = "#E3DEBF", border=NA, add=TRUE)
+plot(world.spdf, col  = "#E3DEBF", border = NA, add = TRUE)
 # Plot Nuts2 regions
-plot(nuts2.spdf, col = "grey60",border = "white", lwd=0.4, add=TRUE)
+plot(nuts2.spdf, col = "grey60",border = "white", lwd = 0.4, add = TRUE)
 
 # Set a custom color palette
 cols <- carto.pal(pal1 = "blue.pal", n1 = 2, pal2 = "red.pal", n2 = 4)
@@ -206,19 +208,11 @@ propSymbolsChoroLayer(spdf = nuts2.spdf,
 layoutLayer(title = "Demographic trends, 1999-2008", coltitle = "black",
             sources = "Eurostat, 2011", scale = NULL,
             author = "cartography", frame ="", col = NA)
-par(opar)
 
-## ----discLayer, fig.height=5, fig.width=7--------------------------------
-library(cartography)
-# Load data
-data(nuts2006)
-# set margins
-opar <- par(mar = c(0,0,1.2,0))
-
+## ----discLayer, fig.height=5, fig.width=7, margin=TRUE-------------------
 # Get a SpatialLinesDataFrame of countries borders
-nuts0.contig.spdf <- getBorders(nuts0.spdf)
-class(nuts0.contig.spdf)
-head(nuts0.contig.spdf@data)
+nuts0.contig <- getBorders(spdf = nuts0.spdf)
+class(nuts0.contig)
 
 # Get the GDP per capita
 nuts0.df$gdpcap <- nuts0.df$gdppps2008/nuts0.df$pop2008*1000000
@@ -236,7 +230,7 @@ choroLayer(spdf = nuts0.spdf, df = nuts0.df, var = "gdpcap", border = "grey80",
            legend.title.txt = "GDP per Capita\n(in euros)")
 
 # Plot discontinuities
-discLayer(spdf = nuts0.contig.spdf, # SpatialLinesDataFrame of borders
+discLayer(x = nuts0.contig, # sf of borders
           df = nuts0.df, # data frame on countries
           var = "gdpcap", # variable used to compute discontinuties 
           type = "rel", # type of discontinuity measure 
@@ -255,33 +249,18 @@ discLayer(spdf = nuts0.contig.spdf, # SpatialLinesDataFrame of borders
 layoutLayer(title = "Wealth Disparities in Europe", coltitle = "black",
             sources = "Eurostat, 2011", scale = NULL,
             author = "cartography", frame ="", col = NA)
-par(opar)
 
-## ----gridLayer, fig.height=5, fig.width=7--------------------------------
-library(cartography)
-# Load data
-data(nuts2006)
-# set margins
-opar <- par(mar = c(0,0,1.2,0))
-
+## ----gridLayer, fig.height=5, fig.width=7, margin=TRUE-------------------
 # Create a grid layer
-mygrid <- getGridLayer(spdf=nuts2.spdf, # SpatialPolygonsDataFrame
-                       cellsize = 200000) # output cell size, in map units (200 km)
-# getGridLayer outputs a list
-ls(mygrid)
-# Data frame of surface intersection
-head(mygrid$df)
-# The grid
-plot(mygrid$spdf)
-
-# Compute data for the grid layer
-datagrid.df <- getGridData(x = mygrid, # list outputed by getGridLayer
-                           df = nuts2.df, # a data frame matching the spdf SpatialdataFrame in getGridLayer
-                           var = "pop2008") # name of the variable to distribute on the grid 
+nuts2.spdf@data <- nuts2.df
+mygrid <- getGridLayer(x = nuts2.spdf, # SpatialPolygonsDataFrame
+                       cellsize = 200000 * 200000, # output cell size, in map units (200 km)
+                       var = "pop2008") # variable to adapt to the grid
+                       
 
 # Plot dentsity of population
 ## conversion from square meter to square kilometers
-datagrid.df$densitykm <- datagrid.df$pop2008_density*1000*1000
+mygrid$densitykm <- mygrid$pop2008 * 1000 * 1000 / mygrid$gridarea
 
 # Plot a layer with the extent of the EU28 countries with only a background color
 plot(nuts0.spdf, border = NA, col = NA, bg = "#A6CAE0")
@@ -292,15 +271,13 @@ plot(world.spdf, col  = "#E3DEBF", border=NA, add=TRUE)
 cols <- carto.pal(pal1 = "wine.pal", n1 = 6)
 
 # Plot the gridded population density
-choroLayer(spdf = mygrid$spdf,df = datagrid.df,var = "densitykm", 
+choroLayer(x = mygrid, var = "densitykm", 
            border = "grey80", col = cols, legend.pos = "topright",
-           method = "q6", add = TRUE,
+           method = "q6", add = TRUE, legend.values.rnd = 1,
            legend.title.txt = "Population Density\n(inhabitant/km²)")
 
 # Layout
 layoutLayer(title = "Population Density", coltitle = "black",
             sources = "Eurostat, 2011", scale = NULL, 
             author = "cartography", frame ="", col = NA)
-
-par(opar)
 

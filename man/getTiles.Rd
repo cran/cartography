@@ -4,14 +4,17 @@
 \alias{getTiles}
 \title{Get Tiles from Open Map Servers}
 \usage{
-getTiles(spdf, type = "osm", zoom = NULL, crop = FALSE)
+getTiles(x, spdf, type = "osm", zoom = NULL, crop = FALSE)
 }
 \arguments{
-\item{spdf}{a Spatial*DataFrame with a valid projection attribute.}
+\item{x}{an sf object, a simple feature collection or a Spatial*DataFrame.}
 
-\item{type}{the tile server from which to get the map, one of "hikebike", 
-"hotstyle", "lovinacycle", "lovinahike", "osmgrayscale", "stamenbw" and 
-"stamenwatercolor".}
+\item{spdf}{deprecated, a Spatial*DataFrame with a valid projection attribute.}
+
+\item{type}{the tile server from which to get the map, one of "osm", 
+"opencycle", "hotstyle", "loviniahike", "loviniacycle", "hikebike", "osmgrayscale", 
+"stamenbw", "stamenwatercolor", "osmtransport", "thunderforestlandscape", 
+"thunderforestoutdoors", "cartodark", "cartolight".}
 
 \item{zoom}{the zoom level. If null, it is determined automatically 
 (see Details).}
@@ -22,7 +25,7 @@ getTiles(spdf, type = "osm", zoom = NULL, crop = FALSE)
 A RatserBrick is returned.
 }
 \description{
-Get map tiles based on a Spatial*DataFrame extent. Maps can be 
+Get map tiles based on a spatial object extent. Maps can be 
 fetched from various open map servers.
 }
 \details{
@@ -39,16 +42,24 @@ extraction and display parameters.
 \dontrun{
 data("nuts2006")
 # extract Denmark
-spdf <- nuts0.spdf[nuts0.spdf$id=="DK",]   
-# Download the tiles, extent = Denmark 
-den <- getTiles(spdf = spdf, type = "stamenwatercolor", crop = TRUE)
+spdf <- nuts0.spdf[nuts0.spdf$id=="DK",]
+# Download the tiles, extent = Denmark
+den <- getTiles(spdf = spdf, type = "osm", crop = TRUE)
 class(den)
 # Plot the tiles
 tilesLayer(den)
-# Plot countries
-plot(spdf, add=TRUE)
 # Map tiles sources
-mtext(text = "Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA.",
+mtext(text = "© OpenStreetMap contributors, under CC BY SA.",
+      side = 1, adj = 0, cex = 0.7, font = 3)
+
+mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+# Download the tiles, extent = Martinique
+mtqOSM <- getTiles(x = mtq, type = "osm", crop = TRUE)
+# Plot the tiles
+tilesLayer(mtqOSM)
+# Plot countries
+plot(st_geometry(mtq), add=TRUE)
+mtext(text = "© OpenStreetMap contributors, under CC BY SA.",
       side = 1, adj = 0, cex = 0.7, font = 3)
 }
 }

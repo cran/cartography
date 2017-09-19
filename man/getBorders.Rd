@@ -2,38 +2,52 @@
 % Please edit documentation in R/getBorders.R
 \name{getBorders}
 \alias{getBorders}
-\title{Extract SpatialPolygonsDataFrame Borders}
+\title{Extract Polygons Borders}
 \usage{
-getBorders(spdf, spdfid = NULL)
+getBorders(x, id, spdf, spdfid = NULL)
 }
 \arguments{
-\item{spdf}{a SpatialPolygonsDataFrame. This SpatialPolygonsDataFrame
+\item{x}{an sf object, a simple feature collection or a SpatialPolygonsDataFrame.}
+
+\item{id}{identifier field in x or spdf, default to the first column. (optional)}
+
+\item{spdf}{deprecated, a SpatialPolygonsDataFrame. This SpatialPolygonsDataFrame
 has to be projected (planar coordinates).}
 
-\item{spdfid}{identifier field in spdf, default to the first column 
-of the spdf data frame. (optional)}
+\item{spdfid}{deprecated, identifier field in spdf, default to the first column of the 
+spdf data frame. (optional)}
 }
 \value{
-A SpatialLinesDataFrame of borders is returned. This object has three 
+An sf object (MULTILINESTRING) of borders is returned. This object has three 
 id fields: id, id1 and id2.
 id1 and id2 are ids of units that neighbour a border; id is the concatenation 
 of id1 and id2 (with "_" as separator).
 }
 \description{
-Extract borders between SpatialPolygonsDataFrame units.
+Extract borders between polygons.
 }
 \note{
 getBorders and getOuterBorders can be combined with rbind.
 }
 \examples{
 data(nuts2006)
-# Get units borders
-nuts0.contig.spdf <- getBorders(nuts0.spdf)
+# Get borders
+nuts0.contig <- getBorders(x = nuts0.spdf)
 # Plot Countries
 plot(nuts0.spdf, border = NA, col = "grey60")
 # Plot borders
-plot(nuts0.contig.spdf, 
-     col = sample(x = rainbow(nrow(nuts0.contig.spdf))), 
+plot(st_geometry(nuts0.contig), 
+     col = sample(x = rainbow(nrow(nuts0.contig))), 
+     lwd = 3, add = TRUE)
+
+mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+# Get borders
+mtq.borders <- getBorders(x = mtq)
+# Plot polygons
+plot(st_geometry(mtq), border = NA, col = "grey60")
+# Plot borders
+plot(st_geometry(mtq.borders), 
+     col = sample(x = rainbow(nrow(nuts0.contig))), 
      lwd = 3, add = TRUE)
 }
 \seealso{

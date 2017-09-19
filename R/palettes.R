@@ -4,12 +4,11 @@
 #' each of the two gradients).
 #' @name carto.pal
 #' @param pal1 name of the color gradiant (see Details).
-#' @param n1 number of colors (up to 20)
+#' @param n1 number of colors (up to 20).
 #' @param pal2 name of the color gradiant (see Details). 
-#' @param n2 number of colors (up to 20)
-#' @param middle  a logical value. If TRUE, a neutral color ("#F6F6F6", almost 
-#' white) between 
-#' two gradients is added.
+#' @param n2 number of colors (up to 20).
+#' @param middle  a logical value. If TRUE, a neutral color ("#F6F6F6", light 
+#' grey) between two gradients is added.
 #' @param transparency a logical value. If TRUE, contrasts are enhenced by 
 #' adding an opacity variation.
 #' @details Sequential palettes: 
@@ -68,10 +67,6 @@
 #' @export
 carto.pal <- function(pal1, n1, pal2 = NULL, n2 = NULL, middle = FALSE,
                       transparency = FALSE){
-
-  
-  utils::data("cartography.colors", envir = environment())
-  cartography.colors <- get("cartography.colors", envir  = environment())
   alphainit<-30
   alpha="FF"
   middlecol<-"#F6F6F6"
@@ -127,8 +122,6 @@ carto.pal <- function(pal1, n1, pal2 = NULL, n2 = NULL, middle = FALSE,
 #' @export
 display.carto.all <- function(n = 10)
 {
-  utils::data("cartography.colors", envir = environment())
-  cartography.colors <- get("cartography.colors", envir  = environment())
   nbpal <- length(cartography.colors)
   ncol <- 2
   nrow <- round(nbpal/ncol+0.1)
@@ -150,16 +143,14 @@ display.carto.all <- function(n = 10)
 
 
 #' @title Display the Names of all Cartographic Palettes
-#' @description Display the names of all the available color palettes.
+#' @description Display the names of all color palettes.
 #' @name carto.pal.info
-#' @return A vector of palettes names is returned. 
+#' @return A vector of color palettes names is returned. 
 #' @examples
-#' carto.pal.info
+#' carto.pal.info()
 #' @seealso \link{carto.pal}, \link{display.carto.pal}, \link{display.carto.all}
 #' @export
 carto.pal.info <- function(){
-  utils::data("cartography.colors", envir = environment())
-  cartography.colors <- get("cartography.colors", envir  = environment())
   names(cartography.colors)
 }
 
@@ -208,7 +199,7 @@ display.carto.pal<-function(name)
   for ( i in 1:20) {
     mypal <- carto.pal(name,i)
     k<-length(mypal)
-    image(1:k, 1, as.matrix(1:k), col =mypal, xlab = paste(k," classes",sep=""), 
+    image(1:k, 1, as.matrix(1:k), col = mypal, xlab = paste(k," classes",sep=""), 
           ylab = "", xaxt = "n", yaxt = "n",bty = "n")
     
     if (i==1){cl <- "classe"}else{cl <- "classes"}

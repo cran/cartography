@@ -4,10 +4,13 @@
 \alias{getFigDim}
 \title{Get Figure Dimensions}
 \usage{
-getFigDim(spdf, width = NULL, height = NULL, mar = par("mar"), res = 72)
+getFigDim(x, spdf, width = NULL, height = NULL, mar = par("mar"),
+  res = 72)
 }
 \arguments{
-\item{spdf}{a Spatial*DataFrame.}
+\item{x}{an sf object, a simple feature collection or a Spatial*DataFrame.}
+
+\item{spdf}{deprecated, a Spatial*DataFrame.}
 
 \item{width}{width of the figure (in pixels), either width or height 
 must be set.}
@@ -27,10 +30,9 @@ A vector of width and height in pixels is returned.
 }
 \description{
 Give the dimension of a map figure to be exported in 
-raster of vector format. \cr
-Output dimension are based on a Spatial*DataFrame 
-dimension ratio, the margins of the figure, a targeted width or height
-of the figure and its resolution.
+raster or vector format. \cr
+Output dimension are based on a spatial object dimension ratio, margins of 
+the figure, a targeted width or height and a resolution.
 }
 \details{
 The function can be used to export vector or raster files (see examples).
@@ -38,30 +40,29 @@ The function can be used to export vector or raster files (see examples).
 \examples{
 \dontrun{
 data("nuts2006")
-spdf <- nuts0.spdf[nuts0.spdf$id=="IT",]
+italy <- nuts0.spdf[nuts0.spdf$id=="IT",]
 
 ## PNG export
 # get figure dimension
-sizes <- getFigDim(spdf = spdf, width = 450, mar = c(0,0,1.2,0))
+sizes <- getFigDim(x = italy, width = 450, mar = c(0,0,1.2,0))
 # export the map
 png(filename = "Italy.png", width = sizes[1], height = sizes[2])
 par(mar = c(0,0,1.2,0))
-plot(spdf, col = NA, border=NA, bg = "#A6CAE0")
+plot(italy, col = NA, border=NA, bg = "#A6CAE0")
 plot(world.spdf, col = "#E3DEBF", border = NA, add = TRUE)
-plot(spdf, col = "#D1914D", border = "white", add = TRUE)
+plot(italy, col = "#D1914D", border = "white", add = TRUE)
 layoutLayer(title = "Map of Italy")
 dev.off()
 
 ## PDF export
 # get figure dimension
-sizes <- getFigDim(spdf = spdf, width = 450, mar = c(1,1,2.2,1))
+mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+sizes <- getFigDim(x = mtq, width = 450, mar = c(1,1,2.2,1))
 # export the map
-pdf(file = "Italy.pdf", width = sizes[1]/72, height = sizes[2]/72)
+pdf(file = "Martinique.pdf", width = sizes[1]/72, height = sizes[2]/72)
 par(mar = c(1,1,2.2,1))
-plot(spdf, col = NA, border = NA, bg = "#A6CAE0")
-plot(world.spdf, col = "#E3DEBF", border = NA, add = TRUE)
-plot(spdf, col = "#D1914D", border = "white", add = TRUE)
-layoutLayer(title = "Map of Italy")
+plot(st_geometry(mtq), col = "#D1914D", border = "white", bg = "#A6CAE0")
+layoutLayer(title = "Map of Martinique")
 dev.off()
 }
 }

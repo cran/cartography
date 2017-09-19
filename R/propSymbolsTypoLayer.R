@@ -2,6 +2,7 @@
 #' @name propSymbolsTypoLayer
 #' @description Plot a proportional symbols layer with colors based on
 #'  qualitative data.
+#' @param x an sf object, a simple feature collection. If x is used then spdf, df, spdfid and dfid are not.
 #' @param spdf SpatialPointsDataFrame or SpatialPolygonsDataFrame; if spdf
 #' is a SpatialPolygonsDataFrame symbols are plotted on centroids.
 #' @param df a data frame that contains the values to plot. If df is missing 
@@ -16,14 +17,15 @@
 #' @param col a vector of colors.
 #' @param inches size of the biggest symbol (radius for circles, width for
 #' squares, height for bars) in inches.
-#' @param k share of the map occupied by the biggest symbol (this argument
-#' is deprecated; please use inches instead.).
 #' @param fixmax value of the biggest symbol. (optional)
 #' @param border color of symbols borders.
 #' @param lwd width of symbols borders.
-#' @param legend.var.pos position of the legend for var, one of "topleft", "top",
-#' @param legend.var2.pos position of the legend for var2, one of "topleft", "top",
-#' "topright", "left", "right", "bottomleft", "bottom", "bottomright".
+#' @param legend.var.pos position of the legend, one of "topleft", "top", 
+#' "topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
+#' vector of two coordinates in map units (c(x, y)).
+#' @param legend.var2.pos position of the legend, one of "topleft", "top", 
+#' "topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
+#' vector of two coordinates in map units (c(x, y)).
 #' @param legend.var.title.txt title of the legend (numeric data).
 #' @param legend.var2.title.txt title of the legend (factor data).
 #' @param legend.title.cex size of the legend title.
@@ -55,31 +57,25 @@
 #' propSymbolsTypoLayer(spdf = nuts0.spdf, df = nuts0.df,
 #'                      var = "pop2008", var2="typo")
 #' 
+#' 
 #' ## Example 2
-#' #Countries plot
-#' plot(nuts0.spdf, col = "grey60",border = "grey20", add = FALSE)
-#' nuts0.df$typo <- c(rep("A",10),rep("B",10),rep("C",10),rep("D",4))
-#' nuts0.df$typo[1:3] <- NA
-#' nuts0.df$pop2008[4:6] <- NA
-#' propSymbolsTypoLayer(spdf = nuts0.spdf, df = nuts0.df,
-#'                      var = "pop2008", var2="typo",
-#'                      symbols = "circle",
-#'                      legend.var.pos = "topright",
-#'                      legend.var2.pos = "right",
-#'                      legend.var.title.txt = "Total\npopulation (2008)",
-#'                      legend.values.rnd = -3,
-#'                      legend.var2.title.txt = "Category",
-#'                      col = carto.pal(pal1 = "pastel.pal", 4),
-#'                      legend.var2.values.order = c("D", "A", "B", "C"),
-#'                      legend.var.style = "c")
+#' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+#' # Countries plot
+#' plot(st_geometry(mtq), col = "lightblue4",border = "lightblue3", bg = "lightblue1")
+#' # Population plot on proportional symbols
+#' propSymbolsTypoLayer(x = mtq, var = "P13_POP", var2 = "STATUT",
+#'                      symbols = "circle",          
+#'                      col = c("aquamarine4", "yellow3","wheat"),
+#'                      legend.var2.values.order = c("Préfecture de région",
+#'                                                   "Sous-préfecture", 
+#'                                                   "Commune simple"),
+#'                      legend.var.pos = "right", border = "grey",
+#'                      legend.var.title.txt = "Total\npopulation (2013)")
 #' # Layout plot
-#' layoutLayer(title = "Countries Population & Color in Europe",
-#'             sources = "UMS RIATE, 2015",
-#'             scale = NULL,
-#'             frame = TRUE,
-#'             col = "black",
-#'             coltitle = "white")
-propSymbolsTypoLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, var,
+#' layoutLayer(title = "Population in Martinique",
+#'             sources = "INSEE, 2016", theme = "blue.pal",
+#'             scale = NULL, frame = FALSE)
+propSymbolsTypoLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, var,
                                  inches = 0.3, fixmax = NULL, symbols = "circle",
                                  border = "grey20", lwd = 1,
                                  var2, col = NULL, colNA = "white",
@@ -95,61 +91,58 @@ propSymbolsTypoLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, var,
                                  legend.var2.values.order = NULL,
                                  legend.var2.nodata = "no data",
                                  legend.var2.frame = FALSE,
-                                 add = TRUE, k = NULL){
+                                 add = TRUE){
   
-  # info about k
-  if(!is.null(k)){
-    stop("Argument k is deprecated (last used in version 1.3.0); please use inches instead.",
-         call. = FALSE)
+  if (missing(x)){
+    x <- convertToSf(spdf = spdf, df = df, spdfid = spdfid, dfid = dfid)
   }
   
-  # Check missing df and NULL identifiers 
-  if (missing(df)){df <- spdf@data}
-  if (is.null(spdfid)){spdfid <- names(spdf@data)[1]}
-  if (is.null(dfid)){dfid <- names(df)[1]}
-  
   # check merge and order spdf & df
-  dots <- checkMergeOrder(spdf = spdf, spdfid = spdfid,
-                          df = df, dfid = dfid, var = var)
+  dots <- checkMergeOrder(x = x, var = var)
+  
+  
   
   
   # modalities
-  mod <- unique(dots[, var2])
+  mod <- unique(dots[[var2]])
   mod <- mod[!is.na(mod)]
   
   # check nb col vs nb mod
   col <- checkCol(col, mod)
+  
+  
   # check legend.var2.values.order vs mod values
   legend.var2.values.order <- checkOrder(legend.var2.values.order, mod)
+  
   # get the colors 
   refcol <- data.frame(mod = legend.var2.values.order, 
                        col = col[1:length(legend.var2.values.order)], 
                        stringsAsFactors = FALSE)
-  mycols <- refcol[match(dots[, var2], refcol[,1]),2]
+  mycols <- refcol[match(dots[[var2]], refcol[,1]),2]
   
-  # for the legend  
-  mycolsleg <- refcol[,2]
-  rVal <- refcol[,1]
+  
   
   nodata <- FALSE
-  if(max(is.na(dots[,var2])>0)){
+  if(max(is.na(dots[[var2]])>0)){
     nodata <- TRUE
     mycols[is.na(mycols)] <- colNA
   }
   
   
   if (is.null(fixmax)){
-    fixmax <- max(dots[,var])
+    fixmax <- max(dots[[var]])
   }
   
-  # size management
-  sizes <- sizer(dots = dots, inches = inches, var = var,
+  # compute sizes
+  sizes <- sizer(dots = dots, inches = inches, var = var, 
                  fixmax = fixmax, symbols = symbols)
-  sizeMax <- max(sizes)
   
+  
+  # size and values for legend, hollow circle (fixmax case)
+  sizeMax <- max(sizes)
   if (inches <= sizeMax){
     sizevect <- xinch(seq(inches, min(sizes), length.out = 4))
-    varvect <- seq(fixmax,0,length.out = 4 )
+    varvect <- seq(fixmax, 0, length.out = 4)
     inches <- sizeMax
   }else{
     mycols <- c(NA, mycols)
@@ -161,59 +154,58 @@ propSymbolsTypoLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, var,
     varvect <- seq(fixmax, 0,length.out = 4 )
   }
   
+  # plot
   if (add==FALSE){
-    sp::plot(spdf, col = NA, border = NA)
+    plot(sf::st_geometry(x), col = NA, border = NA)
   }
+  
   switch(symbols, 
          circle = {
-           symbols(dots[, 2:3], circles = sizes, bg = mycols, fg = border, 
+           symbols(dots[, 1:2, drop = TRUE], circles = sizes, bg = mycols, 
+                   fg = border, 
                    lwd = lwd, add = TRUE, inches = inches, asp = 1)
-           if(legend.var.pos!="n"){
-             legendCirclesSymbols(pos = legend.var.pos, 
-                                  title.txt = legend.var.title.txt,
-                                  title.cex = legend.title.cex,
-                                  values.cex = legend.values.cex,
-                                  var = varvect,
-                                  r = sizevect,
-                                  col = "grey",
-                                  frame = legend.var.frame,
-                                  values.rnd =  legend.values.rnd,
-                                  style = legend.var.style)
-           }
+           legendCirclesSymbols(pos = legend.var.pos, 
+                                title.txt = legend.var.title.txt,
+                                title.cex = legend.title.cex,
+                                values.cex = legend.values.cex,
+                                var = c(min(dots[[var]]),max(dots[[var]])),
+                                inches = inches,
+                                col = "grey",
+                                frame = legend.var.frame,
+                                values.rnd =  legend.values.rnd,
+                                style = legend.var.style)
          }, 
          square = {
-           symbols(dots[, 2:3], squares = sizes, bg = mycols, fg = border, 
+           symbols(dots[, 1:2, drop = TRUE], squares = sizes, bg = mycols, 
+                   fg = border, 
                    lwd = lwd, add = TRUE, inches = inches, asp = 1)
-           if(legend.var.pos!="n"){
-             legendSquaresSymbols(pos = legend.var.pos, 
-                                  title.txt = legend.var.title.txt,
-                                  title.cex = legend.title.cex,
-                                  values.cex = legend.values.cex,
-                                  var = varvect,
-                                  r = sizevect,
-                                  col = "grey",
-                                  frame = legend.var.frame,
-                                  values.rnd =  legend.values.rnd,
-                                  style = legend.var.style)
-           }
+           legendSquaresSymbols(pos = legend.var.pos, 
+                                title.txt = legend.var.title.txt,
+                                title.cex = legend.title.cex,
+                                values.cex = legend.values.cex,
+                                var = c(min(dots[[var]]),max(dots[[var]])),
+                                inches = inches,
+                                col = "grey",
+                                frame = legend.var.frame,
+                                values.rnd =  legend.values.rnd,
+                                style = legend.var.style)
          }, 
          bar = {
-           tmp <- as.matrix(data.frame(width = inches/10, height = sizes))
-           dots[,3] <- dots[,3] + yinch(sizes/2)
-           symbols(dots[,2:3], rectangles = tmp, add = TRUE, bg = mycols,
+           tmp <- as.matrix(data.frame(width = inches/7, height = sizes))
+           dots[[2]] <- dots[[2]] + yinch(sizes/2)
+           symbols(dots[, 1:2, drop = TRUE], rectangles = tmp, add = TRUE, 
+                   bg = mycols,
                    fg = border, lwd = lwd, inches = inches, asp = 1)
-           if(legend.var.pos!="n"){
-             legendBarsSymbols(pos = legend.var.pos, 
-                               title.txt = legend.var.title.txt,
-                               title.cex = legend.title.cex,
-                               values.cex = legend.values.cex,
-                               var = varvect,
-                               r = sizevect,
-                               col = "grey",
-                               frame = legend.var.frame,
-                               values.rnd =  legend.values.rnd,
-                               style = legend.var.style)
-           }
+           legendBarsSymbols(pos = legend.var.pos, 
+                             title.txt = legend.var.title.txt,
+                             title.cex = legend.title.cex,
+                             values.cex = legend.values.cex,
+                             var = c(min(dots[[var]]),max(dots[[var]])),
+                             inches = inches,
+                             col = "grey",
+                             frame = legend.var.frame,
+                             values.rnd =  legend.values.rnd,
+                             style = legend.var.style)
          })
   
   
@@ -222,13 +214,12 @@ propSymbolsTypoLayer <- function(spdf, df, spdfid = NULL, dfid = NULL, var,
                title.txt = legend.var2.title.txt,
                title.cex = legend.title.cex,
                values.cex = legend.values.cex,
-               categ = rVal,
-               col = mycolsleg,
+               categ = refcol[,1],
+               col = refcol[,2],
                frame = legend.var2.frame,
                symbol="box",
                nodata = nodata,nodata.col = colNA,
                nodata.txt = legend.var2.nodata)
   }
 }
-
 
