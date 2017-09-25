@@ -23,14 +23,10 @@ some cartographic APIs.
 -----------
 
 **Up to version 1.4.2 `cartography` was mainly based on `sp` and `rgeos` for its spatial data management and geoprocessing operations. These dependancies are as much as possible replaced by [`sf`](https://github.com/r-spatial/sf) functions since version 2.0.0.**    
-**See [sf README](https://github.com/r-spatial/sf) in case of installation problems with sf.**  
-
 
 **Most functions are kept unchanged except for the addition of an `x` argument used to take `sf` objects as inputs.**  
 
-**See the [NEWS](https://raw.githubusercontent.com/riatelab/cartography/master/NEWS) file for the full list of changes.**   
-
-**For now (2017-06-30) `cartography` v2.0.0 is hosted on GitHub, but will soon make it to the CRAN.** 
+**See the [NEWS](https://raw.githubusercontent.com/riatelab/cartography/master/NEWS) file for the full list of changes and see [sf README](https://github.com/r-spatial/sf) in case of installation problems with sf.**
 
 -----------
 

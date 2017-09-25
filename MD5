@@ -1,6 +1,6 @@
-bebe7ed441baa7c4fa4f408b75e44b12 *DESCRIPTION
+0f884769e24683964c7e9e4135a6f087 *DESCRIPTION
 53f826c91bdb55aea541fde5d1229a7e *NAMESPACE
-dc09433d2503bd448cad4d7f8777ebd9 *NEWS
+ee240a5db6492cda7e89487ddd8e00f3 *NEWS
 b2fff3e7ace189147f10920226c6b620 *R/Package.R
 b0f6d5c1cad2b95686a313c15bad292f *R/RcppExports.R
 d7bed49438c0f265dc3fe2d11cb05aac *R/barscale.R
@@ -13,7 +13,7 @@ a285e6a7861503c4378828494e6c35de *R/getBreaks.R
 1681d7b94b1f1207c6e3c7ac7df38326 *R/getFigDim.R
 1e98848b9184ce14f90c7be4105a4687 *R/getGridLayer.R
 a35aba8ed6bd44a5b8e152d66f75f4f9 *R/getLinkLayer.R
-2b022678ae5bb06c8c60b4e3477f4f2e *R/getOuterBorders.R
+a752bd0aa1b19476e50d3b5c3ee48c18 *R/getOuterBorders.R
 30312d04dd2b73303609ca6f35063d60 *R/getTiles.R
 baad1ae31ed9c16f57de8a0bb15b7665 *R/gradLinkLayer.R
 d14cee80c2071a9e54699f2048447557 *R/gradLinkTypoLayer.R
@@ -31,14 +31,14 @@ ad8ccab8a67ecc747cb7cac449436694 *R/smoothLayer.R
 0d0b8b4285c89c0de08be848055682d0 *R/sysdata.rda
 d1ee4560310bc8358ef75c71ebc4c55b *R/tilesLayer.R
 1f0c7110234c26e22b6688f0ca4262b7 *R/typoLayer.R
-95eb6bce51688216d2e260234c8f5a6e *R/utils.R
-2745e06e64693d3c6fa6795f489e258d *README.md
+123931ad0f65dbc332405e3399273740 *R/utils.R
+2bc92663acc4fafac4472d44acbad5fd *README.md
 f2f25a8016c5718a49e013fb1b2c18e9 *build/vignette.rds
 537782b5a54fa0164e436b8a13263ac4 *data/nuts2006.RData
 fe0635dbbeea05b814aee8ffef1d8b82 *inst/CITATION
 19377d595f852cde5990a8082240849a *inst/doc/cartography.R
 0be11b75669ac59c188fb11fd212c06a *inst/doc/cartography.Rmd
-4634fafd2fd438ea8613de89901f2085 *inst/doc/cartography.html
+5bfbad1a103f392cd99afe698d2191ba *inst/doc/cartography.html
 a910d5246fbc5adb8a5de3ab3cb54f92 *inst/shape/martinique.dbf
 95367f5326643d83546a8d07bbf9764f *inst/shape/martinique.prj
 6478d3a5ef87291b7df3b40a7c922275 *inst/shape/martinique.shp
@@ -61,7 +61,7 @@ da426ce40a3b5387db60c9892f776218 *man/getFigDim.Rd
 7fa35b7dd5e94381f64effacca584c71 *man/getGridData.Rd
 8b0fb0ab34fa9e801ccbe1be3f4eba37 *man/getGridLayer.Rd
 08f25790e211ddfae569344c88406606 *man/getLinkLayer.Rd
-163a9581b299aa697ed69f04ce5affba *man/getOuterBorders.Rd
+4ccbbfe19fdbc9e386990180291adc06 *man/getOuterBorders.Rd
 32d76808fbdc50cd083c61d1cde17245 *man/getTiles.Rd
 4492094b2a90738f2aa30ca5459f6242 *man/gradLinkLayer.Rd
 1157df67286c92e91d20cf3ae50ee4d7 *man/gradLinkTypoLayer.Rd
