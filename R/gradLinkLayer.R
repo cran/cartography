@@ -75,7 +75,7 @@ gradLinkLayer <- function(x, df, xid = NULL, dfid = NULL,
   if (is.null(dfid)){dfid <- names(df)[1:2]}
   
   # joint
-  link <- merge(x = x, y = df, by.x = xid, by.y = dfid)
+  link <- merge(x = x[,xid], y = df, by.x = xid, by.y = dfid)
   
   # clean
   link <- link[!is.na(link[[var]]), ]
@@ -86,7 +86,7 @@ gradLinkLayer <- function(x, df, xid = NULL, dfid = NULL,
   lwdMap <- lwd[findInterval(x = link[[var]], vec = breaks, all.inside = TRUE)]
   
   # map
-  plot(link, col = col, lwd = lwdMap, add = add)
+  plot(st_geometry(link), col = col, lwd = lwdMap, add = add)
   
   # legend
   legendGradLines(pos = legend.pos, title.txt = legend.title.txt, 

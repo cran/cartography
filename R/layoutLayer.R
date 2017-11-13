@@ -9,6 +9,8 @@
 #' @param frame wheither displaying a frame (TRUE) or not (FALSE).
 #' @param col color of the title box and frame border.
 #' @param coltitle color of the title.
+#' @param tabtitle size of the title box either a full banner (FALSE) or a "tab" (TRUE). 
+#' @param postitle position of the title, one of "left", "center", "right". 
 #' @param bg color of the frame background.
 #' @param north wheither displaying a Noth arrow (TRUE) or not (FALSE).
 #' @param south wheither displaying a South arrow (TRUE) or not (FALSE).
@@ -34,27 +36,29 @@
 #' plot(nuts0.spdf, col = "#D1914D",border = "white", lwd=1, add=TRUE)
 #' layoutLayer(col = NA, coltitle = "black",
 #'             sources = "", author = "",
-#'             frame = FALSE,
+#'             frame = FALSE, postitle = "center",
 #'             south = TRUE)
-#'             
+#' 
 #' # Example 3
 #' nuts3.df$gdphab <- 1000000 * nuts3.df$gdppps2008 / nuts3.df$pop2008
 #' choroLayer(spdf = nuts3.spdf, df = nuts3.df, var = "gdphab",
 #'            legend.pos = "right", border = NA, nclass = 6,
 #'            col = carto.pal('green.pal', 6))
 #' # Layout plot
-#' layoutLayer(title = "GDP per Inhabitants", sources = "",
+#' layoutLayer(title = "GDP per Inhabitants", sources = "", 
+#'             tabtitle = TRUE, scale = NULL,
 #'             author = "Eurostat, 2008", theme = "green.pal")
 layoutLayer <- function(title = "Title of the map, year",
                         sources = "Source(s)", author = "Author(s)",
                         col = "black", coltitle = "white", theme = NULL, 
                         bg = NULL, scale = 0, frame = TRUE, north = FALSE, 
-                        south = FALSE, extent = NULL){
+                        south = FALSE, extent = NULL, tabtitle = FALSE, 
+                        postitle = "left"){
   # EXTENT
   if (!is.null(extent)){
     if(methods::is(extent, 'Spatial')){
       extent <- sf::st_as_sf(extent)
-      }
+    }
     plot(sf::st_geometry(extent), border = NA, col = NA, add = FALSE, bg = bg)
     mapExtent <- par()$usr
   } else {
@@ -80,7 +84,7 @@ layoutLayer <- function(title = "Title of the map, year",
   if(frame == TRUE){
     rect(x1, y1, x2, y2, border = col, col = bg)
   }
-
+  
   # SCALE
   if (!is.null(scale)){
     if(scale == 0){
@@ -97,20 +101,41 @@ layoutLayer <- function(title = "Title of the map, year",
   if(north == T){
     north(pos = "topright")
   }
-
   
   # TITLE
   size <- 0.8
+  titlesize <- xinch(strwidth(title, cex = size, units = "inches", font = 2))
   par(xpd = TRUE)
-  rect(xleft = x1, ybottom = y2, xright = x2, ytop = y2 + (xinch(1.2) * 0.2), 
-       border = col, col = col)
-  text(x = x1 + delta / 2, 
-       y = y2 + ((xinch(1.2) * 0.2) - 
-                   xinch(strheight(title, cex = 0.8, units = "inches"))) / 2,
+  switch(postitle, 
+         left = {
+           x1s <- x1
+         }, 
+         center = {
+           x1s <- x1 + ((x2 - x1) - titlesize) / 2 - delta / 2
+           }, 
+         right = {
+           x1s <- x1 + ((x2 - x1) - titlesize) - delta
+           }
+         )
+  if(tabtitle){
+    rect(xleft = x1s, 
+         ybottom = y2, 
+         xright = x1s + titlesize + delta, 
+         ytop = y2 + (xinch(1.2) * 0.2), 
+         border = col, col = col)
+  }else{
+    rect(xleft = x1, 
+         ybottom = y2, 
+         xright = x2, 
+         ytop = y2 + (xinch(1.2) * 0.2), 
+         border = col, col = col)
+  }
+  text(x = x1s + delta / 2, 
+       y = y2 + ((xinch(1.2) * 0.2) - xinch(strheight(title, cex = 0.8, units = "inches", font = 2))) / 2,
        labels = title, adj = c(0,0),
        cex = size, col = coltitle, font = 2)
   par(xpd = FALSE)
-
+  
   # SOURCES
   text(x1 + delta / 2, y1 + delta / 2, paste(sources, author, sep = "\n"),
        adj = c(0,0), cex = 0.6, font = 3)

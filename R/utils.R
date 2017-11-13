@@ -15,9 +15,9 @@ convertToSf <- function(spdf, df, spdfid, dfid){
     # missing IDs
     if (is.null(spdfid)){spdfid <- names(spdf@data)[1]}
     if (is.null(dfid)){dfid <- names(df)[1]}
-    # Join (only on df data)
+    # Join (only on df data), work with tibbls
     spdf@data <- data.frame(spdf@data[,spdfid], 
-                            df[match(spdf@data[,spdfid], df[,dfid]),])
+                            data.frame(df[match(spdf@data[,spdfid], df[[dfid]]),]))
     spdf <- spdf[!is.na(spdf@data[,dfid]),]
   }
   # convert
@@ -174,23 +174,6 @@ sizer <- function(dots, inches, var, fixmax, symbols){
          })
   return(size)
 }
-
-
-# my_centroid <- function(x){
-#   if(sum(sf::st_geometry_type(x)=="MULTIPOLYGON") == nrow(x)){
-#     x0 <- sf::st_sf(id = 1:nrow(x), geometry = sf::st_geometry(x))
-#     x1 <- sf::st_cast(x = x0, to = "POLYGON", warn = F)
-#     x1$area <- sf::st_area(x1)
-#     x2 <- stats::aggregate(x1[,c("id", "area"), drop = T],
-#                            by = list(x1$id),
-#                            FUN = which.max)
-#     ind <- match(x0$id, x1$id) + x2$area - 1
-#     sf::st_geometry(x) <- sf::st_geometry(x1[ind,])
-#   }
-#   sf::st_centroid(x)
-# }
-
-
 
 
 
