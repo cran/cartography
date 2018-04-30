@@ -1,15 +1,15 @@
 #' @title Build Cartographic Palettes
-#' @description Build sequantial, diverging and qualitative color palettes. 
-#' Diververging color palettes can be dissymetric (different number of colors in 
+#' @description Build sequential, diverging and qualitative color palettes. 
+#' Diverging color palettes can be dissymmetric (different number of colors in 
 #' each of the two gradients).
 #' @name carto.pal
-#' @param pal1 name of the color gradiant (see Details).
+#' @param pal1 name of the color gradient (see Details).
 #' @param n1 number of colors (up to 20).
-#' @param pal2 name of the color gradiant (see Details). 
+#' @param pal2 name of the color gradient (see Details). 
 #' @param n2 number of colors (up to 20).
 #' @param middle  a logical value. If TRUE, a neutral color ("#F6F6F6", light 
 #' grey) between two gradients is added.
-#' @param transparency a logical value. If TRUE, contrasts are enhenced by 
+#' @param transparency a logical value. If TRUE, contrasts are enhanced by 
 #' adding an opacity variation.
 #' @details Sequential palettes: 
 #' \itemize{
@@ -67,40 +67,40 @@
 #' @export
 carto.pal <- function(pal1, n1, pal2 = NULL, n2 = NULL, middle = FALSE,
                       transparency = FALSE){
-  alphainit<-30
-  alpha="FF"
-  middlecol<-"#F6F6F6"
+  alphainit <- 30
+  alpha <- "FF"
+  middlecol <- "#F6F6F6"
   if(is.null(pal2) & is.null(n2)){
     pal<-as.character(unlist(cartography.colors[[pal1]][n1]))
-    if(transparency==TRUE){
+    if(transparency == TRUE){
       for ( i in 1:n1-1) {
-        alpha<-as.hexmode(floor(alphainit+(255-alphainit)/n1*i))
-        pal[i]<-paste(pal[i],alpha,sep="")
+        alpha <- as.hexmode(floor(alphainit+(255-alphainit)/n1*i))
+        pal[i] <- paste(pal[i],alpha,sep="")
       }
-      alpha<-as.hexmode(alphainit)
+      alpha <- as.hexmode(alphainit)
     }
   }
   
   if(!is.null(pal2) & !is.null(n2)){
     n <- max(n1,n2)
-    pal1<-as.character(unlist(cartography.colors[[pal1]][n]))
-    pal2<-as.character(unlist(cartography.colors[[pal2]][n]))
+    pal1 <- as.character(unlist(cartography.colors[[pal1]][n]))
+    pal2 <- as.character(unlist(cartography.colors[[pal2]][n]))
     
     if(transparency==TRUE){
       for ( i in 1:n-1) {
-        alpha<-as.hexmode(floor(alphainit+(255-alphainit)/n*i))
-        pal1[i]<-paste(pal1[i],alpha,sep="")
-        pal2[i]<-paste(pal2[i],alpha,sep="")
+        alpha <- as.hexmode(floor(alphainit+(255-alphainit)/n*i))
+        pal1[i] <- paste(pal1[i],alpha,sep="")
+        pal2[i] <- paste(pal2[i],alpha,sep="")
       }
-      alpha<-as.hexmode(alphainit)
+      alpha <- as.hexmode(alphainit)
     }
     
-    pal1 <-pal1[1:n1]
-    pal1<-rev(pal1)
-    pal2 <-pal2[1:n2]
+    pal1 <- pal1[1:n1]
+    pal1 <- rev(pal1)
+    pal2 <- pal2[1:n2]
     
-    pal<-c(pal1,pal2)
-    if(middle==T){pal<-c(pal1,paste(middlecol,alpha,sep=""),pal2)}
+    pal <- c(pal1,pal2)
+    if(middle == T){pal <- c(pal1,paste(middlecol,alpha,sep=""),pal2)}
   }
   return(pal)
 }
@@ -118,7 +118,6 @@ carto.pal <- function(pal1, n1, pal2 = NULL, n2 = NULL, middle = FALSE,
 #' display.carto.all(12)
 #' display.carto.all(20)
 #' @seealso \link{carto.pal}, \link{display.carto.pal}, \link{carto.pal.info}
-#' @import graphics
 #' @export
 display.carto.all <- function(n = 10)
 {
@@ -134,7 +133,8 @@ display.carto.all <- function(n = 10)
     pal <- names(cartography.colors)[i]
     mypal <- carto.pal(pal,n)
     k<-length(mypal)
-    image(1:k, 1, as.matrix(1:k), col =mypal, xlab = paste(k," classes",sep=""), 
+    image(1:k, 1, as.matrix(1:k), col =mypal,
+          xlab = paste(k," classes",sep=""), 
           ylab = "", xaxt = "n", yaxt = "n",bty = "n")
     title(names(cartography.colors)[i])
   }
@@ -199,7 +199,8 @@ display.carto.pal<-function(name)
   for ( i in 1:20) {
     mypal <- carto.pal(name,i)
     k<-length(mypal)
-    image(1:k, 1, as.matrix(1:k), col = mypal, xlab = paste(k," classes",sep=""), 
+    image(1:k, 1, as.matrix(1:k), col = mypal, 
+          xlab = paste(k," classes",sep=""), 
           ylab = "", xaxt = "n", yaxt = "n",bty = "n")
     
     if (i==1){cl <- "classe"}else{cl <- "classes"}

@@ -37,13 +37,13 @@
 #' @param col2 defunct.
 #' @details  
 #' Two maps with the same inches and fixmax parameters will be comparable.
-#' @export
+#' @export 
 #' @seealso \link{legendBarsSymbols}, \link{legendCirclesSymbols}, 
 #' \link{legendSquaresSymbols}, \link{propSymbolsChoroLayer}, 
 #' \link{propSymbolsTypoLayer}
-#' @import sp
 #' @examples
 #' ## Example 1
+#' library(sf)
 #' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
 #' # Countries plot
 #' plot(st_geometry(mtq), col = "lightblue4",border = "lightblue3", bg = "lightblue1")
@@ -59,6 +59,7 @@
 #'             scale = NULL, frame = FALSE)
 #' 
 #' ## Example 2
+#' library(sp)
 #' data("nuts2006")
 #' # Countries plot
 #' plot(nuts0.spdf, col = "grey60",border = "grey20")
@@ -131,6 +132,7 @@ propSymbolsLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, var,
   sizes <- sizer(dots = dots, inches = inches, var = var, 
                  fixmax = fixmax, symbols = symbols)
   
+  
   # size and values for legend, hollow circle (fixmax case)
   sizeMax <- max(sizes)
   if (inches <= sizeMax){
@@ -164,7 +166,7 @@ propSymbolsLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, var,
                                 values.cex = legend.values.cex,
                                 var = c(min(dots[[var]]),max(dots[[var]])),
                                 inches = inches,
-                                col = col,
+                                col = col, lwd = lwd,
                                 frame = legend.frame,
                                 values.rnd =  legend.values.rnd,
                                 style = legend.style)
@@ -178,7 +180,7 @@ propSymbolsLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, var,
                                 values.cex = legend.values.cex,
                                 var = c(min(dots[[var]]),max(dots[[var]])),
                                 inches = inches,
-                                col = col,
+                                col = col, lwd = lwd, 
                                 frame = legend.frame,
                                 values.rnd =  legend.values.rnd,
                                 style = legend.style)
@@ -194,7 +196,7 @@ propSymbolsLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, var,
                              values.cex = legend.values.cex,
                              var = c(min(dots[[var]]),max(dots[[var]])),
                              inches = inches,
-                             col = col,
+                             col = col, lwd = lwd,
                              frame = legend.frame,
                              values.rnd =  legend.values.rnd,
                              style = legend.style)

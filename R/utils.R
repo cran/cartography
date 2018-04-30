@@ -17,7 +17,8 @@ convertToSf <- function(spdf, df, spdfid, dfid){
     if (is.null(dfid)){dfid <- names(df)[1]}
     # Join (only on df data), work with tibbls
     spdf@data <- data.frame(spdf@data[,spdfid], 
-                            data.frame(df[match(spdf@data[,spdfid], df[[dfid]]),]))
+                            data.frame(df[match(spdf@data[,spdfid], 
+                                                df[[dfid]]),]))
     spdf <- spdf[!is.na(spdf@data[,dfid]),]
   }
   # convert
@@ -179,7 +180,8 @@ sizer <- function(dots, inches, var, fixmax, symbols){
 
 ################################################################################
 ### legend utils
-legpos <- function(pos, x1, x2, y1, y2, delta1, delta2, legend_xsize, legend_ysize){
+legpos <- function(pos, x1, x2, y1, y2, delta1, delta2, 
+                   legend_xsize, legend_ysize){
   # Position
   if(length(pos) == 2){
     return(list(xref = pos[1], yref = pos[2]))
@@ -248,8 +250,6 @@ NULL
 #' @param rstep rstep
 #' @param ... other stuf
 #' @return coords
-#' @import graphics
-#' @import stats
 #' @noRd
 wordlayout <- function(x, y, words, cex=1, rotate90 = FALSE,
                        xlim=c(-Inf,Inf), ylim=c(-Inf,Inf), 
@@ -274,8 +274,10 @@ wordlayout <- function(x, y, words, cex=1, rotate90 = FALSE,
     theta <- runif(1,0,2*pi)
     x1 <- xo <- x[i]
     y1 <- yo <- y[i]
-    wid <- strwidth(words[i],cex=cex[i],...) + 0.4 * strwidth("R",cex=cex[i],...)
-    ht <- strheight(words[i],cex=cex[i],...) + 0.4 * strheight("R",cex=cex[i],...)
+    wid <- strwidth(words[i],cex=cex[i],...) + 0.4 * 
+      strwidth("R", cex=cex[i], ...)
+    ht <- strheight(words[i],cex=cex[i],...) + 0.4 * 
+      strheight("R", cex=cex[i], ...)
 
     #mind your ps and qs
     if(grepl(tails,words[i]))
@@ -322,7 +324,6 @@ wordlayout <- function(x, y, words, cex=1, rotate90 = FALSE,
 #' @noRd
 shadowtext <- function(x, y=NULL, labels, col='white', bg='black', 
                        theta= seq(0, 2*pi, length.out=50), r=0.1, ... ) {
-  # xy <- xy.coords(x,y)
   xo <- r*strwidth('A')
   yo <- r*strheight('A')
   for (i in theta) {
@@ -330,3 +331,13 @@ shadowtext <- function(x, y=NULL, labels, col='white', bg='black',
   }
   text(x, y, labels, col=col, ... )
 }
+
+
+# import stuffs
+#' @importFrom graphics image legend lines par plot.new
+#'             plot.window points polygon rect segments
+#'             strheight strwidth symbols text title 
+#'             xinch yinch plot
+#' @importFrom stats aggregate na.omit quantile runif sd
+
+NULL

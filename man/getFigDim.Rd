@@ -15,7 +15,7 @@ getFigDim(x, spdf, width = NULL, height = NULL, mar = par("mar"),
 \item{width}{width of the figure (in pixels), either width or height 
 must be set.}
 
-\item{height}{heigth of the figure (in pixels), either width or height 
+\item{height}{height of the figure (in pixels), either width or height 
 must be set.}
 
 \item{mar}{a numerical vector of the form c(bottom, left, top, right) 
@@ -39,6 +39,7 @@ The function can be used to export vector or raster files (see examples).
 }
 \examples{
 \dontrun{
+library(sp)
 data("nuts2006")
 italy <- nuts0.spdf[nuts0.spdf$id=="IT",]
 
@@ -56,6 +57,7 @@ dev.off()
 
 ## PDF export
 # get figure dimension
+library(sf)
 mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
 sizes <- getFigDim(x = mtq, width = 450, mar = c(1,1,2.2,1))
 # export the map

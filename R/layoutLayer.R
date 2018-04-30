@@ -6,30 +6,32 @@
 #' @param author author of the map (or something else).
 #' @param scale size of the scale bar in kilometers. If set to NULL, no scale bar is 
 #' displayed, if set to 0 an automatic scale bar is displayed (1/10 of the map width).
-#' @param frame wheither displaying a frame (TRUE) or not (FALSE).
+#' @param frame whether displaying a frame (TRUE) or not (FALSE).
 #' @param col color of the title box and frame border.
 #' @param coltitle color of the title.
 #' @param tabtitle size of the title box either a full banner (FALSE) or a "tab" (TRUE). 
 #' @param postitle position of the title, one of "left", "center", "right". 
 #' @param bg color of the frame background.
-#' @param north wheither displaying a Noth arrow (TRUE) or not (FALSE).
-#' @param south wheither displaying a South arrow (TRUE) or not (FALSE).
+#' @param north whether displaying a North arrow (TRUE) or not (FALSE).
+#' @param south whether displaying a South arrow (TRUE) or not (FALSE).
 #' @param extent sf object or Spatial*DataFrame; sets the extent of the frame to 
 #' the one of a spatial object. (optional)
 #' @param theme name of a cartographic palette (see \link{carto.pal.info}). 
 #' col and coltitle are set according to the chosen palette. 
 #' @details If extent is not set, plot.new has to be called first.\cr
 #' The size of the title box in layoutLayer is fixed to 1.2 lines height.
-#' @export
+#' @export 
 #' @seealso \link{labelLayer}
 #' @examples
 #' # Example 1
+#' library(sf)
 #' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
 #' plot(st_geometry(mtq), col = "grey60",border = "grey20")
 #' # Layout plot
 #' layoutLayer()
 #' 
 #' # Example 2
+#' library(sp)
 #' data("nuts2006")
 #' plot(nuts0.spdf, col=NA, border = NA, bg ="#A6CAE0")
 #' plot(world.spdf, col  = "#E3DEBF", border=NA, add=TRUE)
@@ -131,7 +133,9 @@ layoutLayer <- function(title = "Title of the map, year",
          border = col, col = col)
   }
   text(x = x1s + delta / 2, 
-       y = y2 + ((xinch(1.2) * 0.2) - xinch(strheight(title, cex = 0.8, units = "inches", font = 2))) / 2,
+       y = y2 + ((xinch(1.2) * 0.2) - xinch(strheight(title, cex = 0.8, 
+                                                      units = "inches", 
+                                                      font = 2))) / 2,
        labels = title, adj = c(0,0),
        cex = size, col = coltitle, font = 2)
   par(xpd = FALSE)

@@ -28,11 +28,11 @@ col and coltitle are set according to the chosen palette.}
 \item{scale}{size of the scale bar in kilometers. If set to NULL, no scale bar is 
 displayed, if set to 0 an automatic scale bar is displayed (1/10 of the map width).}
 
-\item{frame}{wheither displaying a frame (TRUE) or not (FALSE).}
+\item{frame}{whether displaying a frame (TRUE) or not (FALSE).}
 
-\item{north}{wheither displaying a Noth arrow (TRUE) or not (FALSE).}
+\item{north}{whether displaying a North arrow (TRUE) or not (FALSE).}
 
-\item{south}{wheither displaying a South arrow (TRUE) or not (FALSE).}
+\item{south}{whether displaying a South arrow (TRUE) or not (FALSE).}
 
 \item{extent}{sf object or Spatial*DataFrame; sets the extent of the frame to 
 the one of a spatial object. (optional)}
@@ -50,12 +50,14 @@ The size of the title box in layoutLayer is fixed to 1.2 lines height.
 }
 \examples{
 # Example 1
+library(sf)
 mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
 plot(st_geometry(mtq), col = "grey60",border = "grey20")
 # Layout plot
 layoutLayer()
 
 # Example 2
+library(sp)
 data("nuts2006")
 plot(nuts0.spdf, col=NA, border = NA, bg ="#A6CAE0")
 plot(world.spdf, col  = "#E3DEBF", border=NA, add=TRUE)

@@ -31,9 +31,9 @@
 #' @param dfids defunct.
 #' @param dfide defunct.
 #' @note Unlike most of cartography functions, identifiers fields are mandatory.
-#' @import sp
 #' @seealso \link{getLinkLayer}, \link{propLinkLayer}, \link{legendGradLines}
 #' @examples
+#' library(sp)
 #' data("nuts2006")
 #' # Create a link layer
 #' twincities.sf <- getLinkLayer(x = nuts2.spdf, df = twincities.df[,1:2])
@@ -60,7 +60,8 @@ gradLinkLayer <- function(x, df, xid = NULL, dfid = NULL,
                           spdf, spdfid, spdfids, spdfide, dfids, dfide){
   
   
-  if(sum(c(missing(spdf), missing(spdfid), missing(spdfids), missing(spdfide), missing(dfids), missing(dfide))) != 6){
+  if(sum(c(missing(spdf), missing(spdfid), missing(spdfids), missing(spdfide), 
+           missing(dfids), missing(dfide))) != 6){
     stop("spdf, spdfid, spdfids, spdfide, dfids and dfide are defunct arguments; last used in version 1.4.2.",
          call. = FALSE)
   }
@@ -86,7 +87,7 @@ gradLinkLayer <- function(x, df, xid = NULL, dfid = NULL,
   lwdMap <- lwd[findInterval(x = link[[var]], vec = breaks, all.inside = TRUE)]
   
   # map
-  plot(st_geometry(link), col = col, lwd = lwdMap, add = add)
+  plot(sf::st_geometry(link), col = col, lwd = lwdMap, add = add)
   
   # legend
   legendGradLines(pos = legend.pos, title.txt = legend.title.txt, 

@@ -55,6 +55,7 @@
 #' @param add whether to add the layer to an existing plot (TRUE) or 
 #' not (FALSE).
 #' @examples
+#' library(sp)
 #' data("nuts2006")
 #' ## Example 1
 #' # Growth rate
@@ -67,6 +68,7 @@
 #' 
 #' ## Example 2
 #' # Share of farmers in Martinique
+#' library(sf)
 #' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
 #' mtq$shareCS1 <- 100 * mtq$C13_CS1/mtq$C13_POP
 #' plot(st_geometry(mtq), col = "grey60",border = "white", 
@@ -91,11 +93,11 @@
 #' @seealso \link{legendBarsSymbols}, \link{legendChoro}, 
 #' \link{legendCirclesSymbols}, \link{legendSquaresSymbols}, 
 #' \link{choroLayer}, \link{propSymbolsLayer}
-#' @import sp
 propSymbolsChoroLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL,
                                   var, 
                                   inches = 0.3, fixmax = NULL, 
-                                  symbols = "circle", border = "grey20", lwd = 1,
+                                  symbols = "circle", border = "grey20", 
+                                  lwd = 1,
                                   var2, 
                                   breaks = NULL,  method="quantile",  
                                   nclass= NULL, 
@@ -123,8 +125,8 @@ propSymbolsChoroLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL,
   dots <- checkMergeOrder(x = x, var = var)
   
   # Color Management
-  layer <- choro(var = dots[[var2]], distr = breaks, col = col, nclass = nclass, 
-                 method = method)
+  layer <- choro(var = dots[[var2]], distr = breaks, col = col, 
+                 nclass = nclass, method = method)
   
   mycols <- as.vector(layer$colMap)
   
@@ -178,7 +180,7 @@ propSymbolsChoroLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL,
                                 values.cex = legend.values.cex,
                                 var = c(min(dots[[var]]),max(dots[[var]])),
                                 inches = inches,
-                                col = "grey",
+                                col = "grey", lwd = lwd, 
                                 frame = legend.var.frame,
                                 values.rnd =  legend.var.values.rnd,
                                 style = legend.var.style)
@@ -194,7 +196,7 @@ propSymbolsChoroLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL,
                                 values.cex = legend.values.cex,
                                 var = c(min(dots[[var]]),max(dots[[var]])),
                                 inches = inches,
-                                col = "grey",
+                                col = "grey", lwd = lwd,
                                 frame = legend.var.frame,
                                 values.rnd =  legend.var.values.rnd,
                                 style = legend.var.style)
@@ -212,7 +214,7 @@ propSymbolsChoroLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL,
                              values.cex = legend.values.cex,
                              var = c(min(dots[[var]]),max(dots[[var]])),
                              inches = inches,
-                             col = "grey",
+                             col = "grey", lwd = lwd,
                              frame = legend.var.frame,
                              values.rnd =  legend.var.values.rnd,
                              style = legend.var.style)
@@ -231,5 +233,3 @@ propSymbolsChoroLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL,
               nodata = nodata, nodata.col = colNA,
               nodata.txt = legend.var2.nodata)
 }
-
-

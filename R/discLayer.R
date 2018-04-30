@@ -1,10 +1,10 @@
 #' @title Discontinuities Layer
 #' @description This function computes and plots spatial discontinuities. The 
-#' discontinuities are plotted over the layer outputed by the \link{getBorders} function.
+#' discontinuities are plotted over the layer outputted by the \link{getBorders} function.
 #' The line widths reflect the ratio or the difference between values of an indicator 
 #' in two neighbouring units.
 #' @name discLayer
-#' @param x an sf object, a simple feature collection, as outputed by the \link{getBorders} function. 
+#' @param x an sf object, a simple feature collection, as outputted by the \link{getBorders} function. 
 #' @param df a data frame that contains the values used to compute and plot discontinuities.
 #' @param dfid identifier field in df, default to the first column 
 #' of df. (optional)
@@ -41,6 +41,7 @@
 #' The "abs" type of discontinuity is the result of pmax(value unit 1 - value unit 2, value unit 2 - value unit 1).
 #' @seealso \link{getBorders}, \link{gradLinkLayer}, \link{legendGradLines}
 #' @examples
+#' library(sp)
 #' data(nuts2006)
 #' # Get borders
 #' nuts0.contig <- getBorders(x = nuts0.spdf)
@@ -56,6 +57,7 @@
 #'           legend.title.txt = "GDP per Capita discontinuities\n(relative)",
 #'           legend.pos = "topright", add=TRUE)
 #' 
+#' library(sf)
 #' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
 #' # Get borders
 #' mtq.borders <- getBorders(x = mtq)
@@ -93,8 +95,10 @@ discLayer <- function(x, df, dfid = NULL, var,
   if (is.null(dfid)){dfid <- names(df)[1]}
   df <- data.frame(df)
   # Join (1 and 2)
-  x <- merge(x, df[,c(dfid, var)], by.x = names(x)[3], by.y = dfid, all.x = TRUE)
-  x <- merge(x, df[,c(dfid, var)], by.x = names(x)[3], by.y = dfid, all.x = TRUE)
+  x <- merge(x, df[,c(dfid, var)], by.x = names(x)[3], by.y = dfid, 
+             all.x = TRUE)
+  x <- merge(x, df[,c(dfid, var)], by.x = names(x)[3], by.y = dfid, 
+             all.x = TRUE)
   names(x)[4:5] <- c('var1', 'var2')
   
   # elimination des valeurs manquantes
@@ -123,7 +127,7 @@ discLayer <- function(x, df, dfid = NULL, var,
   x$sizesMap <- sizes[(findInterval(x$disc,distr,all.inside=TRUE))]
   
   # Cartographie
-  plot(st_geometry(x), col = col, lwd = x$sizesMap, add = add)
+  plot(sf::st_geometry(x), col = col, lwd = x$sizesMap, add = add)
   
   # Legend
   legendGradLines(pos = legend.pos, title.txt = legend.title.txt, 

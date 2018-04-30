@@ -12,18 +12,18 @@
 #' (see Details).
 #' @param crop TRUE if results should be cropped to the specified spdf extent, FALSE otherwise.
 #' @details 
-#' Zoom levels are descibed on the OpenStreetMap wiki: 
+#' Zoom levels are described on the OpenStreetMap wiki: 
 #' \url{http://wiki.openstreetmap.org/wiki/Zoom_levels}.
 #' @note This function is a wrapper around the \code{osm.raster} function 
 #' from the \code{rosm} package. \cr
 #' Use directly the \href{https://CRAN.R-project.org/package=rosm}{rosm} package to have a finer control over  
 #' extraction and display parameters.
 #' @export
-#' @import sp
 #' @return A RatserBrick is returned.
 #' @seealso \link{tilesLayer}
 #' @examples
 #' \dontrun{
+#' library(sp)
 #' data("nuts2006")
 #' # extract Denmark
 #' spdf <- nuts0.spdf[nuts0.spdf$id=="DK",]
@@ -36,6 +36,7 @@
 #' mtext(text = "© OpenStreetMap contributors, under CC BY SA.",
 #'       side = 1, adj = 0, cex = 0.7, font = 3)
 #' 
+#' library(sf)
 #' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
 #' # Download the tiles, extent = Martinique
 #' mtqOSM <- getTiles(x = mtq, type = "osm", crop = TRUE)

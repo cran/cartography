@@ -13,8 +13,8 @@
 #' @param dfids defunct.
 #' @param dfide defunct.
 #' @return An sf LINESTRING is returned, it contains two fields (origins and destinations).
-#' @import sp
 #' @examples 
+#' library(sp)
 #' data("nuts2006")
 #' # Create a link layer
 #' head(twincities.df)
@@ -53,3 +53,4 @@ if(sum(missing(spdf), is.null(spdf2), is.null(spdfid),
                 geometry = sf::st_as_sfc(stringo, crs = sf::st_crs(x)))
   return(link)
 }
+

@@ -29,16 +29,16 @@
 #' If an error occurred, increase this value.\cr
 #' The type parameters is defined within the \link{spsample} function.
 #' @export
-#' @import sp
 #' @seealso \link{propSymbolsLayer}
 #' @examples
-#' data("nuts2006")
 #' # Example 1
+#' library(sp)
+#' data("nuts2006")
 #' plot(nuts0.spdf)
 #' dotDensityLayer(spdf = nuts0.spdf, df=nuts0.df,var="pop2008")
 #' 
-#' 
 #' # Example 2
+#' library(sf)
 #' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
 #' plot(st_geometry(mtq), col = "#B8704D50",border = "white")
 #' dotDensityLayer(x = mtq,  var="P13_POP", pch=20, col = "brown", n = 50)
@@ -81,7 +81,7 @@ dotDensityLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, var,
   }
   
   for (i in 1:nrow(spdf)){
-    plot(spsample(spdf[i,], n = spdf@data[i,"ndots"], type = type, 
+    sp::plot(sp::spsample(spdf[i,], n = spdf@data[i,"ndots"], type = type, 
                   iter = iter), pch = pch, cex= cex , col=col, 
          add=TRUE)
   }

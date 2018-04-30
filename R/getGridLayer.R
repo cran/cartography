@@ -9,9 +9,8 @@
 #' @param spdfid deprecated, identifier field in spdf, default to the first column 
 #' of the spdf data frame.  (optional)
 #' @return A grid is returned as an sf object.
-#' @import sp
-#' @import sf
 #' @examples
+#' library(sf)
 #' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
 #' # Plot dentsity of population 
 #' mtq$dens <- mtq$P13_POP / (st_area(mtq) / (1000 * 1000)) 
@@ -34,6 +33,7 @@
 #' plot(st_geometry(mtq), lwd = 0.2, add=TRUE, border = "#ffffff75")
 #' 
 #' \donttest{
+#' library(sp)
 #' data(nuts2006)
 #' nuts2.spdf@data = nuts2.df
 #' mygrid <- getGridLayer(x = nuts2.spdf, cellsize = 200000 * 200000, 
@@ -56,7 +56,8 @@
 #' par(opar)
 #' }
 #' @export
-getGridLayer <- function(x, cellsize, type = "regular", var, spdf, spdfid = NULL){
+getGridLayer <- function(x, cellsize, type = "regular", var, 
+                         spdf, spdfid = NULL){
   # sp check
   if(missing(x)){
     x <- sf::st_as_sf(spdf)
@@ -84,7 +85,8 @@ getGridLayer <- function(x, cellsize, type = "regular", var, spdf, spdfid = NULL
   
   # keep only intersecting cells
   gover <- sf::st_intersects(grid, x)
-  grid <- grid[unlist(lapply(gover, FUN = function(x) {if(length(x)>0){TRUE}else{FALSE}})), ]
+  fun1 <- function(x) {if(length(x)>0){TRUE}else{FALSE}} 
+  grid <- grid[unlist(lapply(gover, FUN = fun1)), ]
   
   # predicted warning, we don't care...
   options(warn = -1)
@@ -95,7 +97,8 @@ getGridLayer <- function(x, cellsize, type = "regular", var, spdf, spdfid = NULL
   lvar <- vector(mode = "list", length = length(var))
   names(lvar) <- var
   for (i in 1:length(lvar)){
-    lvar[[i]] <- as.vector(parts[[names(lvar)[i]]] * parts$area_part / parts$area)
+    lvar[[i]] <- as.vector(parts[[names(lvar)[i]]] * parts$area_part / 
+                             parts$area)
   }
   v <- aggregate(do.call(cbind,lvar), by = list(id = parts[['id_cell']]), 
                  FUN = sum, na.rm=TRUE)
@@ -104,12 +107,12 @@ getGridLayer <- function(x, cellsize, type = "regular", var, spdf, spdfid = NULL
   # split parts
   l <- split(parts,  parts[[1]])
   # aggregate each parts
-  a <- lapply(l, FUN = function(x){st_buffer(st_union(x), dist = 0.0000001)})
+  a <- lapply(l, FUN = function(x){sf::st_buffer(sf::st_union(x), dist = 0.0000001)})
   # only polygons on   # bind all parts
-  geometry <- st_cast(do.call(c, a))
+  geometry <- sf::st_cast(do.call(c, a))
   # full sf 
-  grid <- st_sf(geometry, id = names(l))
-  grid$gridarea <- st_area(x = grid)
+  grid <- sf::st_sf(geometry, id = names(l))
+  grid$gridarea <- sf::st_area(x = grid)
   
   grid <- merge(grid, v, by = "id", all.x = T)
   return(grid)
@@ -119,16 +122,16 @@ getGridLayer <- function(x, cellsize, type = "regular", var, spdf, spdfid = NULL
 
 getGridSquare <- function(x, cellsize){
   # cellsize transform
-  cellsize = sqrt(cellsize)
-  boundingBox <- st_bbox(x)
+  cellsize <- sqrt(cellsize)
+  boundingBox <- sf::st_bbox(x)
   rounder <- boundingBox[1:2] %% cellsize
   boundingBox[1] <- boundingBox[1] - rounder[1]
   boundingBox[2] <- boundingBox[2] - rounder[2]
   n <- unname(c(ceiling(diff(boundingBox[c(1, 3)]) / cellsize), 
                 ceiling(diff(boundingBox[c(2, 4)]) / cellsize)))
-  grid <- st_make_grid(cellsize = cellsize, offset = boundingBox[1:2], n = n,
-                       crs = st_crs(x))
-  grid <- st_sf(id_cell=1:length(grid), geometry = grid)
+  grid <- sf::st_make_grid(cellsize = cellsize, offset = boundingBox[1:2], n = n,
+                       crs = sf::st_crs(x))
+  grid <- sf::st_sf(id_cell=1:length(grid), geometry = grid)
   # grid$id_cell <- 1:nrow(grid)
   row.names(grid) <- grid$id_cell
   return(grid)
@@ -154,19 +157,23 @@ getGridHexa <- function(x, cellsize){
                     c(bbox[1,'max'],bbox[2,'max']), 
                     c(bbox[1,'max'],bbox[2,'min']), 
                     c(bbox[1,'min'],bbox[2,'min']) ) 
-  bboxSP <- sp::SpatialPolygons(Srl = list(sp::Polygons(list(sp::Polygon(bboxMat)),"bbox")), 
+  bboxSP <- sp::SpatialPolygons(Srl = 
+                                  list(sp::Polygons(list(sp::Polygon(bboxMat)),
+                                                    "bbox")), 
                                 proj4string=sp::CRS(sp::proj4string(spdf)))
   
   pregrid <- sp::spsample(x = bboxSP, type = "hexagonal", cellsize = cellsize, 
                           bb = bbox(spdf))
   grid <- sp::HexPoints2SpatialPolygons(pregrid)
   grid <- sp::SpatialPolygonsDataFrame(Sr = grid, 
-                                       data = data.frame(id_cell = 1:length(grid)), 
+                                       data = data.frame(id_cell = 
+                                                           1:length(grid)), 
                                        match.ID = FALSE)
   row.names(grid) <- as.character(grid$id_cell)
   grid <- sf::st_as_sf(grid)
   return(grid)
 }
+
 
 #' @title Compute Data for a Grid Layer
 #' @name getGridData
@@ -179,3 +186,4 @@ getGridHexa <- function(x, cellsize){
 getGridData <- function(x, df, dfid = NULL, var){
   .Defunct(msg = "This function is defunct, use getGridLayer instead.")
 }
+

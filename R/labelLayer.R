@@ -20,13 +20,13 @@
 #' @param r width of the halo
 #' @param overlap if FALSE, labels are moved so they do not overlap.
 #' @param halo If TRUE, then a 'halo' is printed around the text and additional 
-#' arguments bg and r can be modified to set the colour and width of the halo.
+#' arguments bg and r can be modified to set the color and width of the halo.
 #' @param show.lines if TRUE, then lines are plotted between x,y and the word, 
 #' for those words not covering their x,y coordinate
 #' @seealso \link{layoutLayer}
-#' @import sp
 #' @export
 #' @examples
+#' library(sf)
 #' opar <- par(mar = c(0,0,0,0))
 #' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
 #' plot(st_geometry(mtq), col = "darkseagreen3", border = "darkseagreen4", 
@@ -36,8 +36,8 @@
 #'            overlap = FALSE, show.lines = FALSE)
 #' par(opar)
 #' 
+#' library(sp)
 #' data("nuts2006")
-#' 
 #' plot(nuts0.spdf, border = NA, col = NA, add = FALSE, bg = "#A6CAE0")
 #' plot(world.spdf, col  = "#E3DEBF", border=NA, add=TRUE)
 #' plot(nuts0.spdf, col = "#D1914D",border = "white", lwd=1, add=TRUE)
@@ -60,7 +60,8 @@
 #'             author = "", sources = "",
 #'             scale = NULL, col = NA, coltitle = "black",
 #'             frame = FALSE, south = TRUE)
-labelLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, txt, col = "black",
+labelLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, txt,
+                       col = "black",
                         cex = 0.7, overlap = TRUE, show.lines = TRUE, 
                         halo = FALSE, bg = "white", r = 0.1, ...){
   if (missing(x)){
@@ -70,7 +71,7 @@ labelLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, txt, col = "blac
     x <- sf::st_as_sf(x)
   }
   
-  words = x[[txt]]
+  words <- x[[txt]]
   cc <- sf::st_coordinates(sf::st_centroid(x = x, of_largest_polygon = max(sf::st_is(sf::st_as_sf(x), "MULTIPOLYGON"))))
   
   if (!overlap){
@@ -103,4 +104,3 @@ labelLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, txt, col = "blac
     text(x = cc[,1], y = cc[,2], labels = words, cex = cex, col = col, ...)
   }
 }
-

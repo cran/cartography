@@ -1,6 +1,6 @@
 #' @title Discretization
 #' @name getBreaks
-#' @description A function to discretize continious variables.
+#' @description A function to discretize continuous variables.
 #' @param v a vector of numeric values.
 #' @param nclass a number of classes
 #' @param method a discretization method; one of "sd", "equal", 
@@ -22,6 +22,7 @@
 #' @note This function is mainly a wrapper classInt::classIntervals + 
 #' arith, em, q6, geom and msd methods. 
 #' @examples
+#' library(sp)
 #' data("nuts2006")
 #' # Create the natality rate
 #' var <- nuts2.df$birth_2008/nuts2.df$pop2008 * 1000
@@ -56,8 +57,6 @@
 #' abline(v = moy + 0.5 * sd, col = "blue", lwd = 3)
 #' abline(v = moy - 0.5 * sd, col = "blue", lwd = 3)
 #' @return A numeric vector of breaks
-#' @import classInt
-#' @import stats
 #' @export
 getBreaks <- function(v, nclass = NULL, method = "quantile", 
                       k = 1, middle = FALSE){
@@ -98,7 +97,8 @@ getBreaks <- function(v, nclass = NULL, method = "quantile",
     }
     if (method == "q6")
     {
-      intervals <- as.vector(quantile(v,probs = c(0, 5, 27.5, 50, 72.5, 95, 100)/100))
+      intervals <- as.vector(quantile(v, probs = 
+                                        c(0, 5, 27.5, 50, 72.5, 95, 100)/100))
     }
     if (method == "em"){
       t <- bitwAnd(nclass,(nclass-1))

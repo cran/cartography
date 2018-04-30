@@ -45,13 +45,13 @@
 #' not (FALSE).
 #' @param colNA no data color. 
 #' @export
-#' @import sp
 #' @seealso \link{legendBarsSymbols}, \link{legendTypo},
 #' \link{legendCirclesSymbols}, \link{legendSquaresSymbols},
 #' \link{typoLayer}, \link{propSymbolsLayer}
 #' @examples
-#' data("nuts2006")
 #' ## Example 1
+#' library(sp)
+#' data("nuts2006")
 #' plot(nuts0.spdf, col = "grey60",border = "grey20")
 #' nuts0.df$typo <- c(rep("A",10),rep("B",10),rep("C",10),rep("D",4))
 #' propSymbolsTypoLayer(spdf = nuts0.spdf, df = nuts0.df,
@@ -59,6 +59,7 @@
 #' 
 #' 
 #' ## Example 2
+#' library(sf)
 #' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
 #' # Countries plot
 #' plot(st_geometry(mtq), col = "lightblue4",border = "lightblue3", bg = "lightblue1")
@@ -172,7 +173,7 @@ propSymbolsTypoLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, var,
                                 values.cex = legend.values.cex,
                                 var = c(min(dots[[var]]),max(dots[[var]])),
                                 inches = inches,
-                                col = "grey",
+                                col = "grey", lwd = lwd, 
                                 frame = legend.var.frame,
                                 values.rnd =  legend.values.rnd,
                                 style = legend.var.style)
@@ -187,7 +188,7 @@ propSymbolsTypoLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, var,
                                 values.cex = legend.values.cex,
                                 var = c(min(dots[[var]]),max(dots[[var]])),
                                 inches = inches,
-                                col = "grey",
+                                col = "grey", lwd = lwd, 
                                 frame = legend.var.frame,
                                 values.rnd =  legend.values.rnd,
                                 style = legend.var.style)
@@ -204,7 +205,7 @@ propSymbolsTypoLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, var,
                              values.cex = legend.values.cex,
                              var = c(min(dots[[var]]),max(dots[[var]])),
                              inches = inches,
-                             col = "grey",
+                             col = "grey", lwd = lwd, 
                              frame = legend.var.frame,
                              values.rnd =  legend.values.rnd,
                              style = legend.var.style)
@@ -224,4 +225,3 @@ propSymbolsTypoLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, var,
                nodata.txt = legend.var2.nodata)
   }
 }
-

@@ -1,7 +1,7 @@
 #' @title Extract Polygons Outer Borders
 #' @description Extract outer borders between polygons.
 #' Outer borders are non-contiguous polygons borders (e.g.
-#' maritim borders).
+#' maritime borders).
 #' @name getOuterBorders
 #' @param x an sf object, a simple feature collection or a SpatialPolygonsDataFrame.
 #' @param id identifier field in x, default to the first column. (optional)
@@ -19,16 +19,18 @@
 #' of id1 and id2 (with "_" as separator).
 #' @note getBorders and getOuterBorders can be combined with rbind.
 #' @examples
+#' library(sf)
 #' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
 #' # Get units borders
 #' mtq.outer <- getOuterBorders(x = mtq, res = 1000, width = 2500)
 #' # Plot communesa
-#' plot(mtq$geometry, col = "grey60")
+#' plot(st_geometry(mtq), col = "grey60")
 #' # Plot borders
-#' plot(mtq.outer, col = sample(x = rainbow(nrow(mtq.outer))),
+#' plot(st_geometry(mtq.outer), col = sample(x = rainbow(nrow(mtq.outer))),
 #'      lwd = 3, add = TRUE)
 #'      
 #' \donttest{
+#' library(sp)
 #' data(nuts2006)
 #' # Get units borders
 #' nuts0.outer <- getOuterBorders(x = nuts0.spdf)
@@ -40,10 +42,12 @@
 #' }
 #' @seealso \link{discLayer}, \link{getBorders}
 #' @export
-getOuterBorders <- function(x, id, res = NULL, width = NULL, spdf, spdfid = NULL){
+getOuterBorders <- function(x, id, res = NULL, width = NULL, 
+                            spdf, spdfid = NULL){
   
   if(sum(missing(spdf), is.null(spdfid)) != 2){
-    warning("spdf and spdfid are deprecated; use x and id instead.", call. = FALSE)
+    warning("spdf and spdfid are deprecated; use x and id instead.", 
+            call. = FALSE)
   }
   
   if(!missing(x)){
@@ -107,7 +111,8 @@ getOuterBorders <- function(x, id, res = NULL, width = NULL, spdf, spdfid = NULL
   
   
   # calculate coordinates of the nearest Non-NA pixel
-  # assume that we have a orthogonal, projected CRS, so we can use (Pythagorean) calculations
+  # assume that we have a orthogonal, projected CRS, 
+  # so we can use (Pythagorean) calculations
   co.x <- na.x + dist * sin(direct)
   co.y <- na.y + dist * cos(direct)
   
@@ -125,7 +130,7 @@ getOuterBorders <- function(x, id, res = NULL, width = NULL, spdf, spdfid = NULL
   
   
   pBBorder <- getBorders(x = pB, id = "id" )
-  result <- st_simplify(x=pBBorder, dTolerance = res, preserveTopology = F)
+  result <- sf::st_simplify(x=pBBorder, dTolerance = res, preserveTopology = F)
   row.names(result) <- paste0(row.names(result), "_o")
   
   

@@ -8,7 +8,7 @@
 #' @param spdf deprecated, a Spatial*DataFrame.
 #' @param width width of the figure (in pixels), either width or height 
 #' must be set.
-#' @param height heigth of the figure (in pixels), either width or height 
+#' @param height height of the figure (in pixels), either width or height 
 #' must be set. 
 #' @param mar a numerical vector of the form c(bottom, left, top, right) 
 #' which gives the number of lines of margin to be specified on the four 
@@ -20,6 +20,7 @@
 #' @export
 #' @examples
 #' \dontrun{
+#' library(sp)
 #' data("nuts2006")
 #' italy <- nuts0.spdf[nuts0.spdf$id=="IT",]
 #' 
@@ -37,6 +38,7 @@
 #' 
 #' ## PDF export
 #' # get figure dimension
+#' library(sf)
 #' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
 #' sizes <- getFigDim(x = mtq, width = 450, mar = c(1,1,2.2,1))
 #' # export the map

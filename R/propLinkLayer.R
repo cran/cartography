@@ -30,9 +30,9 @@
 #' @param dfids defunct.
 #' @param dfide defunct.
 #' @note Unlike most of cartography functions, identifiers fields are mandatory.
-#' @import sp
 #' @seealso \link{gradLinkLayer}, \link{getLinkLayer}, \link{legendPropLines}
 #' @examples
+#' library(sp)
 #' data("nuts2006")
 #' # Create a link layer of the twin cities agreements
 #' twincities.spdf <- getLinkLayer(x = nuts2.spdf, df = twincities.df[,1:2])
@@ -71,7 +71,7 @@ propLinkLayer <- function(x, df, xid = NULL, dfid = NULL,
   
   maxval <- max(link[[var]])
   link$lwd <- link[[var]] * maxlwd / maxval
-  plot(st_geometry(link), lwd = link$lwd, col = col, add = add)
+  plot(sf::st_geometry(link), lwd = link$lwd, col = col, add = add)
   
   legendPropLines(pos = legend.pos, title.txt = legend.title.txt, 
                   title.cex = legend.title.cex,

@@ -33,11 +33,11 @@
 #' @param add whether to add the layer to an existing plot (TRUE) or 
 #' not (FALSE).
 #' @export
-#' @import sp
 #' @seealso \link{legendPropTriangles}
 #' @examples
-#' data("nuts2006")
 #' # Example 1
+#' library(sp)
+#' data("nuts2006")
 #' plot(nuts0.spdf)
 #' # There is no data for deaths in Turkey
 #' propTrianglesLayer(spdf = nuts0.spdf, df = nuts0.df, 
@@ -79,7 +79,7 @@ propTrianglesLayer <- function(spdf, df, spdfid = NULL, dfid = NULL,
   if (is.null(spdfid)){spdfid <- names(spdf@data)[1]}
   if (is.null(dfid)){dfid <- names(df)[1]}
   
-  dots <- cbind(spdf@data[, spdfid], as.data.frame(coordinates(spdf)))
+  dots <- cbind(spdf@data[, spdfid], as.data.frame(sp::coordinates(spdf)))
   colnames(dots) <- c(spdfid,"x","y")
   dots <- data.frame(dots, df[match(dots[,spdfid], df[,dfid]),])
   dots <- dots[,c(spdfid,"x","y", var1, var2)]
@@ -110,9 +110,11 @@ propTrianglesLayer <- function(spdf, df, spdfid = NULL, dfid = NULL,
   dots$yy1a<-dots$y
   dots$yy1b<-dots$y+dots$size1/2
   dots$yy1c<-dots$y
-  for (i in 1:length(dots$x)){polygon(c(dots$xx1a[i],dots$xx1b[i],dots$xx1c[i]), 
-                                      c(dots$yy1a[i],dots$yy1b[i],dots$yy1c[i]), 
-                                      col = col1, border = "#DDDDDD")}
+  for (i in 1:length(dots$x)){
+    polygon(c(dots$xx1a[i],dots$xx1b[i],dots$xx1c[i]), 
+            c(dots$yy1a[i],dots$yy1b[i],dots$yy1c[i]), 
+            col = col1, border = "#DDDDDD")
+  }
   
   # TRIANGLE BOTTOM
   dots$size2 <-  sqrt(dots[,var2]*k* sfdc / sc /2)
@@ -124,9 +126,11 @@ propTrianglesLayer <- function(spdf, df, spdfid = NULL, dfid = NULL,
   dots$yy1a<-dots$y
   dots$yy1b<-dots$y-dots$size2/2
   dots$yy1c<-dots$y
-  for (i in 1:length(dots$x)){polygon(c(dots$xx1a[i],dots$xx1b[i],dots$xx1c[i]), 
-                                      c(dots$yy1a[i],dots$yy1b[i],dots$yy1c[i]), 
-                                      col = col2, border = "#DDDDDD")}
+  for (i in 1:length(dots$x)){
+    polygon(c(dots$xx1a[i],dots$xx1b[i],dots$xx1c[i]), 
+            c(dots$yy1a[i],dots$yy1b[i],dots$yy1c[i]), 
+            col = col2, border = "#DDDDDD")
+  }
   
   
   if(legend.pos!="n"){
