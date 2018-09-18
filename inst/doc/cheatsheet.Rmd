@@ -1,0 +1,20 @@
+---
+title: "Thematic Maps with cartography :: CHEAT SHEET"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Thematic Maps with cartography :: CHEAT SHEET}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteKeyword{PDF}
+  %\VignetteKeyword{HTML}
+  %\VignetteKeyword{vignette}
+  %\VignetteKeyword{package}
+
+---
+
+ * [Thematic Maps with cartography :: CHEAT SHEET](http://riatelab.github.io/cartography/vignettes/cheatsheet/cartography_cheatsheet.pdf)
+
+
+

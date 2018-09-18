@@ -149,7 +149,7 @@ getGridHexa <- function(x, cellsize){
   spdf <- methods::as(x, "Spatial")
   # cellsize transform
   cellsize <- 2 * sqrt(cellsize/((3*sqrt(3)/2))) * sqrt(3)/2
-  bbox <- bbox(spdf)
+  bbox <- sp::bbox(spdf)
   bbox[, 1] <- bbox[, 1] - cellsize
   bbox[, 2] <- bbox[, 2] + cellsize
   bboxMat <- rbind( c(bbox[1,'min'] , bbox[2,'min']), 
@@ -163,7 +163,7 @@ getGridHexa <- function(x, cellsize){
                                 proj4string=sp::CRS(sp::proj4string(spdf)))
   
   pregrid <- sp::spsample(x = bboxSP, type = "hexagonal", cellsize = cellsize, 
-                          bb = bbox(spdf))
+                          bb = sp::bbox(spdf))
   grid <- sp::HexPoints2SpatialPolygons(pregrid)
   grid <- sp::SpatialPolygonsDataFrame(Sr = grid, 
                                        data = data.frame(id_cell = 

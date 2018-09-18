@@ -1,6 +1,6 @@
 Package: cartography
 Title: Thematic Cartography
-Version: 2.1.1
+Version: 2.1.2
 Authors@R: c(
       person("Timothée", "Giraud", 
         email = "timothee.giraud@cnrs.fr", role = c("cre","aut")),
@@ -21,13 +21,13 @@ LinkingTo: Rcpp
 VignetteBuilder: knitr
 SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ.4 (>= 4.8.0)
 Encoding: UTF-8
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 NeedsCompilation: yes
-Packaged: 2018-06-25 11:46:09 UTC; tim
+Packaged: 2018-09-18 13:02:19 UTC; tim
 Author: Timothée Giraud [cre, aut],
   Nicolas Lambert [aut],
   Ian Fellows [cph] (no overlap algorithm for labels, from wordcloud
     package)
 Maintainer: Timothée Giraud <timothee.giraud@cnrs.fr>
 Repository: CRAN
-Date/Publication: 2018-06-25 13:23:29 UTC
+Date/Publication: 2018-09-18 13:30:02 UTC
