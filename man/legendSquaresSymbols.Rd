@@ -11,8 +11,9 @@ legendSquaresSymbols(pos = "topleft",
 }
 \arguments{
 \item{pos}{position of the legend, one of "topleft", "top", 
-"topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
-vector of two coordinates in map units (c(x, y)).}
+"topright", "right", "bottomright", "bottom", "bottomleft", 
+"bottomleftextra", "left" or a vector of two coordinates in map units 
+(c(x, y)).}
 
 \item{title.txt}{title of the legend.}
 
@@ -45,15 +46,14 @@ styles, "c" stands for compact and "e" for extended.}
 Plot legend for proportional squares maps
 }
 \examples{
-library(sp)
-data("nuts2006")
-plot(nuts0.spdf)
+library(sf)
+mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+plot(st_geometry(mtq))
 box()
 legendSquaresSymbols(pos = "bottomright", title.txt = "Title of\\nthe legend ",
                      title.cex = 0.8, values.cex = 0.6,
-                     var = c(max(nuts1.df$pop2008), min(nuts1.df$pop2008)),
+                     var = c(max(mtq$POP), min(mtq$POP)),
                      inches = 0.5,
                      col="red",  
                      frame=TRUE, values.rnd=0, style ="c")
-
 }

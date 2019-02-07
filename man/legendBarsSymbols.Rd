@@ -11,8 +11,9 @@ legendBarsSymbols(pos = "topleft", title.txt = "Title of the legend",
 }
 \arguments{
 \item{pos}{position of the legend, one of "topleft", "top", 
-"topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
-vector of two coordinates in map units (c(x, y)).}
+"topright", "right", "bottomright", "bottom", "bottomleft", 
+"bottomleftextra", "left" or a vector of two coordinates in map units 
+(c(x, y)).}
 
 \item{title.txt}{title of the legend.}
 
@@ -45,13 +46,13 @@ styles, "c" stands for compact and "e" for extended.}
 Plot legend for proportional bars maps
 }
 \examples{
-library(sp)
-data("nuts2006")
-plot(nuts0.spdf)
-
+library(sf)
+mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+plot(st_geometry(mtq))
+box()
 legendBarsSymbols(pos = "topleft", title.txt = "Title of\\nthe legend",
                      title.cex = 0.8, values.cex = 0.6,cex = 1,
-                     var = c(min(nuts0.df$pop2008),max(nuts0.df$pop2008)),
+                     var = c(min(mtq$POP),max(mtq$POP)),
                      inches = 0.5,
                      col = "purple",
                      values.rnd=0, style ="e")

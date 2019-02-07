@@ -1,9 +1,9 @@
-#' @title Discretization
+#' @title Classification
 #' @name getBreaks
-#' @description A function to discretize continuous variables.
+#' @description A function to classify continuous variables.
 #' @param v a vector of numeric values.
 #' @param nclass a number of classes
-#' @param method a discretization method; one of "sd", "equal", 
+#' @param method a classification method; one of "sd", "equal", 
 #' "quantile", "fisher-jenks","q6", "geom", "arith", "em" or "msd" (see Details).
 #' @param k number of standard deviation for "msd" method (see Details)..
 #' @param middle creation of a central class for "msd" method (see Details). 
@@ -22,13 +22,11 @@
 #' @note This function is mainly a wrapper classInt::classIntervals + 
 #' arith, em, q6, geom and msd methods. 
 #' @examples
-#' library(sp)
-#' data("nuts2006")
-#' # Create the natality rate
-#' var <- nuts2.df$birth_2008/nuts2.df$pop2008 * 1000
-#' 
+#' library(sf)
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+#' var <- mtq$MED
 #' # Histogram
-#' hist(var, probability = TRUE, nclass = 30)
+#' hist(var, probability = TRUE, breaks = 20)
 #' rug(var)
 #' moy <- mean(var)
 #' med <- median(var)

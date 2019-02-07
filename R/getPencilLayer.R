@@ -12,23 +12,20 @@
 #' @return A MULTILINESTRING sf object is returned. 
 #' @examples 
 #' library(sf)
-#' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
 #' mtq_pencil <- getPencilLayer(x = mtq)
 #' plot(st_geometry(mtq_pencil), col = 1:8)
 #' plot(st_geometry(mtq), add = TRUE)
 #' 
-#' typoLayer(x = mtq_pencil, var="STATUT", add = FALSE,
+#' typoLayer(x = mtq_pencil, var="STATUS", 
 #'           col = c("aquamarine4", "yellow3","wheat"),
-#'           legend.values.order = c("Préfecture de région",
-#'                                   "Sous-préfecture", 
-#'                                   "Commune simple"),
+#'           legend.values.order = c("Prefecture",
+#'                                   "Sub-prefecture", 
+#'                                   "Simple municipality"),
 #'           legend.pos = "topright",
 #'           legend.title.txt = "Status")
 #' plot(st_geometry(mtq), add = TRUE, ldy=2)
-#' layoutLayer(title = "Commune Status",
-#'             author = "UMS RIATE, 2017",
-#'             sources = "IGN, 2016",
-#'             scale = NULL)
+#' layoutLayer(title = "Municipality Status")
 #' @export
 getPencilLayer <- function(x, size = 100, buffer = 1000, lefthanded = TRUE){
   a <- median(sf::st_area(sf::st_set_crs(x, NA)))
@@ -47,7 +44,7 @@ getPencilLayer <- function(x, size = 100, buffer = 1000, lefthanded = TRUE){
 
 makelines <- function(x, size, buffer, lefthanded, a){
   size <- round(sqrt(as.numeric(sf::st_area(x) * size / a)), 0)
-  if (size <= 10){size = 10}
+  if (size <= 10){size <- 10}
   pt <- sf::st_sample(sf::st_buffer(x, buffer), size = size)
   # pt <- pt[sort(sample(1:length(pt), size, replace = FALSE))]
   if(lefthanded){

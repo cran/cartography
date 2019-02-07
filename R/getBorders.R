@@ -13,27 +13,15 @@
 #' id1 and id2 are ids of units that neighbour a border; id is the concatenation 
 #' of id1 and id2 (with "_" as separator).
 #' @examples
-#' library(sp)
 #' library(sf)
-#' data(nuts2006)
-#' # Get borders
-#' nuts0.contig <- getBorders(x = nuts0.spdf)
-#' # Plot Countries
-#' plot(nuts0.spdf, border = NA, col = "grey60")
-#' # Plot borders
-#' plot(st_geometry(nuts0.contig), 
-#'      col = sample(x = rainbow(nrow(nuts0.contig))), 
-#'      lwd = 3, add = TRUE)
-#' 
-#' library(sf)
-#' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
 #' # Get borders
 #' mtq.borders <- getBorders(x = mtq)
 #' # Plot polygons
 #' plot(st_geometry(mtq), border = NA, col = "grey60")
 #' # Plot borders
 #' plot(st_geometry(mtq.borders), 
-#'      col = sample(x = rainbow(nrow(nuts0.contig))), 
+#'      col = sample(x = rainbow(nrow(mtq.borders))), 
 #'      lwd = 3, add = TRUE)
 #' @seealso \link{discLayer}, \link{getOuterBorders}
 #' @export
@@ -60,7 +48,7 @@ getBorders <- function(x, id, spdf, spdfid = NULL){
   sf::st_geometry(x) <-  sf::st_buffer(x = sf::st_geometry(x), 1, nQuadSegs = 5)
   lx <- sf::st_cast(x, "MULTILINESTRING")
   
-  l <- sf::st_intersects(x,x, sparse = F)
+  l <- sf::st_intersects(x,x, sparse = FALSE)
   colnames(l) <- x[[id]]
   rownames(l) <- x[[id]]
   l <- lower.tri(l) * l

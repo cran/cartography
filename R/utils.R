@@ -37,7 +37,7 @@ convertToSf <- function(spdf, df, spdfid, dfid){
 #' @param distr vector of classes
 #' @param col vector of colors
 #' @param nclass number of classes targeted (if null, the Huntsberger method is used)
-#' @param method discretization method ("sd", "equal", "quantile", "fisher-jenks","q6","geom")
+#' @param method classification method ("sd", "equal", "quantile", "fisher-jenks","q6","geom")
 #' @return List: a vector of colors, colors and distr
 #' @noRd
 choro <- function(var, distr = NULL, col = NULL, 
@@ -86,7 +86,7 @@ checkCol <- function(col, mod){
       col <- carto.pal(pal1 = "pastel.pal", n1 = lm)
     }else{
       lc <- carto.pal(pal1 = "pastel.pal", 20)
-      col <- sample(x = lc, size = lm , replace = T)
+      col <- sample(x = lc, size = lm , replace = TRUE)
     } 
   }else{
     if (length(col) < length(mod)){
@@ -190,6 +190,10 @@ legpos <- function(pos, x1, x2, y1, y2, delta1, delta2,
     xref <- x1 + delta1
     yref <- y1 + delta1
   }
+  if (pos == "bottomleftextra") {
+    xref <- x1 + delta1 
+    yref <- y1 + delta1 + graphics::strheight(s = "hp\nhp", cex = 0.6, font = 3)
+  }
   if (pos == "topleft") {
     xref <- x1 + delta1
     yref <- y2 - 2 * delta1 - legend_ysize
@@ -243,7 +247,6 @@ NULL
 #' @param y lat
 #' @param words labels
 #' @param cex cex
-#' @param rotate90 rotate
 #' @param xlim xlim
 #' @param ylim ylim
 #' @param tstep tstep
@@ -251,7 +254,7 @@ NULL
 #' @param ... other stuf
 #' @return coords
 #' @noRd
-wordlayout <- function(x, y, words, cex=1, rotate90 = FALSE,
+wordlayout <- function(x, y, words, cex=1, 
                        xlim=c(-Inf,Inf), ylim=c(-Inf,Inf), 
                        tstep=.1, rstep=.1, ...){
   tails <- "g|j|p|q|y"
@@ -264,12 +267,9 @@ wordlayout <- function(x, y, words, cex=1, rotate90 = FALSE,
     sdy <- 1
   if(length(cex)==1)
     cex <- rep(cex,n)
-  if(length(rotate90)==1)
-    rotate90 <- rep(rotate90,n)	
   set.seed(999)
   boxes <- list()
   for(i in 1:length(words)){
-    rotWord <- rotate90[i]
     r <-0
     theta <- runif(1,0,2*pi)
     x1 <- xo <- x[i]
@@ -282,11 +282,6 @@ wordlayout <- function(x, y, words, cex=1, rotate90 = FALSE,
     #mind your ps and qs
     if(grepl(tails,words[i]))
       ht <- ht + ht*.2
-    if(rotWord){
-      tmp <- ht
-      ht <- wid
-      wid <- tmp	
-    }
     isOverlaped <- TRUE
     while(isOverlaped){
       if(!is_overlap(x1-.5*wid,y1-.5*ht,wid,ht,boxes) &&

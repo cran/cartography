@@ -90,33 +90,21 @@ Plot a proportional symbols layer with colors based on
  qualitative data.
 }
 \examples{
-## Example 1
-library(sp)
-data("nuts2006")
-plot(nuts0.spdf, col = "grey60",border = "grey20")
-nuts0.df$typo <- c(rep("A",10),rep("B",10),rep("C",10),rep("D",4))
-propSymbolsTypoLayer(spdf = nuts0.spdf, df = nuts0.df,
-                     var = "pop2008", var2="typo")
-
-
-## Example 2
 library(sf)
-mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
 # Countries plot
-plot(st_geometry(mtq), col = "lightblue4",border = "lightblue3", bg = "lightblue1")
+plot(st_geometry(mtq), col = "lightblue4",border = "lightblue3", 
+     bg = "lightblue1")
 # Population plot on proportional symbols
-propSymbolsTypoLayer(x = mtq, var = "P13_POP", var2 = "STATUT",
-                     symbols = "circle",          
+propSymbolsTypoLayer(x = mtq, var = "POP", var2 = "STATUS",
+                     symbols = "circle",
                      col = c("aquamarine4", "yellow3","wheat"),
-                     legend.var2.values.order = c("Préfecture de région",
-                                                  "Sous-préfecture", 
-                                                  "Commune simple"),
+                     legend.var2.values.order = c("Prefecture",
+                                                  "Sub-prefecture",
+                                                  "Simple municipality"),
                      legend.var.pos = "right", border = "grey",
-                     legend.var.title.txt = "Total\\npopulation (2013)")
-# Layout plot
-layoutLayer(title = "Population in Martinique",
-            sources = "INSEE, 2016", theme = "blue.pal",
-            scale = NULL, frame = FALSE)
+                     legend.var.title.txt = "Total\\nPopulation")
+layoutLayer(title = "Population Distribution in Martinique, 2015")
 }
 \seealso{
 \link{legendBarsSymbols}, \link{legendTypo},

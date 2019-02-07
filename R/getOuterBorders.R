@@ -20,26 +20,14 @@
 #' @note getBorders and getOuterBorders can be combined with rbind.
 #' @examples
 #' library(sf)
-#' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
 #' # Get units borders
 #' mtq.outer <- getOuterBorders(x = mtq, res = 1000, width = 2500)
-#' # Plot communesa
+#' # Plot municipalities
 #' plot(st_geometry(mtq), col = "grey60")
 #' # Plot borders
 #' plot(st_geometry(mtq.outer), col = sample(x = rainbow(nrow(mtq.outer))),
 #'      lwd = 3, add = TRUE)
-#'      
-#' \donttest{
-#' library(sp)
-#' data(nuts2006)
-#' # Get units borders
-#' nuts0.outer <- getOuterBorders(x = nuts0.spdf)
-#' # Plot Countries
-#' plot(nuts0.spdf, border = NA, col = "grey60")
-#' # Plot borders
-#' plot(st_geometry(nuts0.outer), col = sample(x = rainbow(nrow(nuts0.outer))),
-#'      lwd = 3, add = TRUE)
-#' }
 #' @seealso \link{discLayer}, \link{getBorders}
 #' @export
 getOuterBorders <- function(x, id, res = NULL, width = NULL, 
@@ -64,7 +52,7 @@ getOuterBorders <- function(x, id, res = NULL, width = NULL,
     id <- names(spdf@data)[1]
   }
   
-  if(!is.numeric(spdf[,id])){
+  if(!is.numeric(spdf@data[,id])){
     spdf$idxd <- 1:nrow(spdf)
   }else{
     spdf$idxd <- spdf@data[, id]
@@ -125,12 +113,13 @@ getOuterBorders <- function(x, id, res = NULL, width = NULL,
   r.NAVals <- rna # initiate new raster
   r.NAVals[] <- NAVals # store values in raster
   
-  pB <- raster::rasterToPolygons(r.NAVals, dissolve = T)
+  pB <- raster::rasterToPolygons(r.NAVals, dissolve = TRUE)
   pB@data$id <- spdf@data[pB@data$layer, id]
   
   
   pBBorder <- getBorders(x = pB, id = "id" )
-  result <- sf::st_simplify(x=pBBorder, dTolerance = res, preserveTopology = F)
+  result <- sf::st_simplify(x=pBBorder, dTolerance = res, 
+                            preserveTopology = FALSE)
   row.names(result) <- paste0(row.names(result), "_o")
   
   

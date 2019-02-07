@@ -28,48 +28,24 @@ Build a regular grid based on an sf object or a SpatialPolygonsDataFrame.
 }
 \examples{
 library(sf)
-mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
-# Plot dentsity of population 
-mtq$dens <- mtq$P13_POP / (st_area(mtq) / (1000 * 1000)) 
-bks <- getBreaks(v = mtq$dens, method = "q6")
-cols <- carto.pal(pal1 = "taupe.pal", n1 = 6)
+mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+# Plot dentsity of population
+mtq$POPDENS <- 1e6 * mtq$POP / st_area(mtq) 
+bks <- getBreaks(v = mtq$POPDENS, method = "geom", 5)
+cols <- carto.pal(pal1 = "taupe.pal", n1 = 5)
 opar <- par(mfrow = c(1,2), mar = c(0,0,0,0))
-choroLayer(x = mtq, var = "dens", breaks = bks, 
-           border = "burlywood3", col = cols, 
-           legend.pos = "topright", legend.values.rnd = 1,
+choroLayer(x = mtq, var = "POPDENS", breaks = bks,
+           border = "burlywood3", col = cols,
+           legend.pos = "topright", legend.values.rnd = 0,
            legend.title.txt = "Population density")
 
-mygrid <- getGridLayer(x = mtq, cellsize = 3000 * 3000, 
-                       type = "regular", var = "P13_POP")
+mygrid <- getGridLayer(x = mtq, cellsize = 3e7,
+                       type = "hexagonal", var = "POP")
 ## conversion from square meter to square kilometers
-mygrid$densitykm <- mygrid$P13_POP / (mygrid$gridarea / (1000 * 1000)) 
-choroLayer(x = mygrid, var = "densitykm", breaks = bks,
-           border = "burlywood3", col = cols, 
+mygrid$POPDENSG <- 1e6 * mygrid$POP / mygrid$gridarea 
+choroLayer(x = mygrid, var = "POPDENSG", breaks = bks,
+           border = "burlywood3", col = cols,
            legend.pos = "n", legend.values.rnd = 1,
            legend.title.txt = "Population density")
-plot(st_geometry(mtq), lwd = 0.2, add=TRUE, border = "#ffffff75")
-
-\donttest{
-library(sp)
-data(nuts2006)
-nuts2.spdf@data = nuts2.df
-mygrid <- getGridLayer(x = nuts2.spdf, cellsize = 200000 * 200000, 
-                       type = "regular", var = "pop2008")
-# Plot total population
-plot(st_geometry(mygrid), col="#CCCCCC",border="white")
-propSymbolsLayer(x = mygrid, var = "pop2008", border = "white",
-                 legend.style = "e", legend.pos = "right", 
-                 legend.title.txt = "Total population",
-                 inches = 0.1, col = "black", add = TRUE)
-
-# Plot dentsity of population 
-## conversion from square meter to square kilometers
-mygrid$densitykm <- mygrid$pop2008 * 1000 * 1000 / mygrid$gridarea 
-cols <- carto.pal(pal1 = "taupe.pal", n1 = 6)
-choroLayer(x = mygrid, var = "densitykm", 
-           border = "grey80",col = cols, method = "q6", 
-           legend.pos = "right", legend.values.rnd = 1,
-           legend.title.txt = "Population density")
 par(opar)
-}
 }

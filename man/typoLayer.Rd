@@ -61,27 +61,16 @@ not (FALSE).}
 Plot a typology layer.
 }
 \examples{
-## Example 1
-library(sp)
-data(nuts2006)
-nuts0.df$typo <- c(rep("A",10),rep("B",10),rep("C",10),rep("D",4))
-typoLayer(spdf = nuts0.spdf, df = nuts0.df, var = "typo")
-
-
-## Example 2
 library(sf)
-mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
-typoLayer(x = mtq, var="STATUT",  
+mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+typoLayer(x = mtq, var="STATUS",  
           col = c("aquamarine4", "yellow3","wheat"),
-          legend.values.order = c("Préfecture de région",
-                                  "Sous-préfecture", 
-                                  "Commune simple"),
+          legend.values.order = c("Prefecture",
+                                  "Sub-prefecture", 
+                                  "Simple municipality"),
           legend.pos = "topright",
           legend.title.txt = "Status")
-layoutLayer(title = "Commune Status",
-            author = "UMS RIATE, 2017",
-            sources = "IGN, 2016",
-            scale = NULL)
+layoutLayer(title = "Municipality Status")
 }
 \seealso{
 \link{propSymbolsTypoLayer}, \link{typoLayer}, \link{legendTypo}

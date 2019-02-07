@@ -2,7 +2,7 @@
 % Please edit documentation in R/getBreaks.R
 \name{getBreaks}
 \alias{getBreaks}
-\title{Discretization}
+\title{Classification}
 \usage{
 getBreaks(v, nclass = NULL, method = "quantile", k = 1,
   middle = FALSE)
@@ -12,7 +12,7 @@ getBreaks(v, nclass = NULL, method = "quantile", k = 1,
 
 \item{nclass}{a number of classes}
 
-\item{method}{a discretization method; one of "sd", "equal", 
+\item{method}{a classification method; one of "sd", "equal", 
 "quantile", "fisher-jenks","q6", "geom", "arith", "em" or "msd" (see Details).}
 
 \item{k}{number of standard deviation for "msd" method (see Details)..}
@@ -23,7 +23,7 @@ getBreaks(v, nclass = NULL, method = "quantile", k = 1,
 A numeric vector of breaks
 }
 \description{
-A function to discretize continuous variables.
+A function to classify continuous variables.
 }
 \details{
 "sd", "equal", "quantile" and "fisher-jenks" are \link{classIntervals} methods.\cr\cr
@@ -43,13 +43,11 @@ This function is mainly a wrapper classInt::classIntervals +
 arith, em, q6, geom and msd methods.
 }
 \examples{
-library(sp)
-data("nuts2006")
-# Create the natality rate
-var <- nuts2.df$birth_2008/nuts2.df$pop2008 * 1000
-
+library(sf)
+mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+var <- mtq$MED
 # Histogram
-hist(var, probability = TRUE, nclass = 30)
+hist(var, probability = TRUE, breaks = 20)
 rug(var)
 moy <- mean(var)
 med <- median(var)

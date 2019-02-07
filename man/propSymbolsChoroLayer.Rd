@@ -14,6 +14,7 @@ propSymbolsChoroLayer(x, spdf, df, spdfid = NULL, dfid = NULL, var,
   legend.var.frame = FALSE, legend.var2.pos = "topright",
   legend.var2.title.txt = var2, legend.var2.values.rnd = 2,
   legend.var2.nodata = "no data", legend.var2.frame = FALSE,
+  legend.var2.border = "black", legend.var2.horiz = FALSE,
   add = TRUE)
 }
 \arguments{
@@ -50,7 +51,7 @@ squares, height for bars) in inches.}
 Note that if there are nlevel colors (classes) there should be (nlevel+1) 
 breakpoints (see \link{choroLayer} Details).}
 
-\item{method}{a discretization method; one of "sd", "equal", 
+\item{method}{a classification method; one of "sd", "equal", 
 "quantile", "fisher-jenks", "q6" or "geom"  (see \link{choroLayer} Details).}
 
 \item{nclass}{a targeted number of classes. If null, the number of class is 
@@ -96,48 +97,36 @@ the legend.}
 \item{legend.var2.frame}{whether to add a frame to the legend (TRUE) or 
 not (FALSE).}
 
+\item{legend.var2.border}{color of boxes borders in the legend.}
+
+\item{legend.var2.horiz}{whether to display the legend horizontally (TRUE) or
+not (FALSE).}
+
 \item{add}{whether to add the layer to an existing plot (TRUE) or 
 not (FALSE).}
 }
 \description{
 Plot a proportional symbols layer with colors based on a 
-quantitative data discretization.
+quantitative data classification
 }
 \examples{
-library(sp)
-data("nuts2006")
-## Example 1
-# Growth rate
-nuts0.df$cagr <- (((nuts0.df$pop2008 / nuts0.df$pop1999)^(1/9)) - 1) * 100
-# Countries plot
-plot(nuts0.spdf, col = "grey60",border = "grey20", add=FALSE)
-# Plot the symbols
-propSymbolsChoroLayer(spdf = nuts0.spdf, df = nuts0.df,symbols = "circle",
-                      var = "pop2008", var2 = "cagr")
-
-## Example 2
-# Share of farmers in Martinique
 library(sf)
-mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
-mtq$shareCS1 <- 100 * mtq$C13_CS1/mtq$C13_POP
-plot(st_geometry(mtq), col = "grey60",border = "white", 
+mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+plot(st_geometry(mtq), col = "grey60",border = "white",
      lwd=0.4, bg = "lightsteelblue1")
-propSymbolsChoroLayer(x = mtq, var = "C13_POP", var2 = "shareCS1", 
+propSymbolsChoroLayer(x = mtq, var = "POP", var2 = "MED",
                       col = carto.pal(pal1 = "blue.pal", n1 = 3,
                                       pal2 = "red.pal", n2 = 3),
                       inches = 0.2, method = "q6",
                       border = "grey50", lwd = 1,
-                      legend.var.pos = "topright", legend.var2.pos = "left",
-                      legend.var2.title.txt = 
-                        "Share of \\nthe population\\nworking in\\nagriculture (\%)",
-                      legend.var.title.txt = "Population aged\\n15 and over",
+                      legend.var.pos = "topright", 
+                      legend.var2.pos = "left",
+                      legend.var2.values.rnd = -2,
+                      legend.var2.title.txt = "Median Income\\n(in euros)",
+                      legend.var.title.txt = "Total Population",
                       legend.var.style = "e")
-
 # First layout
-layoutLayer(title="Farmers in Martinique, 2013",
-            scale = NULL,col = NA, coltitle = "black",
-            author = "INSEE, 2016", sources = "",
-            frame = FALSE)
+layoutLayer(title="Population and Wealth in Martinique, 2015")
 }
 \seealso{
 \link{legendBarsSymbols}, \link{legendChoro}, 

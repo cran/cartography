@@ -15,7 +15,7 @@
 #' @param col a vector of colors. Note that if breaks is specified there must be one less 
 #' colors specified than the number of break. 
 #' @param nclass a targeted number of classes. If null, the number of class is automatically defined (see Details).
-#' @param method a discretization method; one of "sd", "equal", "quantile", "fisher-jenks","q6", "geom", "arith", 
+#' @param method a classification method; one of "sd", "equal", "quantile", "fisher-jenks","q6", "geom", "arith", 
 #' "em" or "msd" (see \link{getBreaks}).
 #' @param border color of the polygons borders.
 #' @param lwd borders width.
@@ -31,6 +31,9 @@
 #' @param legend.frame whether to add a frame to the legend (TRUE) or 
 #' not (FALSE).
 #' @param legend.nodata no data label.
+#' @param legend.border color of boxes borders in the legend.
+#' @param legend.horiz whether to display the legend horizontally (TRUE) or
+#' not (FALSE).
 #' @param colNA no data color. 
 #' @param add whether to add the layer to an existing plot (TRUE) or 
 #' not (FALSE).
@@ -52,52 +55,24 @@
 #' @seealso \link{getBreaks}, \link{carto.pal},  \link{legendChoro}, \link{propSymbolsChoroLayer}
 #' @export
 #' @examples
-#' ## Example 1
-#' library(sp)
-#' data("nuts2006")
-#' nuts2.df$unemprate <- nuts2.df$unemp2008/nuts2.df$act2008*100
-#' choroLayer(spdf = nuts2.spdf,
-#'            df = nuts2.df,
-#'            var = "unemprate")
-#' 
-#' ## Example 2
-#' nuts2.df$unemprate <- nuts2.df$unemp2008/nuts2.df$act2008*100
-#' choroLayer(spdf = nuts2.spdf,
-#'            df = nuts2.df,
-#'            var = "unemprate",
-#'            method = "quantile",
-#'            nclass = 8,
-#'            col = carto.pal(pal1 = "turquoise.pal", n1 = 8),
-#'            border = "grey40",
-#'            add = FALSE,
-#'            legend.pos = "topright",
-#'            legend.title.txt = "Unemployement rate\n(%)",
-#'            legend.values.rnd = 1)
-#' 
-#' ## Example 3
 #' library(sf)
-#' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
-#' # Compute the compound annual growth rate
-#' mtq$cagr <- (((mtq$P13_POP / mtq$P08_POP)^(1/4)) - 1) * 100
-#' summary(mtq$cagr)
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+#' # Population density
+#' mtq$POPDENS <- 1e6 * mtq$POP / st_area(x = mtq)
 #' 
-#' # Plot the compound annual growth rate
-#' cols <- carto.pal(pal1 = "blue.pal", n1 = 3, pal2 = "red.pal", n2 = 2)
-#' choroLayer(x = mtq, 
-#'            var = "cagr", breaks = c(-6.14,-2,-1,0,1,2),
-#'            col = cols,
+#' # Default
+#' choroLayer(x = mtq, var = "POPDENS")
+#' 
+#' # With parameters 
+#' choroLayer(x = mtq, var = "POPDENS",
+#'            method = "quantile", nclass = 5,
+#'            col = carto.pal(pal1 = "sand.pal", n1 = 5),
 #'            border = "grey40",
-#'            add = FALSE,
-#'            legend.pos = "topleft",
-#'            legend.title.txt = "Compound annual\ngrowth rate",
-#'            legend.values.rnd = 2)
-#' # Layout plot
-#' layoutLayer(title = "Demographic Trends in Martinique, 2008-2013",
-#'             author = "INSEE, 2016", sources = "",
-#'             scale = NULL,
-#'             frame = TRUE,
-#'             col = "black",
-#'             coltitle = "white")
+#'            legend.pos = "topright", legend.values.rnd = 0,
+#'            legend.title.txt = "Population Density\n(people per km2)")
+#' 
+#' # Layout
+#' layoutLayer(title = "Population Distribution in Martinique, 2015")
 choroLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, var, 
                        breaks = NULL, method = "quantile", nclass = NULL,
                        col = NULL,
@@ -110,6 +85,8 @@ choroLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, var,
                        legend.values.rnd = 0,
                        legend.nodata = "no data",
                        legend.frame = FALSE,
+                       legend.border = "black",
+                       legend.horiz = FALSE,
                        add = FALSE){
   
   if (missing(x)){
@@ -146,7 +123,9 @@ choroLayer <- function(x, spdf, df, spdfid = NULL, dfid = NULL, var,
               frame = legend.frame, 
               symbol="box",  nodata.col = colNA,
               nodata = nodata, 
-              nodata.txt = legend.nodata)
+              nodata.txt = legend.nodata, 
+              border = legend.border, 
+              horiz = legend.horiz)
   
   
 }

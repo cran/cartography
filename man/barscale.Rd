@@ -4,19 +4,19 @@
 \alias{barscale}
 \title{Scale Bar}
 \usage{
-barscale(size = NULL, lwd = 1.5, cex = 0.6, pos = NULL,
+barscale(size, lwd = 1.5, cex = 0.6, pos = "bottomright",
   style = "pretty")
 }
 \arguments{
-\item{size}{size of the scale bar in kilometers. If set to NULL, an 
+\item{size}{size of the scale bar in kilometers. If size is not set, an 
 automatic size is used (1/10 of the map width).}
 
 \item{lwd}{width of the scale bar.}
 
 \item{cex}{cex of the text.}
 
-\item{pos}{position of the legend, default to the bottom right corner of the map. 
-A vector of two coordinates (c(x, y)) is possible.}
+\item{pos}{position of the legend, default to "bottomright". 
+"bottomright" or a vector of two coordinates (c(x, y)) are possible.}
 
 \item{style}{style of the legend, either "pretty" or "oldschool". The 
 "oldschool" style only uses the "size" parameter.}
@@ -28,16 +28,11 @@ Plot a scale bar.
 This scale bar is not accurate on unprojected (long/lat) maps.
 }
 \examples{
-data("nuts2006")
-library(sp)
-plot(nuts0.spdf, col = "grey60",border = "grey20", add=FALSE)
-barscale(size = 1000)
-barscale(size = 500, lwd = 3, cex = .9, pos = c(3553000, 1449000))
-
 library(sf)
-mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
 plot(st_geometry(mtq), col = "grey60", border = "grey20")
-barscale(style = "oldschool")
+barscale(size = 5)
+barscale(size = 5, lwd = 2, cex = .9, pos = c(714000, 1596000))
 }
 \seealso{
 \link{layoutLayer}

@@ -7,12 +7,14 @@
 legendChoro(pos = "topleft", title.txt = "Title of the legend",
   title.cex = 0.8, values.cex = 0.6, breaks, col, cex = 1,
   values.rnd = 2, nodata = TRUE, nodata.txt = "No data",
-  nodata.col = "white", frame = FALSE, symbol = "box")
+  nodata.col = "white", frame = FALSE, symbol = "box",
+  border = "black", horiz = FALSE)
 }
 \arguments{
 \item{pos}{position of the legend, one of "topleft", "top", 
-"topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
-vector of two coordinates in map units (c(x, y)).}
+"topright", "right", "bottomright", "bottom", "bottomleft", 
+"bottomleftextra", "left" or a vector of two coordinates in map units 
+(c(x, y)).}
 
 \item{title.txt}{title of the legend.}
 
@@ -20,8 +22,10 @@ vector of two coordinates in map units (c(x, y)).}
 
 \item{values.cex}{size of the values in the legend.}
 
-\item{breaks}{break points in sorted order to indicate the intervals for assigning the colors. 
-Note that if there are nlevel colors (classes) there should be (nlevel+1) breakpoints.
+\item{breaks}{break points in sorted order to indicate the intervals for 
+assigning the colors. 
+Note that if there are nlevel colors (classes) there should be (nlevel+1) 
+breakpoints.
 It is possible to use a vector of characters.}
 
 \item{col}{a vector of colors.}
@@ -41,14 +45,18 @@ the legend.}
 not (FALSE).}
 
 \item{symbol}{type of symbol in the legend 'line' or 'box'}
+
+\item{border}{color of the box borders}
+
+\item{horiz}{layout of legend, TRUE for horizontal layout}
 }
 \description{
 Plot legend for choropleth maps.
 }
 \examples{
-library(sp)
-data("nuts2006")
-plot(nuts0.spdf, col = "grey")
+library(sf)
+mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+plot(st_geometry(mtq))
 box()
 legendChoro(pos = "bottomleft", title.txt = "Title of the legend", title.cex = 0.8,
             values.cex = 0.6, breaks = c(1,2,3,4,10.27,15.2),

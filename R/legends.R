@@ -2,13 +2,16 @@
 #' @description Plot legend for choropleth maps.
 #' @name legendChoro
 #' @param pos position of the legend, one of "topleft", "top", 
-#' "topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
-#' vector of two coordinates in map units (c(x, y)).
+#' "topright", "right", "bottomright", "bottom", "bottomleft", 
+#' "bottomleftextra", "left" or a vector of two coordinates in map units 
+#' (c(x, y)).
 #' @param title.txt title of the legend.
 #' @param title.cex size of the legend title.
 #' @param values.cex size of the values in the legend.
-#' @param breaks break points in sorted order to indicate the intervals for assigning the colors. 
-#' Note that if there are nlevel colors (classes) there should be (nlevel+1) breakpoints.
+#' @param breaks break points in sorted order to indicate the intervals for 
+#' assigning the colors. 
+#' Note that if there are nlevel colors (classes) there should be (nlevel+1) 
+#' breakpoints.
 #' It is possible to use a vector of characters. 
 #' @param col a vector of colors. 
 #' @param cex size of the legend. 2 means two times bigger.
@@ -20,11 +23,13 @@
 #' @param frame whether to add a frame to the legend (TRUE) or 
 #' not (FALSE).
 #' @param symbol type of symbol in the legend 'line' or 'box'
+#' @param border color of the box borders
+#' @param horiz layout of legend, TRUE for horizontal layout 
 #' @export
 #' @examples
-#' library(sp)
-#' data("nuts2006")
-#' plot(nuts0.spdf, col = "grey")
+#' library(sf)
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+#' plot(st_geometry(mtq))
 #' box()
 #' legendChoro(pos = "bottomleft", title.txt = "Title of the legend", title.cex = 0.8,
 #'             values.cex = 0.6, breaks = c(1,2,3,4,10.27,15.2),
@@ -52,86 +57,94 @@ legendChoro <- function(pos = "topleft",
                         nodata = TRUE, 
                         nodata.txt = "No data", 
                         nodata.col = "white",
-                        frame=FALSE,symbol="box"){
-  # exit for none
-  positions <- c("bottomleft", "topleft", "topright", "bottomright",
-                 "left", "right", "top", "bottom", "center")
-  if(length(pos) == 1){if(!pos %in% positions){return(invisible())}}
-  
-  # figdim in geo coordinates
-  x1 <- par()$usr[1]
-  x2 <- par()$usr[2]
-  y1 <- par()$usr[3]
-  y2 <- par()$usr[4]
-  
-  # offsets
-  delta1 <- xinch(0.15) * cex
-  delta2 <- delta1 / 2
-  
-  # variables internes
-  width <- (x2 - x1) / (30/cex)
-  height <- width / 1.5
-  
-  # extent
-  if(!is.character(breaks)){
-    breaks <- as.numeric(round(breaks, values.rnd))
-  }
-  
-  if (nodata == FALSE){nodata.txt <- NULL}
-  longval <- max(strwidth(c(breaks, nodata.txt), cex = values.cex))
-  legend_xsize <- max(width + longval,
-                      strwidth(title.txt, cex = title.cex) - delta2) - delta2
-  legend_ysize <- (length(breaks)-1) * height +  strheight(title.txt, cex = title.cex)
-  
-  # legende_size increase if no.data
-  if (nodata == TRUE){legend_ysize <- legend_ysize + height + delta2 }
-  
-  # Get legend position
-  legcoord <- legpos(pos = pos, x1 = x1, x2 = x2, y1 = y1, y2 = y2,
-                     delta1 = delta1, delta2 = delta2,
-                     legend_xsize = legend_xsize,
-                     legend_ysize = legend_ysize)
-  xref <- legcoord$xref
-  yref <- legcoord$yref
-  
-  # Frame
-  if (frame==TRUE){
-    rect(xref - delta1, yref - delta1, xref + legend_xsize + delta1 * 2,
-         yref + legend_ysize + delta1 * 2, border = "black",  col="white")
-  }
-  
-  # box display
-  if (nodata == TRUE){
-    rect(xref, yref, xref + width, yref + height,
-         col = nodata.col, border = "black", lwd = 0.4)
-    text(xref + width + delta2 , yref + height / 2, labels = nodata.txt,
-         adj = c(0,0.5), cex = values.cex)
-    yref <- yref + height + delta2
-  }
-  
-  if (symbol=="box"){
-    for (i in 0:(length(breaks)-2)){
-      rect(xref, yref + i * height, xref + width, yref + height + i * height,
-           col = col[i+1], border = "black", lwd = 0.4)
-    }
+                        frame=FALSE,symbol="box", 
+                        border = "black", horiz = FALSE){
+  if (horiz && symbol=="box"){
+    legendChoroHoriz(pos = pos, title.txt = title.txt, title.cex = title.cex,
+                     values.cex = values.cex, breaks = breaks, col = col, cex = cex,
+                     values.rnd = values.rnd, nodata = nodata, nodata.txt = nodata.txt,
+                     nodata.col = nodata.col, frame = frame, border = border)
   }else{
-    for (i in 0:(length(breaks)-2)){
-      segments(xref, yref + height / 2+ i*height, xref + width,
-               yref + i*height + height / 2, lwd = 5, col = col[i+1], lend = 1)
+    # exit for none
+    positions <- c("bottomleft", "topleft", "topright", "bottomright",
+                   "left", "right", "top", "bottom", "center", 
+                   "bottomleftextra")
+    if(length(pos) == 1){if(!pos %in% positions){return(invisible())}}
+    
+    # figdim in geo coordinates
+    x1 <- par()$usr[1]
+    x2 <- par()$usr[2]
+    y1 <- par()$usr[3]
+    y2 <- par()$usr[4]
+    
+    # offsets
+    delta1 <- xinch(0.15) * cex
+    delta2 <- delta1 / 2
+    
+    # variables internes
+    width <- (x2 - x1) / (30/cex)
+    height <- width / 1.5
+    
+    # extent
+    if(!is.character(breaks)){
+      breaks <- as.numeric(round(breaks, values.rnd))
     }
+    
+    if (nodata == FALSE){nodata.txt <- NULL}
+    longval <- max(strwidth(c(breaks, nodata.txt), cex = values.cex))
+    legend_xsize <- max(width + longval,
+                        strwidth(title.txt, cex = title.cex) - delta2) - delta2
+    legend_ysize <- (length(breaks)-1) * height +  strheight(title.txt, cex = title.cex)
+    
+    # legende_size increase if no.data
+    if (nodata == TRUE){legend_ysize <- legend_ysize + height + delta2 }
+    
+    # Get legend position
+    legcoord <- legpos(pos = pos, x1 = x1, x2 = x2, y1 = y1, y2 = y2,
+                       delta1 = delta1, delta2 = delta2,
+                       legend_xsize = legend_xsize,
+                       legend_ysize = legend_ysize)
+    xref <- legcoord$xref
+    yref <- legcoord$yref
+    
+    # Frame
+    if (frame==TRUE){
+      rect(xref - delta1, yref - delta1, xref + legend_xsize + delta1 * 2,
+           yref + legend_ysize + delta1 * 2, border = "black",  col="white")
+    }
+    
+    # box display
+    if (nodata == TRUE){
+      rect(xref, yref, xref + width, yref + height,
+           col = nodata.col, border = border, lwd = 0.4)
+      text(xref + width + delta2 , yref + height / 2, labels = nodata.txt,
+           adj = c(0,0.5), cex = values.cex)
+      yref <- yref + height + delta2
+    }
+    
+    if (symbol=="box"){
+      for (i in 0:(length(breaks)-2)){
+        rect(xref, yref + i * height, xref + width, yref + height + i * height,
+             col = col[i+1], border = border, lwd = 0.4)
+      }
+    }else{
+      for (i in 0:(length(breaks)-2)){
+        segments(xref, yref + height / 2+ i*height, xref + width,
+                 yref + i*height + height / 2, lwd = 5, col = col[i+1], lend = 1)
+      }
+    }
+    
+    # text display
+    for (i in 1:(length(breaks))){
+      text(x = xref + width + delta2, y = yref + (i-1) * height,
+           labels = breaks[i], adj = c(0,0.5), cex = values.cex)
+    }
+    
+    # title
+    text(x = xref, y = yref + (length(breaks)-1) * height + delta1,
+         labels = title.txt, adj = c(0,0), cex = title.cex)
   }
-  
-  # text display
-  for (i in 1:(length(breaks))){
-    text(x = xref + width + delta2, y = yref + (i-1) * height,
-         labels = breaks[i], adj = c(0,0.5), cex = values.cex)
-  }
-  
-  # title
-  text(x = xref, y = yref + (length(breaks)-1) * height + delta1,
-       labels = title.txt, adj = c(0,0), cex = title.cex)
 }
-
 
 
 #' @title  Legend for Typology Maps
@@ -139,8 +152,9 @@ legendChoro <- function(pos = "topleft",
 #' @name legendTypo
 #' @param categ vector of categories.
 #' @param pos position of the legend, one of "topleft", "top", 
-#' "topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
-#' vector of two coordinates in map units (c(x, y)).
+#' "topright", "right", "bottomright", "bottom", "bottomleft", 
+#' "bottomleftextra", "left" or a vector of two coordinates in map units 
+#' (c(x, y)).
 #' @param title.txt title of the legend.
 #' @param title.cex size of the legend title.
 #' @param values.cex size of the values in the legend.
@@ -154,9 +168,9 @@ legendChoro <- function(pos = "topleft",
 #' @param symbol character; 'line' or 'box'
 #' @export
 #' @examples
-#' library(sp)
-#' data("nuts2006")
-#' plot(nuts0.spdf, col = "grey")
+#' library(sf)
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+#' plot(st_geometry(mtq))
 #' box()
 #' 
 #' # Define labels and colors
@@ -183,12 +197,13 @@ legendTypo <- function(pos = "topleft",
                        nodata.col = "white",
                        frame=FALSE,
                        symbol="box"){
-  categ <- rev(categ)
+  categ <- rev(as.character(categ))
   col <- rev(col)
   
   # exit for none
   positions <- c("bottomleft", "topleft", "topright", "bottomright",
-                 "left", "right", "top", "bottom", "center")
+                 "left", "right", "top", "bottom", "center", 
+                 "bottomleftextra")
   if(length(pos) == 1){if(!pos %in% positions){return(invisible())}}
   
   # figdim in geo coordinates
@@ -282,8 +297,9 @@ legendTypo <- function(pos = "topleft",
 #' @description Plot legend for proportional circles maps
 #' @name legendCirclesSymbols
 #' @param pos position of the legend, one of "topleft", "top", 
-#' "topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
-#' vector of two coordinates in map units (c(x, y)).
+#' "topright", "right", "bottomright", "bottom", "bottomleft", 
+#' "bottomleftextra", "left" or a vector of two coordinates in map units 
+#' (c(x, y)).
 #' @param title.txt title of the legend.
 #' @param title.cex size of the legend title.
 #' @param values.cex size of the values in the legend.
@@ -301,29 +317,27 @@ legendTypo <- function(pos = "topleft",
 #' styles, "c" stands for compact and "e" for extended.
 #' @export
 #' @examples
-#' library(sp) 
-#' data("nuts2006")
-#' plot(nuts0.spdf)
-#' propSymbolsLayer(spdf = nuts0.spdf, df = nuts0.df, var = "pop2008", 
+#' library(sf)
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+#' plot(st_geometry(mtq))
+#' box()
+#' 
+#' propSymbolsLayer(x = mtq, var = "POP",
 #'                  inches = 0.2, legend.pos = "n")
 #' 
 #' legendCirclesSymbols(pos = "topleft", inches = 0.2,
-#'                      var = c(min(nuts0.df$pop2008), max(nuts0.df$pop2008)))
-#' 
-#' legendCirclesSymbols(pos = "left", 
-#'                      var = c(min(nuts0.df$pop2008), max(nuts0.df$pop2008)),
+#'                      var = c(min(mtq$POP), max(mtq$POP)))
+#' legendCirclesSymbols(pos = "left",
+#'                      var = c(min(mtq$POP), max(mtq$POP)),
 #'                      inches = 0.2, style = "e")
-#' oopt <- options(scipen = 10)
-#' legendCirclesSymbols(pos = "bottomleft", 
-#'                      var = c(35e3, 1e7, 4e7, max(nuts0.df$pop2008)),
+#' legendCirclesSymbols(pos = "bottomleft",
+#'                      var = c(600, 12000, 40000, max(mtq$POP)),
 #'                      inches = 0.2, style = "c")
 #' legendCirclesSymbols(pos = "topright", cex = 2,
-#'                      var = c(35e3,1e6, 5e6, 1e7, 2e7, 4e7, 6e7,max(nuts0.df$pop2008)),
+#'                      var = c(600, 30000,max(mtq$POP)),
 #'                      inches = 0.2, style = "e", frame = TRUE)
-#' options(oopt)
-#' 
-#' legendCirclesSymbols(pos = c(5533388, 1570417),
-#'                      var = c(min(nuts0.df$pop2008),max(nuts0.df$pop2008)),
+#' legendCirclesSymbols(pos = c(736164.4, 1596658),
+#'                      var = c(min(mtq$POP),max(mtq$POP)),
 #'                      inches = 0.2, frame = TRUE)
 legendCirclesSymbols<- function(pos = "topleft", title.txt = "Title of the legend", 
                                 title.cex = 0.8, cex = 1, border="black", lwd=1,
@@ -332,7 +346,8 @@ legendCirclesSymbols<- function(pos = "topleft", title.txt = "Title of the legen
   var <- abs(var)
   # exit for none
   positions <- c("bottomleft", "topleft", "topright", "bottomright",
-                 "left", "right", "top", "bottom", "center")
+                 "left", "right", "top", "bottom", "center", 
+                 "bottomleftextra")
   if(length(pos) == 1){if(!pos %in% positions){return(invisible())}}
   
   # figdim in geo coordinates
@@ -355,8 +370,8 @@ legendCirclesSymbols<- function(pos = "topleft", title.txt = "Title of the legen
   }
   size <- xinch(siz)
   var <- round(var,values.rnd)
-  size <- sort(size, decreasing = T)
-  var <- sort(var, decreasing = T)
+  size <- sort(size, decreasing = TRUE)
+  var <- sort(var, decreasing = TRUE)
   
   # Legend width and height    
   longVal <- var[strwidth(var,cex = values.cex) == 
@@ -421,8 +436,9 @@ legendCirclesSymbols<- function(pos = "topleft", title.txt = "Title of the legen
 #' @description Plot legend for proportional squares maps
 #' @name legendSquaresSymbols
 #' @param pos position of the legend, one of "topleft", "top", 
-#' "topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
-#' vector of two coordinates in map units (c(x, y)).
+#' "topright", "right", "bottomright", "bottom", "bottomleft", 
+#' "bottomleftextra", "left" or a vector of two coordinates in map units 
+#' (c(x, y)).
 #' @param title.txt title of the legend.
 #' @param title.cex size of the legend title.
 #' @param values.cex size of the values in the legend.
@@ -440,17 +456,16 @@ legendCirclesSymbols<- function(pos = "topleft", title.txt = "Title of the legen
 #' styles, "c" stands for compact and "e" for extended.
 #' @export
 #' @examples
-#' library(sp)
-#' data("nuts2006")
-#' plot(nuts0.spdf)
+#' library(sf)
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+#' plot(st_geometry(mtq))
 #' box()
 #' legendSquaresSymbols(pos = "bottomright", title.txt = "Title of\nthe legend ",
 #'                      title.cex = 0.8, values.cex = 0.6,
-#'                      var = c(max(nuts1.df$pop2008), min(nuts1.df$pop2008)),
+#'                      var = c(max(mtq$POP), min(mtq$POP)),
 #'                      inches = 0.5,
 #'                      col="red",  
 #'                      frame=TRUE, values.rnd=0, style ="c")
-#'
 legendSquaresSymbols<- function(pos = "topleft", title.txt = "Title of the legend", 
                                 title.cex = 0.8, cex = 1,  border="black", lwd=1,
                                 values.cex = 0.6, var, inches, 
@@ -459,7 +474,8 @@ legendSquaresSymbols<- function(pos = "topleft", title.txt = "Title of the legen
   var <- abs(var)
   # exit for none
   positions <- c("bottomleft", "topleft", "topright", "bottomright",
-                 "left", "right", "top", "bottom", "center")
+                 "left", "right", "top", "bottom", "center", 
+                 "bottomleftextra")
   if(length(pos) == 1){if(!pos %in% positions){return(invisible())}}
   
   # figdim in geo coordinates
@@ -482,8 +498,8 @@ legendSquaresSymbols<- function(pos = "topleft", title.txt = "Title of the legen
   }
   size <- xinch(siz)
   var <- round(var,values.rnd)
-  size <- sort(size, decreasing = T)
-  var <- sort(var, decreasing = T)
+  size <- sort(size, decreasing = TRUE)
+  var <- sort(var, decreasing = TRUE)
   
   # xsize & ysize
   # Legend width and height    
@@ -550,8 +566,9 @@ legendSquaresSymbols<- function(pos = "topleft", title.txt = "Title of the legen
 #' @description Plot legend for proportional bars maps
 #' @name legendBarsSymbols
 #' @param pos position of the legend, one of "topleft", "top", 
-#' "topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
-#' vector of two coordinates in map units (c(x, y)).
+#' "topright", "right", "bottomright", "bottom", "bottomleft", 
+#' "bottomleftextra", "left" or a vector of two coordinates in map units 
+#' (c(x, y)).
 #' @param title.txt title of the legend.
 #' @param title.cex size of the legend title.
 #' @param values.cex size of the values in the legend.
@@ -569,13 +586,13 @@ legendSquaresSymbols<- function(pos = "topleft", title.txt = "Title of the legen
 #' styles, "c" stands for compact and "e" for extended.
 #' @export
 #' @examples
-#' library(sp)
-#' data("nuts2006")
-#' plot(nuts0.spdf)
-#' 
+#' library(sf)
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+#' plot(st_geometry(mtq))
+#' box()
 #' legendBarsSymbols(pos = "topleft", title.txt = "Title of\nthe legend",
 #'                      title.cex = 0.8, values.cex = 0.6,cex = 1,
-#'                      var = c(min(nuts0.df$pop2008),max(nuts0.df$pop2008)),
+#'                      var = c(min(mtq$POP),max(mtq$POP)),
 #'                      inches = 0.5,
 #'                      col = "purple",
 #'                      values.rnd=0, style ="e")
@@ -587,7 +604,8 @@ legendBarsSymbols<- function(pos = "topleft", title.txt = "Title of the legend",
   var <- abs(var)
   # exit for none
   positions <- c("bottomleft", "topleft", "topright", "bottomright",
-                 "left", "right", "top", "bottom", "center")
+                 "left", "right", "top", "bottom", "center", 
+                 "bottomleftextra")
   if(length(pos) == 1){if(!pos %in% positions){return(invisible())}}
   
   # figdim in geo coordinates
@@ -612,8 +630,8 @@ legendBarsSymbols<- function(pos = "topleft", title.txt = "Title of the legend",
   }
   size <- xinch(siz)
   var <- round(var,values.rnd)
-  size <- sort(size, decreasing = T)
-  var <- sort(var, decreasing = T)
+  size <- sort(size, decreasing = TRUE)
+  var <- sort(var, decreasing = TRUE)
   
   # xsize & ysize
   longVal <- var[strwidth(var,cex = values.cex) == 
@@ -675,8 +693,9 @@ legendBarsSymbols<- function(pos = "topleft", title.txt = "Title of the legend",
 #' @description Plot legend for proportional lines maps
 #' @name legendPropLines
 #' @param pos position of the legend, one of "topleft", "top", 
-#' "topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
-#' vector of two coordinates in map units (c(x, y)).
+#' "topright", "right", "bottomright", "bottom", "bottomleft", 
+#' "bottomleftextra", "left" or a vector of two coordinates in map units 
+#' (c(x, y)).
 #' @param title.txt title of the legend.
 #' @param title.cex size of the legend title.
 #' @param values.cex size of the values in the legend.
@@ -690,13 +709,13 @@ legendBarsSymbols<- function(pos = "topleft", title.txt = "Title of the legend",
 #' not (FALSE).
 #' @export
 #' @examples
-#' library(sp)
-#' data("nuts2006")
-#' plot(nuts0.spdf)
+#' library(sf)
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+#' plot(st_geometry(mtq))
 #' box()
 #' legendPropLines(pos = "topleft", title.txt = "Title",
 #'                 title.cex = 0.8, values.cex = 0.6, cex = 1,
-#'                 var = c(min(nuts1.df$pop2008),max(nuts1.df$pop2008)),
+#'                 var = c(10,100),
 #'                 lwd = 15,
 #'                 col="red", frame=TRUE, values.rnd=0)
 legendPropLines<- function(pos = "topleft", title.txt = "Title of the legend", 
@@ -706,7 +725,8 @@ legendPropLines<- function(pos = "topleft", title.txt = "Title of the legend",
   var <- abs(var)
   # exit for none
   positions <- c("bottomleft", "topleft", "topright", "bottomright",
-                 "left", "right", "top", "bottom", "center")
+                 "left", "right", "top", "bottom", "center", 
+                 "bottomleftextra")
   if(length(pos) == 1){if(!pos %in% positions){return(invisible())}}
   
   # figdim in geo coordinates
@@ -730,8 +750,8 @@ legendPropLines<- function(pos = "topleft", title.txt = "Title of the legend",
   # size <- xinch(siz)
   size <- siz
   var <- round(var,values.rnd)
-  size <- sort(size, decreasing = T)
-  var <- sort(var, decreasing = T)
+  size <- sort(size, decreasing = TRUE)
+  var <- sort(var, decreasing = TRUE)
   
   # xsize & ysize
   longVal <- var[strwidth(var, cex = values.cex) == max(strwidth(var, cex = values.cex))][1]
@@ -771,8 +791,9 @@ legendPropLines<- function(pos = "topleft", title.txt = "Title of the legend",
 #' @description Plot legend for graduated size lines maps.
 #' @name legendGradLines
 #' @param pos position of the legend, one of "topleft", "top", 
-#' "topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
-#' vector of two coordinates in map units (c(x, y)).
+#' "topright", "right", "bottomright", "bottom", "bottomleft", 
+#' "bottomleftextra", "left" or a vector of two coordinates in map units 
+#' (c(x, y)).
 #' @param title.txt title of the legend.
 #' @param title.cex size of the legend title.
 #' @param values.cex size of the values in the legend.
@@ -787,9 +808,9 @@ legendPropLines<- function(pos = "topleft", title.txt = "Title of the legend",
 #' not (FALSE).
 #' @export
 #' @examples 
-#' library(sp)
-#' data("nuts2006")
-#' plot(nuts0.spdf)
+#' library(sf)
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+#' plot(st_geometry(mtq))
 #' box()
 #' legendGradLines(title.txt = "Title of the legend", 
 #'                 pos = "topright",
@@ -803,7 +824,8 @@ legendGradLines <- function(pos = "topleft", title.txt = "Title of the legend",
   breaks <- abs(breaks)
   # exit for none
   positions <- c("bottomleft", "topleft", "topright", "bottomright",
-                 "left", "right", "top", "bottom", "center")
+                 "left", "right", "top", "bottom", "center", 
+                 "bottomleftextra")
   if(length(pos) == 1){if(!pos %in% positions){return(invisible())}}
   
   # figdim in geo coordinates
@@ -895,20 +917,20 @@ legendGradLines <- function(pos = "topleft", title.txt = "Title of the legend",
 #' styles, "c" stands for compact and "e" for extended.
 #' @export
 #' @examples
-#' library(sp)
-#' data("nuts2006")
-#' plot(nuts0.spdf)
+#' library(sf)
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+#' plot(st_geometry(mtq))
 #' box()
-#' var <- round((nuts0.df$pop2008 / sum(nuts0.df$pop2008))*100,2)
-#' var2 <- round((nuts0.df$gdppps2008 / sum(nuts0.df$gdppps2008))*100,2)
-#' r <- sqrt(var)/2*1000000
-#' r2 <- sqrt(var2)/2*1000000
-#' legendPropTriangles(pos = "topright", var.txt = "population totale (habs)",
-#'                         var2.txt = "pib (euros)", title.txt="PIB par habitant",
-#'                         title.cex = 0.8, values.cex = 0.6, cex = 1,
-#'                         var = var, var2 = var2, r = r, r2 = r2,
-#'                         col="green", col2="yellow", frame=TRUE, values.rnd=2, 
-#'                         style="c")
+#' var <- runif(10, 0,100)
+#' var2 <- runif(10, 0,100)
+#' r <- sqrt(var)*1000
+#' r2 <- sqrt(var2)*1000
+#' legendPropTriangles(pos = "topright", var.txt = "population 1",
+#'                     var2.txt = "population 2", title.txt="Population totale",
+#'                     title.cex = 0.8, values.cex = 0.6, cex = 1,
+#'                     var = var, var2 = var2, r = r, r2 = r2,
+#'                     col="green", col2="yellow", frame=TRUE, values.rnd=2,
+#'                     style="c")
 legendPropTriangles<- function(pos = "topleft", title.txt, var.txt,var2.txt, 
                                title.cex = 0.8, cex = 1,
                                values.cex = 0.6, var, var2, r, r2, col="red", 
@@ -1114,3 +1136,146 @@ legendPropTriangles<- function(pos = "topleft", title.txt, var.txt,var2.txt,
 }
 
 
+
+
+
+
+
+
+#' @title Legend for Choropleth Maps
+#' @description Plot legend for choropleth maps.
+#' @name legendChoroHoriz
+#' @param pos position of the legend, one of "topleft", "top", 
+#' "topright", "right", "bottomright", "bottom", "bottomleft", 
+#' "bottomleftextra", "left" or a vector of two coordinates in map units 
+#' (c(x, y)).
+#' @param title.txt title of the legend.
+#' @param title.cex size of the legend title.
+#' @param values.cex size of the values in the legend.
+#' @param breaks break points in sorted order to indicate the intervals for assigning the colors.
+#' Note that if there are nlevel colors (classes) there should be (nlevel+1) breakpoints.
+#' It is possible to use a vector of characters.
+#' @param col a vector of colors.
+#' @param cex size of the legend. 2 means two times bigger.
+#' @param values.rnd number of decimal places of the values in
+#' the legend.
+#' @param nodata if TRUE a "no data" box or line is plotted.
+#' @param nodata.txt label for "no data" values.
+#' @param nodata.col color of "no data" values.
+#' @param frame whether to add a frame to the legend (TRUE) or
+#' not (FALSE).
+#' @param border color of the box borders
+#' @noRd
+legendChoroHoriz <- function(pos = "topleft",
+                             title.txt = "Title of the legend",
+                             title.cex = 0.8,
+                             values.cex = 0.6,
+                             breaks,
+                             col,
+                             cex = 1,
+                             values.rnd =2,
+                             nodata = TRUE,
+                             nodata.txt = "No data",
+                             nodata.col = "white",
+                             frame=FALSE,
+                             border = NA){
+  
+  # exit for none
+  positions <- c("bottomleft", "topleft", "topright", "bottomright",
+                 "left", "right", "top", "bottom", "center", 
+                 "bottomleftextra")
+  if(length(pos) == 1){if(!pos %in% positions){return(invisible())}}
+  
+  # figdim in geo coordinates
+  x1 <- par()$usr[1]
+  x2 <- par()$usr[2]
+  y1 <- par()$usr[3]
+  y2 <- par()$usr[4]
+  
+  # offsets
+  delta1 <- xinch(0.15) * cex
+  delta2 <- delta1 / 2
+  
+  # variables internes
+  width <- (x2 - x1) / (20/cex)
+  height <- (x2 - x1) / (35/cex) / 1.5
+  
+  # extent
+  if(!is.character(breaks)){
+    breaks <- as.numeric(round(breaks, values.rnd))
+  }
+  
+  if (nodata == FALSE){nodata.txt <- NULL}
+  
+  longval1 <- strwidth(breaks[1], cex = values.cex)
+  longval2 <- strwidth(breaks[length(breaks)], cex = values.cex)
+  
+  
+  legend_xsize <- ((length(breaks)-1) * width) + (longval1 + longval2) / 2 
+  legend_ysize <- height + delta2+ strheight(title.txt, cex = title.cex)
+  
+  # legende_size increase if no.data
+  if (nodata == TRUE){
+    legend_xsize <- legend_xsize + width + delta2
+    lnodata <- strwidth(nodata.txt, cex = values.cex)
+    nddiff <- lnodata - width
+    if(nddiff>0){
+      legend_xsize  <- legend_xsize + nddiff 
+    }
+  }
+  
+  ltitle <- strwidth(title.txt, cex = title.cex) + longval1/2
+  legend_xsize <- max(ltitle, legend_xsize)
+  
+  # Get legend position
+  legcoord <- legpos(pos = pos, x1 = x1, x2 = x2, y1 = y1, y2 = y2,
+                     delta1 = delta1, delta2 = delta2,
+                     legend_xsize = legend_xsize,
+                     legend_ysize = legend_ysize)
+  xref <- legcoord$xref
+  yref <- legcoord$yref
+  
+  if(substr(pos, nchar(pos)-1,nchar(pos))=="ht"){
+    xref <- xref + delta1
+  }
+  
+  # Frame
+  if (frame==TRUE){
+    rect(xref - delta1, 
+         yref - delta1, 
+         xref + legend_xsize + delta1,
+         yref + legend_ysize + 2*delta1,  col="white")
+  }
+  
+  # no data box display
+  if (nodata == TRUE){
+    rect(xref + (length(breaks)-1) * width + delta2 + (longval1 + longval2)/2 + nddiff/2, 
+         yref + delta2, 
+         xref + ((length(breaks)-1) * width) + width + delta2 + (longval1 + longval2)/2 + nddiff/2, 
+         yref + height + delta2,
+         col = nodata.col, border = border, lwd = 0.4)
+    text(x =  xref + ((length(breaks)-1) * width) +  delta2 + (longval1 + longval2)/2 + width/2 + nddiff/2,
+         y = yref  , labels = nodata.txt,
+         adj = c(0.5,0.5), cex = values.cex)
+  }
+  
+  # boxes
+  for (i in 0:(length(breaks)-2)){
+    rect(xref + i * width + longval1 / 2, 
+         yref + delta2, 
+         xref + width + i * width + longval1 / 2, 
+         yref + height + delta2,
+         col = col[i+1], border =border, lwd = 0.4)
+  }
+  
+  # text display
+  for (i in 1:(length(breaks))){
+    text(x = xref + (i-1) * width + longval1/2, 
+         y = yref,
+         labels = breaks[i], adj = c(0.5,0.5), cex = values.cex)
+  }
+  
+  # title
+  text(x = xref + longval1/2, y = yref + height + delta1 + delta2,
+       labels = title.txt, adj = c(0,0), cex = title.cex)
+}

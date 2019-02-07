@@ -11,8 +11,9 @@ legendTypo(pos = "topleft", title.txt = "Title of the legend",
 }
 \arguments{
 \item{pos}{position of the legend, one of "topleft", "top", 
-"topright", "right", "bottomright", "bottom", "bottomleft", "left" or a 
-vector of two coordinates in map units (c(x, y)).}
+"topright", "right", "bottomright", "bottom", "bottomleft", 
+"bottomleftextra", "left" or a vector of two coordinates in map units 
+(c(x, y)).}
 
 \item{title.txt}{title of the legend.}
 
@@ -41,9 +42,9 @@ not (FALSE).}
 Plot legend for typology maps.
 }
 \examples{
-library(sp)
-data("nuts2006")
-plot(nuts0.spdf, col = "grey")
+library(sf)
+mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+plot(st_geometry(mtq))
 box()
 
 # Define labels and colors

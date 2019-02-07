@@ -4,22 +4,24 @@
 \alias{getTiles}
 \title{Get Tiles from Open Map Servers}
 \usage{
-getTiles(x, spdf, type = "osm", zoom = NULL, crop = FALSE)
+getTiles(x, spdf, type = "osm", zoom = NULL, crop = FALSE,
+  verbose = FALSE)
 }
 \arguments{
 \item{x}{an sf object, a simple feature collection or a Spatial*DataFrame.}
 
 \item{spdf}{deprecated, a Spatial*DataFrame with a valid projection attribute.}
 
-\item{type}{the tile server from which to get the map, one of "osm", 
-"opencycle", "hotstyle", "loviniahike", "loviniacycle", "hikebike", "osmgrayscale", 
-"stamenbw", "stamenwatercolor", "osmtransport", "thunderforestlandscape", 
-"thunderforestoutdoors", "cartodark", "cartolight".}
+\item{type}{the tile server from which to get the map, one of "osm", "hotstyle", 
+"hikebike", "osmgrayscale", "stamenbw", "stamenwatercolor", "cartodark", 
+"cartolight".}
 
 \item{zoom}{the zoom level. If null, it is determined automatically 
 (see Details).}
 
-\item{crop}{TRUE if results should be cropped to the specified spdf extent, FALSE otherwise.}
+\item{crop}{TRUE if results should be cropped to the specified x extent, FALSE otherwise.}
+
+\item{verbose}{if TRUE a progress bar is displayed.}
 }
 \value{
 A RatserBrick is returned.
@@ -40,29 +42,16 @@ extraction and display parameters.
 }
 \examples{
 \dontrun{
-library(sp)
-data("nuts2006")
-# extract Denmark
-spdf <- nuts0.spdf[nuts0.spdf$id=="DK",]
-# Download the tiles, extent = Denmark
-den <- getTiles(spdf = spdf, type = "osm", crop = TRUE)
-class(den)
-# Plot the tiles
-tilesLayer(den)
-# Map tiles sources
-mtext(text = "© OpenStreetMap contributors, under CC BY SA.",
-      side = 1, adj = 0, cex = 0.7, font = 3)
-
 library(sf)
-mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
 # Download the tiles, extent = Martinique
 mtqOSM <- getTiles(x = mtq, type = "osm", crop = TRUE)
 # Plot the tiles
 tilesLayer(mtqOSM)
 # Plot countries
 plot(st_geometry(mtq), add=TRUE)
-mtext(text = "© OpenStreetMap contributors, under CC BY SA.",
-      side = 1, adj = 0, cex = 0.7, font = 3)
+txt <- "© OpenStreetMap contributors. Tiles style under CC BY-SA, www.openstreetmap.org/copyright"
+mtext(text = txt, side = 1, adj = 0, cex = 0.7, font = 3)
 }
 }
 \seealso{

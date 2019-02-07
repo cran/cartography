@@ -1,24 +1,21 @@
-# cartography
+# cartography <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version-ago/cartography)](https://cran.r-project.org/package=cartography)
-[![Travis-CI Build Status](https://travis-ci.org/riatelab/cartography.svg?branch=master)](https://travis-ci.org/riatelab/cartography)
-![](http://cranlogs.r-pkg.org/badges/cartography?color=brightgreen)
+[![](https://www.r-pkg.org/badges/version/cartography)](https://cran.r-project.org/package=cartography)
+[![](https://cranlogs.r-pkg.org/badges/cartography?color=brightgreen)](https://cran.r-project.org/package=cartography)
+[![Build Status](https://travis-ci.org/riatelab/cartography.svg?branch=master)](https://travis-ci.org/riatelab/cartography)
+[![codecov](https://codecov.io/gh/riatelab/cartography/branch/master/graph/badge.svg)](https://codecov.io/gh/riatelab/cartography)
 [![status](http://joss.theoj.org/papers/0c2d51fc23efb8e1f87d764da8414923/status.svg)](http://joss.theoj.org/papers/0c2d51fc23efb8e1f87d764da8414923)  
- 
 
-## *Create and integrate maps in your R workflow!*
 
-[![Cartographic Mix](https://raw.githubusercontent.com/riatelab/cartography/master/img/map8.png "click on the map to see the code")](https://gist.github.com/rCarto/ef52aa4e96a7b628956fbf531143ae68)  
 
-This package allows various **cartographic representations** such as 
-proportional symbols, choropleth, typology, flows or discontinuities maps. It 
-also offers several features enhancing the graphic presentation of maps like 
-cartographic palettes, layout elements (scale, north arrow, title...), labels, 
-legends or access to some cartographic APIs.
+## Create and integrate maps in your R workflow! 
+This package helps to design **cartographic representations** such as proportional symbols, choropleth, typology, flows or discontinuities maps. It also offers several features that improve the graphic presentation of maps, for instance, map palettes, layout elements (scale, north arrow, title...), labels or legends.
 
 ## Cheat Sheet
-The [cheat sheet](http://riatelab.github.io/cartography/vignettes/cheatsheet/cartography_cheatsheet.pdf) displays a quick overview of `cartography`'s main features:
-[![cartography cheat sheet](https://raw.githubusercontent.com/riatelab/cartography/master/img/cheat_sheet.png)](http://riatelab.github.io/cartography/vignettes/cheatsheet/cartography_cheatsheet.pdf)
+The [cheat sheet](http://riatelab.github.io/cartography/vignettes/cheatsheet/cartography_cheatsheet.pdf) displays a quick overview of `cartography`'s main features.
+
+<a href="http://riatelab.github.io/cartography/vignettes/cheatsheet/cartography_cheatsheet.pdf"><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/cheat_sheet.png" alt="cartography cheat sheet" width="300"/></a>
+
 
 ## Vignette
 The [vignette](https://CRAN.R-project.org/package=cartography/vignettes/cartography.html) 
@@ -27,92 +24,90 @@ contains commented scripts on how to build various types of maps with `cartograp
 <table>
 <tbody>
 <tr>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map1.png" /></td>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map2.png" /></td>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map3.png" /></td>
+<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map03.png" /></td>
+<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map02.png" /></td>
+<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map06.png" /></td>
+<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map04.png" /></td>
 </tr>
 <tr>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map4.png" /></td>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map5.png" /></td>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map6.png" /></td>
+<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map01.png" /></td>
+<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map08.png" /></td>
+<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map09.png" /></td>
+<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map05.png" /></td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map07.png" /></td>
+<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map10.png" /></td>
+<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map11.png" /></td>
 </tr>
 </tbody>
 </table>
 
 
 
-## Blog Posts, Tutorials & Papers
+## Other Resources 
 
-
-[Giraud, T. and Lambert, N. (2017). “Reproducible Cartography.” In Peterson MP (ed.), _Advances in Cartography and GIScience. ICACI 2017. Lecture Notes in Geoinformation and Cartography._, pp.
-173-183. doi: 10.1007/978-3-319-57336-6_13.](https://github.com/riatelab/ReproducibleCartography) (EN)      
-[Cartographie reproductible](https://riatelab.github.io/cartographie-reproductible) (FR)  
-[New version of the cartography package](https://rgeomatic.hypotheses.org/1205) (EN)    
-[SF & cartography V2.0.0](https://rgeomatic.hypotheses.org/1149) (FR)   
+* [Giraud T., Lambert N. (2017) Reproducible Cartography. In: Peterson M. (eds) Advances in Cartography and GIScience. ICACI 2017. Lecture Notes in Geoinformation and Cartography. Springer, Cham](https://github.com/riatelab/ReproducibleCartography) (EN)      
+* [Blog posts](https://rgeomatic.hypotheses.org/category/cartography) (FR / EN)  
 
 
 ## Demo
+The following script creates a map of symbols that are proportional to values of a 
+first variable and colored to reflect the classification of a second variable.  
 
-* You can access the code used to create the cartographic mix [here](https://gist.github.com/rCarto/ef52aa4e96a7b628956fbf531143ae68).  
-
-* The following script creates a map of symbols that are proportional to values of a 
-first variable and colored to reflect the discretization of a second variable.  
 
 ```r
+library(sf)
 library(cartography)
+# path to the geopackage file embedded in cartography
+path_to_file <- system.file("gpkg/mtq.gpkg", package="cartography")
+# import to an sf object
+mtq <- st_read(dsn = path_to_file, quiet = TRUE)
 
-# Import a shapefile // this one is distributed within the package
-mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
-
-# Share of farmers in the active population
-mtq$shareCS1 <- 100 * mtq$C13_CS1/mtq$C13_POP
-
-# Set a custom color palette
-cols <- carto.pal(pal1 = "wine.pal", n1 = 6)
-
-# set plot margins
-opar <- par(mar = c(0,0,1.2,0))
-
-# Plot the communes
-plot(st_geometry(mtq), col = "#5F799C", border = "white", 
-     bg = "#A6CAE0", lwd = 0.5, add = FALSE)
-
-# Plot symbols with choropleth coloration
-propSymbolsChoroLayer(x = mtq, # sf object 
-                      var = "C13_POP", # field used to plot the symbols sizes
-                      var2 = "shareCS1", #  field used to plot the colors
-                      col = cols, # symbols colors
-                      inches = 0.4, # radius of the largest circle
-                      method = "quantile", # discretization method (?getBreaks)
-                      border = "grey50", # color of circle borders
-                      lwd = 1, # width of the circle borders
-                      legend.var.pos = "topright", # position of the first legend
-                      legend.var2.pos = "left", # position of the second legend
-                      legend.var2.title.txt =  
-                        "Share of \nthe population\nworking in\nagriculture (%)", 
-                      legend.var.title.txt = "Population aged\n15 and over",
-                      legend.var.style = "c") # legend style
-
+########## Draft Map
+# Plot the municipalities
+plot(st_geometry(mtq))
+# Plot symbols with choropleth coloration (population & median income)
+propSymbolsChoroLayer(x = mtq, var = "POP", var2 = "MED")
 # Add a layout
-layoutLayer(title="Farmers in Martinique, 2013", # title of the map
-            scale = 5, # size of the scale bar
-            north = TRUE, # north arrow
-            col = "white",
-            coltitle = "black",
-            author = "cartography 2.0.0",  
-            sources = "INSEE, 2016",
-            frame = TRUE)
+title(main = "Population & Wealth in Martinique, 2015", 
+      sub = "Sources: Insee and IGN - 2018")
+```
 
+![](https://raw.githubusercontent.com/riatelab/cartography/master/img/readme_raw.png)
+
+```r
+########## Final Map
+# Set figure margins
+opar <- par(mar = c(0,0,1.2,0))
+# Plot the municipalities
+plot(st_geometry(mtq), col="darkseagreen3", border="darkseagreen4",  
+     bg = "lightblue1", lwd = 0.5)
+# Plot symbols with choropleth coloration
+propSymbolsChoroLayer(x = mtq, var = "POP", inches = 0.4, border = "grey50",
+                      lwd = 1, legend.var.pos = "topright", 
+                      legend.var.title.txt = "Population",
+                      var2 = "MED", method = "equal", nclass = 4, 
+                      col = carto.pal(pal1 = "sand.pal", n1 = 4),
+                      legend.var2.values.rnd = -2,  legend.var2.pos = "left", 
+                      legend.var2.title.txt = "Median Income\n(in euros)") 
+# Plot a layout
+layoutLayer(title="Population & Wealth in Martinique, 2015", 
+            author = "cartography 2.1.3", 
+            sources = "Sources: Insee and IGN - 2018", 
+            scale = 5, tabtitle = TRUE, frame = FALSE)
+# Plot a north arrow
+north(pos = "topleft")
 # restore graphics parameters
 par(opar)
 ```
-![](https://raw.githubusercontent.com/riatelab/cartography/master/img/map7.png)
+![](https://raw.githubusercontent.com/riatelab/cartography/master/img/readme_final.png)
 
 
 ## Installation
 * Development version on GitHub
 ```{r}
-require(devtools)
+require(remotes)
 install_github("riatelab/cartography")
 ```
 

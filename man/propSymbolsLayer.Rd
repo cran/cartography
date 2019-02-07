@@ -75,59 +75,21 @@ Plot a proportional symbols layer.
 Two maps with the same inches and fixmax parameters will be comparable.
 }
 \examples{
-## Example 1
 library(sf)
-mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
-# Countries plot
-plot(st_geometry(mtq), col = "lightblue4",border = "lightblue3", bg = "lightblue1")
+mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
+plot(st_geometry(mtq))
+propSymbolsLayer(x = mtq, var = "POP")
+
+plot(st_geometry(mtq), col = "lightblue4",border = "lightblue3", 
+     bg = "lightblue1")
 # Population plot on proportional symbols
-propSymbolsLayer(x = mtq, var = "P13_POP", 
+propSymbolsLayer(x = mtq, var = "POP",
                  symbols = "circle", col =  "white",
                  legend.pos = "right", border = "grey",
-                 legend.title.txt = "Total\\npopulation (2013)",
+                 legend.title.txt = "Total\\nPopulation",
                  legend.style = "c")
 # Layout plot
-layoutLayer(title = "Population in Martinique",
-            sources = "INSEE, 2016", theme = "blue.pal",
-            scale = NULL, frame = FALSE)
-
-## Example 2
-library(sp)
-data("nuts2006")
-# Countries plot
-plot(nuts0.spdf, col = "grey60",border = "grey20")
-# Population plot on proportional symbols
-propSymbolsLayer(spdf = nuts0.spdf, df = nuts0.df,
-                 var = "gdppps2008",
-                 symbols = "bar", col =  "#B00EF0",
-                 legend.pos = "right",
-                 legend.title.txt = "GDP\\nin Millions PPS (2008)",
-                 legend.style = "e")
-
-## Example 3
-oldpar <- par(mfrow = c(1,2), mar = c(0,0,0,0))
-# Countries plot
-plot(nuts0.spdf, col = "grey60",border = "grey20", add=FALSE)
-# Population plot on proportional symbols
-propSymbolsLayer(spdf = nuts0.spdf, df = nuts0.df,
-                 var = "birth_2008", 
-                 fixmax = max(nuts0.df$birth_2008),
-                 inches = 0.4,
-                 symbols = "square", col =  "orange",
-                 legend.pos = "right",
-                 legend.title.txt = "nb of births",
-                 legend.style = "e")
-plot(nuts0.spdf, col = "grey60",border = "grey20", add=FALSE)
-# Population plot on proportional symbols
-propSymbolsLayer(spdf = nuts0.spdf, df = nuts0.df,
-                 var = "death_2008",
-                 symbols = "square", col =  "pink",
-                 fixmax = max(nuts0.df$birth_2008),
-                 inches = 0.4,
-                 legend.pos = "right",
-                 legend.style = "e",
-                 legend.title.txt = "nb of deaths")
-par(oldpar)
+layoutLayer(title = "Population Distribution in Martinique, 2015")
 }
 \seealso{
 \link{legendBarsSymbols}, \link{legendCirclesSymbols}, 

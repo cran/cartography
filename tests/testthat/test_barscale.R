@@ -1,0 +1,8 @@
+context("Plot Scale Bar")
+
+test_that("scale bar plot", {
+  plot(st_geometry(mtq))
+  expect_silent(barscale(pos = c(713709.9, 1596117)))
+  expect_silent(barscale(style = "oldschool"))
+  expect_silent(barscale(pos = "bottomleft", size = 5))
+})

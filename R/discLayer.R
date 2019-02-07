@@ -12,7 +12,7 @@
 #' @param col color of the discontinuities lines.
 #' @param nclass a targeted number of classes. If null, the number of 
 #' class is automatically defined (see \link{getBreaks}).
-#' @param method a discretization method; one of "sd", "equal", "quantile", "fisher-jenks","
+#' @param method a classification method; one of "sd", "equal", "quantile", "fisher-jenks","
 #' q6", "geom", "arith", "em" or "msd" (see \link{getBreaks}).
 #' @param threshold share of represented borders, value between 0 
 #' (nothing) and 1 (all the discontinuities).
@@ -41,37 +41,19 @@
 #' The "abs" type of discontinuity is the result of pmax(value unit 1 - value unit 2, value unit 2 - value unit 1).
 #' @seealso \link{getBorders}, \link{gradLinkLayer}, \link{legendGradLines}
 #' @examples
-#' library(sp)
-#' data(nuts2006)
-#' # Get borders
-#' nuts0.contig <- getBorders(x = nuts0.spdf)
-#' # GDP per capita
-#' nuts0.df$gdpcap <- nuts0.df$gdppps2008/nuts0.df$pop2008
-#' # Plot countries
-#' plot(nuts0.spdf, col="#CCCCCC", lwd=1, border="white")
-#' # Plot discontinuities
-#' discLayer(x = nuts0.contig, df = nuts0.df,
-#'           var = "gdpcap", col="red", nclass=5,
-#'           method="quantile", threshold = 0.5, sizemin = 1,
-#'           sizemax = 10, type = "rel", legend.frame = TRUE,
-#'           legend.title.txt = "GDP per Capita discontinuities\n(relative)",
-#'           legend.pos = "topright", add=TRUE)
-#' 
 #' library(sf)
-#' mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+#' mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
 #' # Get borders
 #' mtq.borders <- getBorders(x = mtq)
-#' # Employees share in the pop
-#' mtq$emp_share <- 100 * mtq$C13_CS5/mtq$C13_POP
-#' # Plot this share
-#' choroLayer(x = mtq, var = "emp_share", border = NA, method = 'q6', 
-#'            legend.values.rnd = 1, legend.pos = "topleft", 
-#'            legend.title.txt = "Share of employees\nin the population\n(age > 15 y.o.)" )
-#' # Plot discontinuities
+#' # Median Income 
+#' choroLayer(x = mtq, var = "MED", border = "grey", lwd = 0.5, 
+#'            method = 'equal', nclass = 6, legend.pos = "topleft",
+#'            legend.title.txt = "Median Income\n(in euros)" )
+#' # Discontinuities
 #' discLayer(x = mtq.borders, df = mtq,
-#'           var = "emp_share", col="darkorange2", nclass=3,
-#'           method="quantile", threshold = 0.5, sizemin = 0.5,
-#'           sizemax = 10, type = "abs", 
+#'           var = "MED", col="red4", nclass=3,
+#'           method="equal", threshold = 0.4, sizemin = 0.5,
+#'           sizemax = 10, type = "abs",legend.values.rnd = 0,
 #'           legend.title.txt = "Discontinuities\n(absolute difference)",
 #'           legend.pos = "bottomleft", add=TRUE)
 #' @export

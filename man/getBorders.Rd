@@ -30,27 +30,15 @@ Extract borders between polygons.
 getBorders and getOuterBorders can be combined with rbind.
 }
 \examples{
-library(sp)
 library(sf)
-data(nuts2006)
-# Get borders
-nuts0.contig <- getBorders(x = nuts0.spdf)
-# Plot Countries
-plot(nuts0.spdf, border = NA, col = "grey60")
-# Plot borders
-plot(st_geometry(nuts0.contig), 
-     col = sample(x = rainbow(nrow(nuts0.contig))), 
-     lwd = 3, add = TRUE)
-
-library(sf)
-mtq <- st_read(system.file("shape/martinique.shp", package="cartography"))
+mtq <- st_read(system.file("gpkg/mtq.gpkg", package="cartography"))
 # Get borders
 mtq.borders <- getBorders(x = mtq)
 # Plot polygons
 plot(st_geometry(mtq), border = NA, col = "grey60")
 # Plot borders
 plot(st_geometry(mtq.borders), 
-     col = sample(x = rainbow(nrow(nuts0.contig))), 
+     col = sample(x = rainbow(nrow(mtq.borders))), 
      lwd = 3, add = TRUE)
 }
 \seealso{
