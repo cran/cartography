@@ -19,35 +19,14 @@ The [cheat sheet](http://riatelab.github.io/cartography/vignettes/cheatsheet/car
 
 ## Vignette
 The [vignette](https://CRAN.R-project.org/package=cartography/vignettes/cartography.html) 
-contains commented scripts on how to build various types of maps with `cartography`:
+contains commented scripts on how to build various types of maps with `cartography`:  
 
-<table>
-<tbody>
-<tr>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map03.png" /></td>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map02.png" /></td>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map06.png" /></td>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map04.png" /></td>
-</tr>
-<tr>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map01.png" /></td>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map08.png" /></td>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map09.png" /></td>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map05.png" /></td>
-</tr>
-<tr>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map07.png" /></td>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map10.png" /></td>
-<td><img src="https://raw.githubusercontent.com/riatelab/cartography/master/img/map11.png" /></td>
-</tr>
-</tbody>
-</table>
-
-
+[![](https://raw.githubusercontent.com/riatelab/cartography/master/img/vignettes.png)](https://CRAN.R-project.org/package=cartography/vignettes/cartography.html)
 
 ## Other Resources 
 
-* [Giraud T., Lambert N. (2017) Reproducible Cartography. In: Peterson M. (eds) Advances in Cartography and GIScience. ICACI 2017. Lecture Notes in Geoinformation and Cartography. Springer, Cham](https://github.com/riatelab/ReproducibleCartography) (EN)      
+* [Giraud T. (2019). Thematic Maps with `cartography`. useR! 2019. Toulouse, France.](https://github.com/rCarto/user2019) (EN)  
+* [Giraud T., Lambert N. (2017). Reproducible Cartography. In: Peterson M. (eds) Advances in Cartography and GIScience. ICACI 2017. Lecture Notes in Geoinformation and Cartography. Springer, Cham](https://github.com/riatelab/ReproducibleCartography) (EN)      
 * [Blog posts](https://rgeomatic.hypotheses.org/category/cartography) (FR / EN)  
 
 

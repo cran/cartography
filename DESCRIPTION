@@ -1,9 +1,10 @@
 Package: cartography
 Title: Thematic Cartography
-Version: 2.2.0
+Version: 2.2.1
 Authors@R: c(
       person("Timothée", "Giraud", 
-        email = "timothee.giraud@cnrs.fr", role = c("cre","aut")),
+        email = "timothee.giraud@cnrs.fr", role = c("cre","aut"), 
+        comment = c(ORCID = "0000-0002-1932-3323")),
       person("Nicolas", "Lambert", 
         email = "nicolas.lambert@cnrs.fr", role = "aut"), 
       person("Ian", "Fellows", role = "cph", 
@@ -15,7 +16,7 @@ BugReports: https://github.com/riatelab/cartography/issues/
 LazyData: true
 Depends: R (>= 3.3.0)
 Imports: classInt, stats, graphics, methods, rosm, raster, Rcpp, rgeos,
-        sp (>= 1.2-4), sf (>= 0.5-4)
+        sp (>= 1.2-4), sf (>= 0.6-4)
 Suggests: SpatialPosition, knitr, rmarkdown, rgdal, testthat
 LinkingTo: Rcpp
 VignetteBuilder: knitr
@@ -23,11 +24,11 @@ SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ.4 (>= 4.8.0)
 Encoding: UTF-8
 RoxygenNote: 6.1.1
 NeedsCompilation: yes
-Packaged: 2019-02-07 11:43:01 UTC; tim
-Author: Timothée Giraud [cre, aut],
+Packaged: 2019-09-27 13:55:17 UTC; tim
+Author: Timothée Giraud [cre, aut] (<https://orcid.org/0000-0002-1932-3323>),
   Nicolas Lambert [aut],
   Ian Fellows [cph] (no overlap algorithm for labels, from wordcloud
     package)
 Maintainer: Timothée Giraud <timothee.giraud@cnrs.fr>
 Repository: CRAN
-Date/Publication: 2019-02-07 12:13:29 UTC
+Date/Publication: 2019-09-27 14:40:02 UTC
