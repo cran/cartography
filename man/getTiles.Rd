@@ -4,8 +4,7 @@
 \alias{getTiles}
 \title{Get Tiles from Open Map Servers}
 \usage{
-getTiles(x, spdf, type = "osm", zoom = NULL, crop = FALSE,
-  verbose = FALSE)
+getTiles(x, spdf, type = "osm", zoom = NULL, crop = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{x}{an sf object, a simple feature collection or a Spatial*DataFrame.}
@@ -14,14 +13,15 @@ getTiles(x, spdf, type = "osm", zoom = NULL, crop = FALSE,
 
 \item{type}{the tile server from which to get the map, one of "osm", "hotstyle", 
 "hikebike", "osmgrayscale", "stamenbw", "stamenwatercolor", "cartodark", 
-"cartolight".}
+"cartolight", "opentopomap".}
 
 \item{zoom}{the zoom level. If null, it is determined automatically 
 (see Details).}
 
-\item{crop}{TRUE if results should be cropped to the specified x extent, FALSE otherwise.}
+\item{crop}{TRUE if results should be cropped to the specified x extent, 
+FALSE otherwise. If x is an sf object with one POINT, crop is set to FALSE.}
 
-\item{verbose}{if TRUE a progress bar is displayed.}
+\item{verbose}{if TRUE, tiles filepaths, zoom level and citation are displayed.}
 }
 \value{
 A RatserBrick is returned.
@@ -34,12 +34,6 @@ fetched from various open map servers.
 Zoom levels are described on the OpenStreetMap wiki: 
 \url{http://wiki.openstreetmap.org/wiki/Zoom_levels}.
 }
-\note{
-This function is a wrapper around the \code{osm.raster} function 
-from the \code{rosm} package. \cr
-Use directly the \href{https://CRAN.R-project.org/package=rosm}{rosm} package to have a finer control over  
-extraction and display parameters.
-}
 \examples{
 \dontrun{
 library(sf)
@@ -50,7 +44,8 @@ mtqOSM <- getTiles(x = mtq, type = "osm", crop = TRUE)
 tilesLayer(mtqOSM)
 # Plot countries
 plot(st_geometry(mtq), add=TRUE)
-txt <- "© OpenStreetMap contributors. Tiles style under CC BY-SA, www.openstreetmap.org/copyright"
+txt <- paste0("\u00A9 OpenStreetMap contributors.", 
+              " Tiles style under CC BY-SA, www.openstreetmap.org/copyright")
 mtext(text = txt, side = 1, adj = 0, cex = 0.7, font = 3)
 }
 }

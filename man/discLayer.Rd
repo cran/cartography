@@ -4,12 +4,29 @@
 \alias{discLayer}
 \title{Discontinuities Layer}
 \usage{
-discLayer(x, df, dfid = NULL, var, method = "quantile", nclass = 4,
-  threshold = 0.75, type = "rel", sizemin = 1, sizemax = 10,
-  col = "red", legend.pos = "bottomleft",
-  legend.title.txt = "legend title", legend.title.cex = 0.8,
-  legend.values.cex = 0.6, legend.values.rnd = 2,
-  legend.frame = FALSE, add = TRUE, spdf, spdfid1, spdfid2)
+discLayer(
+  x,
+  df,
+  dfid = NULL,
+  var,
+  method = "quantile",
+  nclass = 4,
+  threshold = 0.75,
+  type = "rel",
+  sizemin = 1,
+  sizemax = 10,
+  col = "red",
+  legend.pos = "bottomleft",
+  legend.title.txt = "legend title",
+  legend.title.cex = 0.8,
+  legend.values.cex = 0.6,
+  legend.values.rnd = 2,
+  legend.frame = FALSE,
+  add = TRUE,
+  spdf,
+  spdfid1,
+  spdfid2
+)
 }
 \arguments{
 \item{x}{an sf object, a simple feature collection, as outputted by the \link{getBorders} function.}
@@ -85,13 +102,13 @@ mtq.borders <- getBorders(x = mtq)
 # Median Income 
 choroLayer(x = mtq, var = "MED", border = "grey", lwd = 0.5, 
            method = 'equal', nclass = 6, legend.pos = "topleft",
-           legend.title.txt = "Median Income\\n(in euros)" )
+           legend.title.txt = "Median Income\n(in euros)" )
 # Discontinuities
 discLayer(x = mtq.borders, df = mtq,
           var = "MED", col="red4", nclass=3,
           method="equal", threshold = 0.4, sizemin = 0.5,
           sizemax = 10, type = "abs",legend.values.rnd = 0,
-          legend.title.txt = "Discontinuities\\n(absolute difference)",
+          legend.title.txt = "Discontinuities\n(absolute difference)",
           legend.pos = "bottomleft", add=TRUE)
 }
 \seealso{

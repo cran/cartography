@@ -1,4 +1,4 @@
-## ----echo=FALSE----------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------
 knitr::opts_chunk$set(collapse = TRUE)
 
 knitr::knit_hooks$set(margin = function(before, options, envir){
@@ -7,7 +7,7 @@ knitr::knit_hooks$set(margin = function(before, options, envir){
   } 
 })
 
-## ----propMap, fig.height=6, fig.width=5, message=FALSE, margin=TRUE------
+## ----propMap, fig.height=6, fig.width=5, message=FALSE, margin=TRUE-----------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -42,7 +42,7 @@ layoutLayer(title = "Population Distribution in Martinique",
 # north arrow
 north(pos = "topleft")
 
-## ----choroMap, fig.height=6, fig.width=5, margin=TRUE--------------------
+## ----choroMap, fig.height=6, fig.width=5, margin=TRUE-------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -74,7 +74,7 @@ layoutLayer(title = "Population Distribution in Martinique",
 # north arrow
 north(pos = "topleft")
 
-## ----pentypoMap, fig.height=6, fig.width=5, margin=TRUE------------------
+## ----pentypoMap, fig.height=6, fig.width=5, margin=TRUE-----------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -116,7 +116,7 @@ layoutLayer(title = "Administrative Status",
 # north arrow
 north(pos = "topleft")
 
-## ----propchoro, fig.height=6, fig.width=5, margin=TRUE-------------------
+## ----propchoro, fig.height=6, fig.width=5, margin=TRUE------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -151,7 +151,7 @@ layoutLayer(title="Population & Wealth in Martinique, 2015",
 # north arrow
 north(pos = "topleft")
 
-## ----proptypo, fig.height=6, fig.width=5, margin=TRUE--------------------
+## ----proptypo, fig.height=6, fig.width=5, margin=TRUE-------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -186,7 +186,7 @@ layoutLayer(title="Population Distribution in Martinique",
 # north arrow
 north(pos = "topleft")
 
-## ----labelMap, fig.height=6, fig.width=5, margin=TRUE--------------------
+## ----labelMap, fig.height=6, fig.width=5, margin=TRUE-------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -221,7 +221,7 @@ layoutLayer(
 ) 
 
 
-## ----linkMap, fig.height=6, fig.width=5, margin=TRUE---------------------
+## ----linkMap, fig.height=6, fig.width=5, margin=TRUE--------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -269,7 +269,7 @@ layoutLayer(title = "Commuting to Prefectures in Martinique",
             frame = FALSE, col = "grey25", coltitle = "white",
             tabtitle = TRUE)
 
-## ----isopleth, fig.height=6, fig.width=5, margin=TRUE--------------------
+## ----isopleth, fig.height=6, fig.width=5, margin=TRUE-------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -306,7 +306,7 @@ layoutLayer(title = "Population Distribution in Martinique",
 # north arrow
 north(pos = "topleft")
 
-## ----grid, fig.height=6, fig.width=5, margin=TRUE------------------------
+## ----grid, fig.height=6, fig.width=5, margin=TRUE-----------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -337,7 +337,7 @@ layoutLayer(title = "Population Distribution in Martinique",
 # north arrow
 north(pos = "topleft")
 
-## ----discc, fig.height=5, fig.width=5, margin=TRUE-----------------------
+## ----discc, fig.height=5, fig.width=5, margin=TRUE----------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -382,7 +382,7 @@ layoutLayer(title = "Wealth Disparities in Martinique, 2015",
 # north arrow
 north(pos = "topleft")
 
-## ----sp, fig.height=3.6, fig.width=5, margin=TRUE------------------------
+## ----sp, fig.height=3.6, fig.width=5, margin=TRUE-----------------------------
 library(sp)
 library(cartography)
 data("nuts2006")

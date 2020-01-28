@@ -6,6 +6,7 @@
 #' @field id Unique nuts id (character)
 #' @source UMS RIATE - \url{http://riate.cnrs.fr/?page_id=153}
 #' @docType data
+#' @keywords internal
 NULL
 
 #' @title Nuts2 Regions
@@ -16,6 +17,7 @@ NULL
 #' @field id Unique nuts id (character)
 #' @source UMS RIATE - \url{http://riate.cnrs.fr/?page_id=153}
 #' @docType data
+#' @keywords internal
 NULL
 
 #' @title Nuts1 Regions
@@ -26,6 +28,7 @@ NULL
 #' @field id Unique nuts id (character)
 #' @source UMS RIATE - \url{http://riate.cnrs.fr/?page_id=153}
 #' @docType data
+#' @keywords internal
 NULL
 
 #' @title Nuts0 Regions
@@ -36,6 +39,7 @@ NULL
 #' @field id Unique nuts id (character)
 #' @source UMS RIATE - \url{http://riate.cnrs.fr/?page_id=153}
 #' @docType data
+#' @keywords internal
 NULL
 
 #' @title Nuts0 Dataset
@@ -57,9 +61,9 @@ NULL
 #' 2008 (million euros) (numeric)
 #' @field pop1999 Total population in 1999 (inhabitants) (numeric)
 #' @field pop2008 Total population in 2008 (inhabitants) (numeric)
-#' @source UMS RIATE - \url{http://www.ums-riate.fr/Webriate/?page_id=151}. 
-#' Data extraction: 2011; data validity: 2008.
+#' @source UMS RIATE - Data extraction: 2011; data validity: 2008.
 #' @docType data
+#' @keywords internal
 NULL
 
 #' @title Nuts1 Dataset
@@ -81,9 +85,9 @@ NULL
 #' (million euros) (numeric)
 #' @field pop1999 Total population in 1999 (inhabitants) (numeric)
 #' @field pop2008 Total population in 2008 (inhabitants) (numeric)
-#' @source UMS RIATE - \url{http://www.ums-riate.fr/Webriate/?page_id=151}. 
-#' Data extraction: 2011; data validity: 2008.
+#' @source UMS RIATE - Data extraction: 2011; data validity: 2008.
 #' @docType data
+#' @keywords internal
 NULL
 
 #' @title Nuts2 Dataset
@@ -105,9 +109,9 @@ NULL
 #' (million euros) (numeric)
 #' @field pop1999 Total population in 1999 (inhabitants) (numeric)
 #' @field pop2008 Total population in 2008 (inhabitants) (numeric)
-#' @source UMS RIATE - \url{http://www.ums-riate.fr/Webriate/?page_id=151}. 
-#' Data extraction: 2011; data validity: 2008.
+#' @source UMS RIATE - Data extraction: 2011; data validity: 2008.
 #' @docType data
+#' @keywords internal
 NULL
 
 #' @title Nuts3 Dataset
@@ -124,9 +128,9 @@ NULL
 #' (million euros) (numeric)
 #' @field pop1999 Total population in 1999 (inhabitants) (numeric)
 #' @field pop2008 Total population in 2008 (inhabitants) (numeric)
-#' @source UMS RIATE - \url{http://www.ums-riate.fr/Webriate/?page_id=151}. 
-#' Data extraction: 2011; data validity: 2008.
+#' @source UMS RIATE - Data extraction: 2011; data validity: 2008.
 #' @docType data
+#' @keywords internal
 NULL
 
 #' @title Coastline of Europe
@@ -135,6 +139,7 @@ NULL
 #' @format SpatialLinesDataFrame.
 #' @source UMS RIATE - \url{http://riate.cnrs.fr/?page_id=153}
 #' @docType data
+#' @keywords internal
 NULL
 
 #' @title Frame around Europe
@@ -143,6 +148,7 @@ NULL
 #' @format SpatialPolygonsDataFrame.
 #' @source UMS RIATE - \url{http://riate.cnrs.fr/?page_id=153}
 #' @docType data
+#' @keywords internal
 NULL
 
 #' @title Graticule around Europe
@@ -151,6 +157,7 @@ NULL
 #' @format SpatialLines.
 #' @source UMS RIATE - \url{http://riate.cnrs.fr/?page_id=153}
 #' @docType data
+#' @keywords internal
 NULL
 
 
@@ -160,6 +167,7 @@ NULL
 #' @format SpatialPolygonsDataFrame.
 #' @source UMS RIATE - \url{http://riate.cnrs.fr/?page_id=153}
 #' @docType data
+#' @keywords internal
 NULL
 
 #' @title World Background
@@ -168,6 +176,7 @@ NULL
 #' @format SpatialPolygonsDataFrame.
 #' @source UMS RIATE - \url{http://riate.cnrs.fr/?page_id=153}
 #' @docType data
+#' @keywords internal
 NULL
 
 #' @title Twin Cities Dataset
@@ -183,4 +192,5 @@ NULL
 #' University of Warsaw, Poland. 
 #' Primary source: Wikipedia, 2011.
 #' @docType data
+#' @keywords internal
 NULL

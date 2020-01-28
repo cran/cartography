@@ -4,13 +4,32 @@
 \alias{smoothLayer}
 \title{Smooth Layer}
 \usage{
-smoothLayer(x, spdf, df, spdfid = NULL, dfid = NULL, var,
-  var2 = NULL, typefct = "exponential", span, beta,
-  resolution = NULL, mask = NULL, nclass = 8, breaks = NULL,
-  col = NULL, border = "grey20", lwd = 1,
-  legend.pos = "bottomleft", legend.title.txt = "Potential",
-  legend.title.cex = 0.8, legend.values.cex = 0.6,
-  legend.values.rnd = 0, legend.frame = FALSE, add = FALSE)
+smoothLayer(
+  x,
+  spdf,
+  df,
+  spdfid = NULL,
+  dfid = NULL,
+  var,
+  var2 = NULL,
+  typefct = "exponential",
+  span,
+  beta,
+  resolution = NULL,
+  mask = NULL,
+  nclass = 8,
+  breaks = NULL,
+  col = NULL,
+  border = "grey20",
+  lwd = 1,
+  legend.pos = "bottomleft",
+  legend.title.txt = "Potential",
+  legend.title.cex = 0.8,
+  legend.values.cex = 0.6,
+  legend.values.rnd = 0,
+  legend.frame = FALSE,
+  add = FALSE
+)
 }
 \arguments{
 \item{x}{an sf object, a simple feature collection.}
@@ -103,7 +122,7 @@ smoothLayer(x = mtq, var = 'POP',
             span = 4000, beta = 2,
             mask = mtq, border = NA,
             col = carto.pal(pal1 = 'wine.pal', n1 = 8),
-            legend.title.txt = "Population\\nPotential",
+            legend.title.txt = "Population\nPotential",
             legend.pos = "topright", legend.values.rnd = 0)
 propSymbolsLayer(x = mtq, var = "POP", legend.pos = c(690000, 1599950),
                  legend.title.txt = "Population 2015",
