@@ -1,5 +1,8 @@
 ## ----echo=FALSE---------------------------------------------------------------
-knitr::opts_chunk$set(collapse = TRUE)
+knitr::opts_chunk$set(collapse = TRUE, 
+                      fig.width = 4.08, 
+                      fig.height = 5, 
+                      margin = TRUE)
 
 knitr::knit_hooks$set(margin = function(before, options, envir){
   if (before){
@@ -7,7 +10,7 @@ knitr::knit_hooks$set(margin = function(before, options, envir){
   } 
 })
 
-## ----propMap, fig.height=6, fig.width=5, message=FALSE, margin=TRUE-----------
+## ----propMap, message=FALSE---------------------------------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -17,7 +20,7 @@ mtq <- st_read(dsn = path_to_gpkg, quiet = TRUE)
 # download osm tiles
 mtq.osm <- getTiles(
   x = mtq, 
-  type = "osm", 
+  type = "OpenStreetMap", 
   zoom = 11, 
   crop = TRUE
 )
@@ -29,7 +32,7 @@ plot(st_geometry(mtq), col = NA, border = "grey", add=TRUE)
 propSymbolsLayer(
   x = mtq, 
   var = "POP", 
-  inches = 0.4, 
+  inches = 0.25, 
   col = "brown4",
   legend.pos = "topright",  
   legend.title.txt = "Total population"
@@ -42,7 +45,7 @@ layoutLayer(title = "Population Distribution in Martinique",
 # north arrow
 north(pos = "topleft")
 
-## ----choroMap, fig.height=6, fig.width=5, margin=TRUE-------------------------
+## ----choroMap-----------------------------------------------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -74,7 +77,7 @@ layoutLayer(title = "Population Distribution in Martinique",
 # north arrow
 north(pos = "topleft")
 
-## ----pentypoMap, fig.height=6, fig.width=5, margin=TRUE-----------------------
+## ----pentypoMap---------------------------------------------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -116,7 +119,7 @@ layoutLayer(title = "Administrative Status",
 # north arrow
 north(pos = "topleft")
 
-## ----propchoro, fig.height=6, fig.width=5, margin=TRUE------------------------
+## ----propchoro, fig.width=5---------------------------------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -130,7 +133,6 @@ plot(st_geometry(mtq), col="darkseagreen3", border="darkseagreen4",
 propSymbolsChoroLayer(
   x = mtq, 
   var = "POP", 
-  inches = 0.4,
   border = "grey50",
   lwd = 1,
   legend.var.pos = "topright", 
@@ -151,7 +153,7 @@ layoutLayer(title="Population & Wealth in Martinique, 2015",
 # north arrow
 north(pos = "topleft")
 
-## ----proptypo, fig.height=6, fig.width=5, margin=TRUE-------------------------
+## ----proptypo-----------------------------------------------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -175,7 +177,7 @@ propSymbolsTypoLayer(
   legend.var2.values.order = c("Prefecture", "Sub-prefecture", 
                                "Simple municipality"),
   col = carto.pal(pal1 = "multi.pal", n1 = 3),
-  legend.var2.pos = c(693000, 1607000), 
+  legend.var2.pos = c(692000, 1607000), 
   legend.var2.title.txt = "Administrative\nStatus"
 ) 
 # layout
@@ -186,7 +188,7 @@ layoutLayer(title="Population Distribution in Martinique",
 # north arrow
 north(pos = "topleft")
 
-## ----labelMap, fig.height=6, fig.width=5, margin=TRUE-------------------------
+## ----labelMap-----------------------------------------------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -221,7 +223,7 @@ layoutLayer(
 ) 
 
 
-## ----linkMap, fig.height=6, fig.width=5, margin=TRUE--------------------------
+## ----linkMap------------------------------------------------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -269,7 +271,7 @@ layoutLayer(title = "Commuting to Prefectures in Martinique",
             frame = FALSE, col = "grey25", coltitle = "white",
             tabtitle = TRUE)
 
-## ----isopleth, fig.height=6, fig.width=5, margin=TRUE-------------------------
+## ----isopleth, fig.width = 5--------------------------------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -306,7 +308,7 @@ layoutLayer(title = "Population Distribution in Martinique",
 # north arrow
 north(pos = "topleft")
 
-## ----grid, fig.height=6, fig.width=5, margin=TRUE-----------------------------
+## ----grid---------------------------------------------------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
@@ -327,7 +329,7 @@ plot(st_geometry(mtq), col = NA, border = NA, bg = "#deffff")
 # Plot the population density
 choroLayer(x = mygrid, var = "POPDENS", method = "geom", nclass=5, 
            col = carto.pal(pal1 = "turquoise.pal", n1 = 5), border = "grey80", 
-           lwd = 0.5, legend.pos = "topright", add = TRUE,
+           lwd = 0.5, legend.pos = "bottomleftextra", add = TRUE,
            legend.title.txt = "Population Density\n(people per km2)") 
 layoutLayer(title = "Population Distribution in Martinique", 
             sources = "Sources: Insee and IGN, 2018",

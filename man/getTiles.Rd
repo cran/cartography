@@ -4,16 +4,26 @@
 \alias{getTiles}
 \title{Get Tiles from Open Map Servers}
 \usage{
-getTiles(x, spdf, type = "osm", zoom = NULL, crop = FALSE, verbose = FALSE)
+getTiles(
+  x,
+  spdf,
+  type = "OpenStreetMap",
+  zoom = NULL,
+  crop = FALSE,
+  verbose = FALSE,
+  apikey = NA,
+  cachedir = FALSE,
+  forceDownload = FALSE
+)
 }
 \arguments{
 \item{x}{an sf object, a simple feature collection or a Spatial*DataFrame.}
 
 \item{spdf}{deprecated, a Spatial*DataFrame with a valid projection attribute.}
 
-\item{type}{the tile server from which to get the map, one of "osm", "hotstyle", 
-"hikebike", "osmgrayscale", "stamenbw", "stamenwatercolor", "cartodark", 
-"cartolight", "opentopomap".}
+\item{type}{the tile server from which to get the map. See Details for providers.
+For other sources use a list: type = list(src = "name of the source" , 
+q = "tiles address", sub = "subdomains", cit = "how to cite the tiles"). See Examples.}
 
 \item{zoom}{the zoom level. If null, it is determined automatically 
 (see Details).}
@@ -22,9 +32,16 @@ getTiles(x, spdf, type = "osm", zoom = NULL, crop = FALSE, verbose = FALSE)
 FALSE otherwise. If x is an sf object with one POINT, crop is set to FALSE.}
 
 \item{verbose}{if TRUE, tiles filepaths, zoom level and citation are displayed.}
+
+\item{apikey}{Needed for Thunderforest maps.}
+
+\item{cachedir}{name of a directory used to cache tiles. If TRUE, places a 
+'tile.cache' folder in the working directory. If FALSE, tiles are not cached.}
+
+\item{forceDownload}{if TRUE, cached tiles are downloaded again.}
 }
 \value{
-A RatserBrick is returned.
+A RasterBrick is returned.
 }
 \description{
 Get map tiles based on a spatial object extent. Maps can be 
@@ -32,7 +49,32 @@ fetched from various open map servers.
 }
 \details{
 Zoom levels are described on the OpenStreetMap wiki: 
-\url{http://wiki.openstreetmap.org/wiki/Zoom_levels}.
+\url{http://wiki.openstreetmap.org/wiki/Zoom_levels}. \cr\cr
+Full list of providers:  
+\tabular{lll}{
+'OpenStreetMap' (or 'osm')                 \tab	'Stamen' (or 'stamenbw')	                  \tab  'Esri' \cr
+'OpenStreetMap.DE'                         \tab	'Stamen.Toner'                            	\tab  'Esri.WorldStreetMap'\cr
+'OpenStreetMap.France'                     \tab	'Stamen.TonerBackground'                    \tab  'Esri.DeLorme'\cr
+'OpenStreetMap.HOT' (or 'hotstyle')        \tab	'Stamen.TonerHybrid'                        \tab  'Esri.WorldTopoMap'\cr
+                                           \tab  'Stamen.TonerLines'                         \tab  'Esri.WorldImagery'\cr
+'OpenMapSurfer'                            \tab  'Stamen.TonerLabels'                        \tab  'Esri.WorldTerrain'\cr
+'OpenMapSurfer.Roads'                      \tab  'Stamen.TonerLite'                          \tab  'Esri.WorldShadedRelief'\cr
+'OpenMapSurfer.Hybrid'                     \tab  'Stamen.Watercolor' (or 'stamenwatercolor') \tab  'Esri.OceanBasemap'\cr
+'OpenMapSurfer.AdminBounds'                \tab  'Stamen.Terrain'                            \tab  'Esri.NatGeoWorldMap'\cr
+'OpenMapSurfer.ElementsAtRisk'             \tab  'Stamen.TerrainBackground'                  \tab  'Esri.WorldGrayCanvas'\cr
+                                           \tab  'Stamen.TerrainLabels'                      \tab \cr
+'CartoDB'                                  \tab                                              \tab  'Hydda'\cr
+'CartoDB.Positron' (or 'cartolight')       \tab  'Thunderforest'                             \tab  'Hydda.Full'\cr 
+'CartoDB.PositronNoLabels'                 \tab  'Thunderforest.OpenCycleMap'                \tab  'Hydda.Base'\cr
+'CartoDB.PositronOnlyLabels'               \tab  'Thunderforest.Transport'                   \tab  'Hydda.RoadsAndLabels'\cr
+'CartoDB.DarkMatter' (or 'cartodark')      \tab  'Thunderforest.TransportDark'               \tab \cr 
+'CartoDB.DarkMatterNoLabels'               \tab  'Thunderforest.SpinalMap'                   \tab  'HikeBike' (or 'hikebike')\cr
+'CartoDB.DarkMatterOnlyLabels'             \tab  'Thunderforest.Landscape'                   \tab  'HikeBike.HikeBike'\cr
+'CartoDB.Voyager'                          \tab  'Thunderforest.Outdoors'                    \tab \cr
+'CartoDB.VoyagerNoLabels'                  \tab  'Thunderforest.Pioneer'                     \tab  'OpenTopoMap' (or 'opentopomap') \cr
+'CartoDB.VoyagerOnlyLabels'                \tab  'Thunderforest.MobileAtlas'                 \tab  'Wikimedia'\cr
+'CartoDB.VoyagerLabelsUnder'               \tab  'Thunderforest.Neighbourhood'               \tab  'OpenStreetMap.MapnikBW' (or 'osmgrayscale')\cr
+}
 }
 \examples{
 \dontrun{
@@ -47,7 +89,28 @@ plot(st_geometry(mtq), add=TRUE)
 txt <- paste0("\u00A9 OpenStreetMap contributors.", 
               " Tiles style under CC BY-SA, www.openstreetmap.org/copyright")
 mtext(text = txt, side = 1, adj = 0, cex = 0.7, font = 3)
+
+# Download esri tiles
+fullserver = paste("https://server.arcgisonline.com/ArcGIS/rest/services",
+                   "Specialty/DeLorme_World_Base_Map/MapServer",
+                   "tile/{z}/{y}/{x}.jpg",
+                   sep = "/"
+                   )
+typeosm <-  list(
+  src = 'esri',
+  q = fullserver,
+  sub = NA,
+  cit = 'Tiles; Esri; Copyright: 2012 DeLorme'
+)
+mtqESRI <- getTiles(x = mtq, type = typeosm, crop = TRUE, verbose = T, zoom = 10)
+# Plot the tiles
+tilesLayer(mtqESRI)
+txt <- typeosm$cit
+mtext(text = txt, side = 1, adj = 0, cex = 0.6, font = 3)
 }
+}
+\references{
+\url{https://leaflet-extras.github.io/leaflet-providers/preview/}
 }
 \seealso{
 \link{tilesLayer}
