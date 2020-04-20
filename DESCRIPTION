@@ -1,13 +1,13 @@
 Package: cartography
 Title: Thematic Cartography
-Version: 2.4.0
+Version: 2.4.1
 Authors@R: c(
       person("Timothée", "Giraud", 
         email = "timothee.giraud@cnrs.fr", role = c("cre","aut"), 
         comment = c(ORCID = "0000-0002-1932-3323")),
       person("Nicolas", "Lambert", 
         email = "nicolas.lambert@cnrs.fr", role = "aut"), 
-      person("Diego", "Hernangómez", role = "ctb"),
+      person("Diego", "Hernangómez", role = "ctb", comment=c(ORCID="0000-0001-8457-4658")),
       person("Ian", "Fellows", role = "cph", 
         comment = "no overlap algorithm for labels, from wordcloud package"))
 Description: Create and integrate maps in your R workflow. This package helps 
@@ -24,19 +24,19 @@ Depends: R (>= 3.3.0)
 Imports: classInt, curl, graphics, methods, png, raster, Rcpp, rgeos,
         sf (>= 0.6-4), slippymath, sp (>= 1.2-4), stats, utils,
         grDevices
-Suggests: SpatialPosition, knitr, rmarkdown, rgdal, tinytest
+Suggests: lwgeom, SpatialPosition, knitr, rmarkdown, rgdal, tinytest
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ.4 (>= 4.8.0)
 Encoding: UTF-8
 RoxygenNote: 7.1.0
 NeedsCompilation: yes
-Packaged: 2020-04-02 15:59:29 UTC; tim
+Packaged: 2020-04-20 11:28:32 UTC; tim
 Author: Timothée Giraud [cre, aut] (<https://orcid.org/0000-0002-1932-3323>),
   Nicolas Lambert [aut],
-  Diego Hernangómez [ctb],
+  Diego Hernangómez [ctb] (<https://orcid.org/0000-0001-8457-4658>),
   Ian Fellows [cph] (no overlap algorithm for labels, from wordcloud
     package)
 Maintainer: Timothée Giraud <timothee.giraud@cnrs.fr>
 Repository: CRAN
-Date/Publication: 2020-04-02 16:40:06 UTC
+Date/Publication: 2020-04-20 12:30:02 UTC
