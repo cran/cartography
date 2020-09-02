@@ -1,6 +1,6 @@
-abf3f00d6132b0d2eae25032d08aa8ed *DESCRIPTION
+8366e43685825bd100c99c851ce2fc8f *DESCRIPTION
 4dce5e58d95e4a03899afde3602ab9f7 *NAMESPACE
-571e0032e2dee497936c8b28e59a906c *NEWS.md
+536c7dd2005d4b837b06bffd87ba22b0 *NEWS.md
 a269be150824b580f5c3cae2b54ca01f *R/Package.R
 b0f6d5c1cad2b95686a313c15bad292f *R/RcppExports.R
 281abf86ec754dfbfb4e703f19c23553 *R/barscale.R
@@ -16,7 +16,7 @@ f85ea0c9cfaf298d8a0eee396315c313 *R/getGridLayer.R
 443f8cdd79181b8333984beaf48260b6 *R/getOuterBorders.R
 9fa5923de14723e4dcb3ef085872ba5d *R/getPencilLayer.R
 cbb1ab7e38fc9bb84b05b2e778b30253 *R/getPngLayer.R
-d5c77cad8fbbb3d919dff5552750587c *R/getTiles.R
+7a7ff657ac38223046f22900bac11b03 *R/getTiles.R
 c3b05a6094e0c6fdb5a0c0c49385a157 *R/ghostLayer.R
 79fc9256ea24ff752b8f5614d5a9aadd *R/gradLinkLayer.R
 c9b4cfca28ff435662121b1d0929cb5a *R/gradLinkTypoLayer.R
@@ -27,7 +27,7 @@ c9b4cfca28ff435662121b1d0929cb5a *R/gradLinkTypoLayer.R
 f1d33ae3778d010a12d8582edac1833c *R/legendWaffle.R
 4335f86378174460be96e781f79a3193 *R/legends.R
 1d5dfc6d4f8a56b0a2cf40241094fe7f *R/north.R
-39a67f9d47b14537720c1e29bdae3096 *R/palettes.R
+59b771ca35b2cddc6236e532b8575b6e *R/palettes.R
 ebcd2a2163348bdd0161ef93adc8e256 *R/propLinkLayer.R
 c49da8ebaba524b83b315065526c3895 *R/propSymbolsChoroLayer.R
 cb15739ca2e3a6b32a030b244e85f5fe *R/propSymbolsLayer.R
@@ -40,14 +40,14 @@ f8276d89da87956762e35c287b1c0390 *R/typoLayer.R
 3fb1cf89c16f6ca12f2711b8a844b0fe *R/utils.R
 d188dcb7b45b233aad07fda83ae0b37c *R/waffleLayer.R
 5e36c084e53bae1fad91f98419606df8 *R/wordcloudLayer.R
-5af5f2223ee6df9e3c0b865ac8d2bf97 *README.md
-113367f43e2544245a788d169588fc60 *build/vignette.rds
-537782b5a54fa0164e436b8a13263ac4 *data/nuts2006.RData
+32cb3c55708a0072ba72c9a322dba3d3 *README.md
+1883d082155854f3e7f93fce1d695e70 *build/vignette.rds
+fb0eb9a0e844fe1b5e269da321819d13 *data/nuts2006.RData
 fe0635dbbeea05b814aee8ffef1d8b82 *inst/CITATION
 4fa9aa9e59962baa1a7523e1be1f5601 *inst/csv/mob.csv
-95478535e1e6b62a096526983c69f2dd *inst/doc/cartography.R
-3c810484541ea51a2a33cf3e28356d60 *inst/doc/cartography.Rmd
-bb9a83abcaebf2c1c1a80e48f9ba6776 *inst/doc/cartography.html
+d8b6eb038a3112b70616e807659c0aea *inst/doc/cartography.R
+5a85b75b2c35e32d52cd0ebb4ff4b287 *inst/doc/cartography.Rmd
+9ecea6ce3a51bce77448a063124ee751 *inst/doc/cartography.html
 a45c6382a1373d9eb398b2497a24ec7b *inst/doc/cheatsheet.Rmd
 7603fa8b1c78d495f9183e0ef955bb09 *inst/doc/cheatsheet.html
 e6b2c382ce8810d6ea207e6fcd5d4253 *inst/gpkg/mtq.gpkg
@@ -88,7 +88,7 @@ bb94a66a27c6c01ee90545b23d8b225b *inst/tinytest/test_utils.R
 ca9fbe381befb33f819d1eeed4ff5f34 *inst/tinytest/test_waffleLayer.R
 5a12403742d9ae8fcbb927dc382139aa *inst/tinytest/test_wordcloudLayer.R
 afbeb4c12740fb16be66d5ced432f593 *man/barscale.Rd
-cb4c27d18ee568be11ea90bdb8f75208 *man/carto.pal.Rd
+687846ebfb8e28b4f2290e6843c45457 *man/carto.pal.Rd
 17900d1f7f8fcc689eb0a739c40e3909 *man/cartography.Rd
 187f3a821e555bc789ba15e6b84f6218 *man/choroLayer.Rd
 a1105b8a30516c196a8be62c9e1a3d14 *man/coasts.spdf.Rd
@@ -105,7 +105,7 @@ e93d92782ce52523ff76d2ec2068b91c *man/getGridLayer.Rd
 b5bac3807bd47d136c6ac93911d4ebe9 *man/getLinkLayer.Rd
 1732cd105b1397fcb9124412bac49470 *man/getPencilLayer.Rd
 691e168e3374e79207421d14fd69786c *man/getPngLayer.Rd
-3f17730b7ce4fd6d41fe1297fcb8cd53 *man/getTiles.Rd
+256bc4127c288504c08ac69ec0b66cbf *man/getTiles.Rd
 e341e949f56a16c07b80a004c0549d23 *man/ghostLayer.Rd
 7a41fe49d8df1f5bdc6e169db9dc7258 *man/gradLinkLayer.Rd
 faa97dc131be686d1c8fc403170db108 *man/gradLinkTypoLayer.Rd
@@ -148,6 +148,6 @@ cf2a519e3d3f908468ee2a2044cae547 *src/RcppExports.cpp
 8e4984b9e52af0750ccaa09393247e50 *src/init.c
 b9001e903521c253e4de53d8079d5505 *src/layout.cpp
 9a7d46698e72fd73231e0654e59e4046 *tests/tinytest.R
-3c810484541ea51a2a33cf3e28356d60 *vignettes/cartography.Rmd
+5a85b75b2c35e32d52cd0ebb4ff4b287 *vignettes/cartography.Rmd
 a45c6382a1373d9eb398b2497a24ec7b *vignettes/cheatsheet.Rmd
 93d95b95a7916b46eb7e5f9273d2357b *vignettes/cheatsheet/cartography_cheatsheet.pdf

@@ -10,7 +10,7 @@ knitr::knit_hooks$set(margin = function(before, options, envir){
   } 
 })
 
-## ----propMap, message=FALSE---------------------------------------------------
+## ----propMap, message=FALSE, warning=FALSE------------------------------------
 library(sf)
 library(cartography)
 # path to the geopackage file embedded in cartography
