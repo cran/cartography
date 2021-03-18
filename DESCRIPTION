@@ -1,6 +1,6 @@
 Package: cartography
 Title: Thematic Cartography
-Version: 2.4.2
+Version: 3.0.0
 Authors@R: c(
       person("Timothée", "Giraud", 
         email = "timothee.giraud@cnrs.fr", role = c("cre","aut"), 
@@ -24,14 +24,14 @@ Depends: R (>= 3.5.0)
 Imports: classInt, curl, graphics, methods, png, raster, Rcpp, rgeos,
         sf (>= 0.6-4), slippymath, sp (>= 1.2-4), stats, utils,
         grDevices
-Suggests: lwgeom, SpatialPosition, knitr, rmarkdown, rgdal, tinytest
+Suggests: lwgeom, SpatialPosition, knitr, rmarkdown, rgdal, tinytest,
+        covr
 LinkingTo: Rcpp
 VignetteBuilder: knitr
-SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0), PROJ.4 (>= 4.8.0)
 Encoding: UTF-8
 RoxygenNote: 7.1.1
 NeedsCompilation: yes
-Packaged: 2020-09-02 11:25:04 UTC; tim
+Packaged: 2021-03-18 14:35:01 UTC; tim
 Author: Timothée Giraud [cre, aut] (<https://orcid.org/0000-0002-1932-3323>),
   Nicolas Lambert [aut],
   Diego Hernangómez [ctb] (<https://orcid.org/0000-0001-8457-4658>),
@@ -39,4 +39,4 @@ Author: Timothée Giraud [cre, aut] (<https://orcid.org/0000-0002-1932-3323>),
     package)
 Maintainer: Timothée Giraud <timothee.giraud@cnrs.fr>
 Repository: CRAN
-Date/Publication: 2020-09-02 11:50:03 UTC
+Date/Publication: 2021-03-18 15:10:06 UTC

@@ -3,7 +3,7 @@
 #' @description Get map tiles based on a spatial object extent. Maps can be 
 #' fetched from various open map servers.
 #' @param x an sf object, a simple feature collection or a Spatial*DataFrame.
-#' @param spdf  deprecated, a Spatial*DataFrame with a valid projection attribute.
+#' @param spdf  defunct.
 #' @param type the tile server from which to get the map. See Details for providers.
 #' For other sources use a list: type = list(src = "name of the source" , 
 #' q = "tiles address", sub = "subdomains", cit = "how to cite the tiles"). See Examples.
@@ -80,11 +80,16 @@
 #' txt <- typeosm$cit
 #' mtext(text = txt, side = 1, adj = 0, cex = 0.6, font = 3)
 #' }
-getTiles <- function(x, spdf, type = "OpenStreetMap", zoom = NULL, crop = FALSE, 
-                     verbose = FALSE, apikey=NA, cachedir=FALSE, forceDownload=FALSE){
-  # deprecated check
+getTiles <- function(x, type = "OpenStreetMap", zoom = NULL, crop = FALSE, 
+                     verbose = FALSE, apikey = NA, cachedir = FALSE, 
+                     forceDownload = FALSE, spdf){
+  .Deprecated(
+    new = "get_tiles", package = "maptiles", 
+    msg = "'getTiles' is deprecated.\nUse 'maptiles::get_tiles()' instead."
+  )
+  # defunct
   if(!missing(spdf)){
-    warning("spdf is deprecated; use x instead.", call. = FALSE)
+    stop("spdf is defunct; use x instead.", call. = FALSE)
     x <- spdf
   }
   # test for sp
@@ -219,7 +224,7 @@ compose_tile_grid <- function (tile_grid, images){
     if (tile_grid$ext=="png"){
       img <- png::readPNG(img)*255
     }
-
+    
     # compose brick raster
     r_img <- raster::brick(img, crs = sf::st_crs(3857)$proj4string)
     raster::extent(r_img) <- raster::extent(bbox[c("xmin", "xmax", 

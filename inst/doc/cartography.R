@@ -17,17 +17,8 @@ library(cartography)
 path_to_gpkg <- system.file("gpkg/mtq.gpkg", package="cartography")
 # import to an sf object
 mtq <- st_read(dsn = path_to_gpkg, quiet = TRUE)
-# download osm tiles
-mtq.osm <- getTiles(
-  x = mtq, 
-  type = "OpenStreetMap", 
-  zoom = 11, 
-  crop = TRUE
-)
-# plot osm tiles
-tilesLayer(x = mtq.osm)
 # plot municipalities (only borders are plotted)
-plot(st_geometry(mtq), col = NA, border = "grey", add=TRUE)
+plot(st_geometry(mtq), col = "grey80", border = "grey")
 # plot population
 propSymbolsLayer(
   x = mtq, 
@@ -39,7 +30,7 @@ propSymbolsLayer(
 )
 # layout
 layoutLayer(title = "Population Distribution in Martinique",
-            sources = "Sources: Insee and IGN, 2018\n© OpenStreetMap contributors.\nTiles style under CC BY-SA, www.openstreetmap.org/copyright.",
+            sources = "Sources: Insee and IGN, 2018",
             author = paste0("cartography ", packageVersion("cartography")),
             frame = FALSE, north = FALSE, tabtitle = TRUE)
 # north arrow
